@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using unwinder.Models;
+using unwinder.Services;
 
 namespace unwinder.Services;
 
@@ -9,18 +10,20 @@ public class AmadeusApiService : IAmadeusApiService
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<IAmadeusApiService> _logger;
+    private readonly IGetToken _bearerToken;
 
-    public AmadeusApiService(IHttpClientFactory httpClientFactory, ILogger<IAmadeusApiService> logger)
+    public AmadeusApiService(IHttpClientFactory httpClientFactory, ILogger<IAmadeusApiService> logger, IGetToken bearerToken)
     {
         _httpClient = httpClientFactory.CreateClient("AmadeusApiV1");
         _logger = logger;
+        _bearerToken = bearerToken;
     }
     
     // makes request to GetLocation api endpoint in Amadeus API
     // return name of airport, city and iata given city name
     public async Task<string> GetLocation(string query)
     {   
-        var token = await _getToken.GetAuthToken();
+        var token = await _bearerToken.GetAuthToken();
         // add bearer token header
         _logger.LogInformation("Bearer Token: {token}", token);
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -64,7 +67,7 @@ public class AmadeusApiService : IAmadeusApiService
     // used in search form
     public async Task<FlightSearchOutputModel> SearchFlights()
     {
-        var token = await _getToken.GetAuthToken();
+        var token = await _bearerToken.GetAuthToken();
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         // figure out a way to get this data from form 
         var parameters = new Dictionary<string, string>

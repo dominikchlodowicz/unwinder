@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TestApi.Models;
+namespace unwinder.Models;
 
 public class FlightSearchModel
 {
