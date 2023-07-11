@@ -22,6 +22,7 @@ public class GetToken : IGetToken
 
     public async Task<string> GetAuthToken()
     {
+        _logger.LogInformation("Api keys: {serviceApiKey}, {serviceApiSecretKey}", _serviceApiKey, _serviceApiSecretKey);
         var parameters = new Dictionary<string, string>
         {
             {"grant_type", "client_credentials"},

@@ -1,7 +1,12 @@
 using unwinder.Services;
 using unwinder.Models;
+using unwinder.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//enabling logger
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 // Add services to the container.
 
@@ -29,7 +34,7 @@ builder.Services.AddSingleton<IGetToken, GetToken>(sp =>
     var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>(); 
     var logger = sp.GetRequiredService<ILogger<GetToken>>();
     var clientId = flightServicekey.ServiceApiKey;
-    var clientSecret = flightServicekey.ServiceApiSecretKey;
+    var clientSecret = flightServicekey.ServiceSecretApiKey;
     return new GetToken(httpClientFactory, logger, clientId, clientSecret);
 });
 
@@ -40,6 +45,12 @@ builder.Services.AddTransient<IAmadeusApiService, AmadeusApiService>(sp =>
     var getToken = sp.GetRequiredService<IGetToken>();
     var logger = sp.GetRequiredService<ILogger<IAmadeusApiService>>();
     return new AmadeusApiService(httpClientFactory, logger, getToken);
+});
+
+// FlightSearchController
+builder.Services.AddTransient<FlightSearchController>(sp => {
+    var amadeusApiService = sp.GetRequiredService<IAmadeusApiService>();
+    return new FlightSearchController(amadeusApiService);
 });
 
 // Amadeus API key service

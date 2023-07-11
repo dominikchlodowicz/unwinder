@@ -27,6 +27,7 @@ public class AmadeusApiService : IAmadeusApiService
         // add bearer token header
         _logger.LogInformation("Bearer Token: {token}", token);
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         // encode query
         // var encoded = HtmlEncoder.Default.Encode(query);
         _logger.LogInformation("This is query {query}", query);
