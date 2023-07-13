@@ -23,30 +23,53 @@ public class AmadeusApiService : IAmadeusApiService
     // return name of airport, city and iata given city name
     public async Task<string> GetLocation(string query)
     {   
-        var token = await _bearerToken.GetAuthToken();
-        // add bearer token header
-        _logger.LogInformation("Bearer Token: {token}", token);
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var token = await GetToken();
+        AddBearerTokenToHttpClient(token);
+        var response = await GetResponseFromApi(query);
 
-        // encode query
-        // var encoded = HtmlEncoder.Default.Encode(query);
-        _logger.LogInformation("This is query {query}", query);
+        return await ProcessResponse(response);
+    }
+
+    private async Task<string> GetToken()
+    {
+        var token = await _bearerToken.GetAuthToken();
+        _logger.LogInformation("Bearer Token: {token}", token);
+        return token;
+    }
+
+    private void AddBearerTokenToHttpClient(string token)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    private async Task<HttpResponseMessage> GetResponseFromApi(string query)
+    {
         var response = await _httpClient.GetAsync($"reference-data/locations?subType=AIRPORT&keyword={query}");
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Failed to retrieve data from API. Status code: {response.StatusCode}");
+            _logger.LogError($"Failed to retrieve data from API. Status code: {response.StatusCode}");
+            return null; // return null or a more appropriate default value, or consider a more specific exception
         }
-        _logger.LogInformation("This is response {response}", response);
+
+        return response;
+    }
+
+    private async Task<string> ProcessResponse(HttpResponseMessage response)
+    {
         var responseContent = await response.Content.ReadAsStringAsync();
         var responseJson = JObject.Parse(responseContent);
 
-        // Select the airport locations from the response and map them to Airport objects using LINQ
+        var airports = ExtractAirportsFromResponse(responseJson);
+        var serializedAirports = JsonConvert.SerializeObject(airports);
 
-        IEnumerable<object> airports = null;
+        return serializedAirports;
+    }
 
+    private IEnumerable<object> ExtractAirportsFromResponse(JObject responseJson)
+    {
         if (responseJson["data"] != null)
         {
-            airports = responseJson["data"]
+            return responseJson["data"]
                 .Select(a => new
                 {
                     Name = (string)a["name"],
@@ -56,13 +79,10 @@ public class AmadeusApiService : IAmadeusApiService
         }
         else
         {
-            airports = Enumerable.Empty<object>(); // Assign an empty collection when responseJson["data"] is null
+            return Enumerable.Empty<object>();
         }
-
-        _logger.LogInformation("This is airport query result: {airports}", airports);
-        var serializedAirports = JsonConvert.SerializeObject(airports);
-        return serializedAirports;
     }
+
     
     // example api call for flight data
     // used in search form

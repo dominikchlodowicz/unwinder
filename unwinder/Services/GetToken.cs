@@ -9,7 +9,7 @@ public class GetToken : IGetToken
     private readonly ILogger _logger;
 
     private readonly string _serviceApiKey;
-        private readonly string _serviceApiSecretKey;
+    private readonly string _serviceApiSecretKey;
 
 
     public GetToken(IHttpClientFactory httpClientFactory, ILogger<GetToken> logger, string serviceApiKey, string serviceApiSecretKey)
