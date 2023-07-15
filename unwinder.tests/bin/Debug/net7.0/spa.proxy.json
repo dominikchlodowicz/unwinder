@@ -1,8 +1,0 @@
-{
-"SpaProxyServer": {
-"ServerUrl": "https://localhost:44423",
-"LaunchCommand": "npm start",
-"WorkingDirectory": "/Users/dominikchlodowicz/Code/projects/unwinder_project/unwinder/ClientApp/",
-"MaxTimeoutInSeconds": "120"
-}
-}
