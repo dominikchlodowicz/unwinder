@@ -22,4 +22,7 @@ public class FlightSearchController : ControllerBase
         var airports = await _amadeusApiService.GetLocation("Paris");
         return airports;
     }
+
+    [HttpGet]
+    public async Task<>
 }

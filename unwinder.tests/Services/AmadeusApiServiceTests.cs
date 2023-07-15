@@ -18,7 +18,8 @@ public class AmadeusApiServiceTests
     private Mock<IGetToken> _bearerTokenMock;
 
     private Mock<IHttpClientFactory> _httpClientFactoryMock;
-        private Mock<HttpMessageHandler> _httpMessageHandlerMock;
+    private Mock<HttpMessageHandler> _httpMessageHandlerMock;
+    private AmadeusApiService _service;
 
 
     private HttpClient _client;
@@ -29,6 +30,7 @@ public class AmadeusApiServiceTests
         _httpClientFactoryMock = new Mock<IHttpClientFactory>();
         _loggerMock = new Mock<ILogger<IAmadeusApiService>>();
         _bearerTokenMock = new Mock<IGetToken>();
+        
 
         var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
         mockHttpMessageHandler
@@ -52,6 +54,8 @@ public class AmadeusApiServiceTests
             };
 
             _httpClientFactoryMock.Setup(_ => _.CreateClient(It.IsAny<string>())).Returns(_client);
+
+            _service = new AmadeusApiService(_httpClientFactoryMock.Object, _loggerMock.Object, _bearerTokenMock.Object);
     }
 
     [Test]
@@ -70,5 +74,23 @@ public class AmadeusApiServiceTests
         Assert.IsTrue(result.Contains("ATC"));
         Assert.IsTrue(result.Contains("CityName"));
     }
-}
 
+
+    [Test]
+    public async Task FlightSearch_ReturnsExpectedResult()
+    {
+        var flightSearchParameters = new FlightSearchParameters
+        {
+            OriginLocationCode = "LAX",
+            DestinationLocationCode = "JFK",
+            DepartureDate = DateTime.Now.AddDays(14),
+            Adults = 1,
+            Max = 10
+        };
+
+        var result = await _service.FlightSearch(flightSearchParameters);
+
+        Assert.IsNotNull(result);
+        //TODO: Additional assertions based on the expected result...
+    }
+}

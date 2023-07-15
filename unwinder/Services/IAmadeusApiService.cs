@@ -5,5 +5,5 @@ namespace unwinder.Services;
 public interface IAmadeusApiService
 {
      Task<string> GetLocation(string query);
-     Task<FlightSearchOutputModel> SearchFlights();
+     Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters queryDictionary);
 }
