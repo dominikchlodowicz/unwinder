@@ -1,8 +1,8 @@
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using unwinder.Models;
-using unwinder.Services;
+using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
+using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 
 namespace unwinder.Services;
 
@@ -27,16 +27,16 @@ public class AmadeusApiService : IAmadeusApiService
         AddBearerTokenToHttpClient(token);
         var response = await GetLocationFromApi(query);
 
-        return await ProcessResponse(response);
+        return await ProcessGetLocationResponse(response);
     }
 
     public async Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters flightSearchParameters)
     {
         var token = await GetToken();
         AddBearerTokenToHttpClient(token);
-        string response = await GetFlightSearchFromApi(flightSearchParameters);
+        var response = await GetFlightSearchFromApi(flightSearchParameters);
 
-        return DeserializeFlightSearchResponse(response);
+        return ProcessFlightSearchResponse(response);
     }
 
 
@@ -63,23 +63,23 @@ public class AmadeusApiService : IAmadeusApiService
         return response;
     }
 
-    private async Task<string> ProcessResponse(HttpResponseMessage response)
+    private async Task<string> ProcessGetLocationResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
         var responseJson = JObject.Parse(responseContent);
 
-        var airports = ExtractAirportsFromResponse(responseJson);
+        var airports = DeserializeGetLocationResponse(responseJson);
         var serializedAirports = JsonConvert.SerializeObject(airports);
 
         return serializedAirports;
     }
 
-    private IEnumerable<object> ExtractAirportsFromResponse(JObject responseJson)
+    private IEnumerable<GetLocationAirportModel> DeserializeGetLocationResponse(JObject responseJson)
     {
         if (responseJson["data"] != null)
         {
             return responseJson["data"]
-                .Select(a => new
+                .Select(a => new GetLocationAirportModel
                 {
                     Name = (string)a["name"],
                     IataCode = (string)a["iataCode"],
@@ -88,12 +88,22 @@ public class AmadeusApiService : IAmadeusApiService
         }
         else
         {
-            return Enumerable.Empty<object>();
+            return Enumerable.Empty<GetLocationAirportModel>();
         }
     }
 
     // FlightSearch methods
-    private async Task<string> GetFlightSearchFromApi(FlightSearchParameters flightSearchParameters)
+
+    private async Task<FlightSearchOutputModel> ProcessFlightSearchResponse(HttpResponseMessage response)
+    {
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseJson = JObject.Parse(responseContent);
+
+        var flightSearchData = DeserializeFlightSearchResponse(responseJson);
+
+        return flightSearchData;
+    }
+    private async Task<HttpResponseMessage> GetFlightSearchFromApi(FlightSearchParameters flightSearchParameters)
     {
         var requestUri = BuildFlightSearchRequestUri(flightSearchParameters);
         
@@ -101,16 +111,16 @@ public class AmadeusApiService : IAmadeusApiService
         
         ValidateResponse(response);
         
-        return await response.Content.ReadAsStringAsync();
+        return response;
     }
 
     private string BuildFlightSearchRequestUri(FlightSearchParameters flightSearchParameters)
     {
-        return $"shopping/flight-offers?originLocationCode={flightSearchParameters["originLocationCode"]}&" +
-            $"destinationLocationCode={flightSearchParameters["destinationLocationCode"]}&" +
-            $"departureDate={flightSearchParameters["departureDate"]}&" +
-            $"adults={flightSearchParameters["adults"]}&" +
-            $"max={flightSearchParameters["max"]}";
+        return $"shopping/flight-offers?originLocationCode={flightSearchParameters.OriginLocationCode}&" +
+            $"destinationLocationCode={flightSearchParameters.DestinationLocationCode}&" +
+            $"departureDate={flightSearchParameters.DepartureDate}&" +
+            $"adults={flightSearchParameters.Adults}&" +
+            $"max={flightSearchParameters.Max}";
     }
 
     private void ValidateResponse(HttpResponseMessage response)
@@ -126,7 +136,7 @@ public class AmadeusApiService : IAmadeusApiService
         }
     }
 
-    private FlightSearchOutputModel DeserializeFlightSearchResponse(string flightResponse)
+    private FlightSearchOutputModel DeserializeFlightSearchResponse(JObject flightResponse)
     {
         var data = JsonConvert.DeserializeObject<FlightSearchOutputModel>(flightResponse);
         if (data == null)

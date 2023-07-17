@@ -1,12 +1,8 @@
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Moq;
 using Moq.Protected;
-using NUnit.Framework;
 using Microsoft.Extensions.Logging;
 using unwinder.Services;
+using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
 namespace unwinder.tests.Services;
 
@@ -91,6 +87,5 @@ public class AmadeusApiServiceTests
         var result = await _service.FlightSearch(flightSearchParameters);
 
         Assert.IsNotNull(result);
-        //TODO: Additional assertions based on the expected result...
     }
 }

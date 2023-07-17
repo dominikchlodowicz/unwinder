@@ -1,5 +1,5 @@
 using unwinder.Services;
-using unwinder.Models;
+using unwinder.Models.AmadeusApiServiceModels.KeyModels;
 using unwinder.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);

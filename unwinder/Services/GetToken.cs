@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using unwinder.Models;
+using unwinder.Models.AmadeusApiServiceModels.KeyModels;
 
 namespace unwinder.Services;
 

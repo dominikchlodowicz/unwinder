@@ -1,3 +1,5 @@
+
+namespace unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 public class FlightSearchParameters
 {
     public string OriginLocationCode { get; set; }

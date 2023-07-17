@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace unwinder.Models;
+namespace unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
 public class FlightSearchOutputModel
 {

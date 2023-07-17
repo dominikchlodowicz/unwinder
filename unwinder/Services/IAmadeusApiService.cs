@@ -1,9 +1,9 @@
-using unwinder.Models;
+using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
 namespace unwinder.Services;
 
 public interface IAmadeusApiService
 {
      Task<string> GetLocation(string query);
-     Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters queryDictionary);
+     Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters flightSearchParameters);
 }

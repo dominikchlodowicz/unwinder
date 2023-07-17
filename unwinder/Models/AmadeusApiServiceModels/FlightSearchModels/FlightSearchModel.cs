@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace unwinder.Models;
+namespace unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
 public class FlightSearchModel
 {

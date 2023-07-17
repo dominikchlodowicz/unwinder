@@ -1,4 +1,4 @@
-namespace unwinder.Models;
+namespace unwinder.Models.AmadeusApiServiceModels.KeyModels;
 
  public class BearerTokenModel
 {

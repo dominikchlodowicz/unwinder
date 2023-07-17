@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using unwinder.Services;
+using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
 namespace unwinder.Controllers;
 
@@ -24,5 +25,18 @@ public class FlightSearchController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<>
+    public async Task<FlightSearchOutputModel> FlightSearch()
+    {
+        var flightSearchParameters = new FlightSearchParameters
+        {
+            OriginLocationCode = "LAX",
+            DestinationLocationCode = "JFK",
+            DepartureDate = DateTime.Now.AddDays(14),
+            Adults = 1,
+            Max = 10
+        };
+        var flightOffers = await _amadeusApiService.FlightSearch(flightSearchParameters);
+        return flightOffers;
+    }
+
 }
