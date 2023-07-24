@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
@@ -16,13 +17,13 @@ public class AmadeusApiService : IAmadeusApiService
 
     public AmadeusApiService(IHttpClientFactory httpClientFactory, ILogger<IAmadeusApiService> logger, IGetToken bearerToken)
     {
-        _httpClient = httpClientFactory.CreateClient("AmadeusApiV1");
+        _httpClient = httpClientFactory.CreateClient("AmadeusApiV2");
         _logger = logger;
         _bearerToken = bearerToken;
     }
-    
+
     public async Task<string> GetLocation(string query)
-    {   
+    {
         var token = await GetToken();
         AddBearerTokenToHttpClient(token);
         var response = await GetLocationFromApi(query);
@@ -30,13 +31,13 @@ public class AmadeusApiService : IAmadeusApiService
         return await ProcessGetLocationResponse(response);
     }
 
-    public async Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters flightSearchParameters)
+    public async Task<List<FlightSearchOutputListModel>> FlightSearch(FlightSearchParameters flightSearchParameters)
     {
         var token = await GetToken();
         AddBearerTokenToHttpClient(token);
         var response = await GetFlightSearchFromApi(flightSearchParameters);
 
-        return ProcessFlightSearchResponse(response);
+        return await ProcessFlightSearchResponse(response);
     }
 
 
@@ -52,7 +53,7 @@ public class AmadeusApiService : IAmadeusApiService
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
-    
+
 
     // Get Location methods
     private async Task<HttpResponseMessage> GetLocationFromApi(string query)
@@ -66,12 +67,12 @@ public class AmadeusApiService : IAmadeusApiService
     private async Task<string> ProcessGetLocationResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
-        var responseJson = JObject.Parse(responseContent);
+        // var responseJson = JObject.Parse(responseContent);
 
-        var airports = DeserializeGetLocationResponse(responseJson);
-        var serializedAirports = JsonConvert.SerializeObject(airports);
+        // var airports = DeserializeGetLocationResponse(responseJson);
+        // var serializedAirports = JsonConvert.SerializeObject(airports);
 
-        return serializedAirports;
+        return responseContent;
     }
 
     private IEnumerable<GetLocationAirportModel> DeserializeGetLocationResponse(JObject responseJson)
@@ -94,23 +95,25 @@ public class AmadeusApiService : IAmadeusApiService
 
     // FlightSearch methods
 
-    private async Task<FlightSearchOutputModel> ProcessFlightSearchResponse(HttpResponseMessage response)
+    private async Task<List<FlightSearchOutputListModel>> ProcessFlightSearchResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
-        var responseJson = JObject.Parse(responseContent);
 
-        var flightSearchData = DeserializeFlightSearchResponse(responseJson);
+        var flightSearchData = await DeserializeFlightSearchResponse(responseContent);
 
-        return flightSearchData;
+        return flightSearchData.Data;
     }
+    
     private async Task<HttpResponseMessage> GetFlightSearchFromApi(FlightSearchParameters flightSearchParameters)
     {
         var requestUri = BuildFlightSearchRequestUri(flightSearchParameters);
-        
+
+        _logger.LogInformation("URI: {requestUri}", requestUri);
+
         var response = await _httpClient.GetAsync(requestUri);
-        
+
         ValidateResponse(response);
-        
+
         return response;
     }
 
@@ -136,14 +139,36 @@ public class AmadeusApiService : IAmadeusApiService
         }
     }
 
-    private FlightSearchOutputModel DeserializeFlightSearchResponse(JObject flightResponse)
+    private Task<RootObject> DeserializeFlightSearchResponse(string flightResponse)
     {
-        var data = JsonConvert.DeserializeObject<FlightSearchOutputModel>(flightResponse);
+        var data = JsonConvert.DeserializeObject<RootObject>(flightResponse);
         if (data == null)
         {
             throw new Exception("Failed to deserialize API response.");
         }
-        
-        return data;
+
+        return Task.FromResult(data);
     }
+
+    // private IEnumerable<FlightSearchOutputModel> DeserializeFlightSearchResponse(JObject responseJson)
+    // {
+    //     if (responseJson["data"] != null)
+    //     {
+    //         return responseJson["data"]
+    //             .Select(a => new FlightSearchOutputModel
+    //             {
+    //                 Name = (string)a["name"],
+    //                 IataCode = (string)a["iataCode"],
+    //                 CityName = (string)a["address"]["cityName"]
+    //             });
+    //     }
+    //     else
+    //     {
+    //         return Enumerable.Empty<FlightSearchOutputModel>();
+    //     }
+    // }
+
+
 }
+
+

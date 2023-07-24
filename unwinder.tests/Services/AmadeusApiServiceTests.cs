@@ -79,7 +79,7 @@ public class AmadeusApiServiceTests
         {
             OriginLocationCode = "LAX",
             DestinationLocationCode = "JFK",
-            DepartureDate = DateTime.Now.AddDays(14),
+            DepartureDate = DateTime.Today.AddDays(14).ToString("yyyy-MM-dd"),
             Adults = 1,
             Max = 10
         };
