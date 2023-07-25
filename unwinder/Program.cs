@@ -51,8 +51,11 @@ builder.Services.AddTransient<IAmadeusApiService, AmadeusApiService>(sp =>
 builder.Services.AddTransient<FlightSearchController>(sp => {
     var logger = sp.GetRequiredService<ILogger<FlightSearchController>>();
     var amadeusApiService = sp.GetRequiredService<IAmadeusApiService>();
-    return new FlightSearchController(amadeusApiService, logger);
+    var getToken = sp.GetRequiredService<IGetToken>();
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    return new FlightSearchController(amadeusApiService, logger, httpClientFactory, getToken);
 });
+
 
 // Amadeus API key service
 // builder.Services.AddSingleton<AmadeusFlightSettings>(sp =>

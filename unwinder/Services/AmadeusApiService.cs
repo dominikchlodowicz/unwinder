@@ -14,6 +14,7 @@ public class AmadeusApiService : IAmadeusApiService
     private readonly IGetToken _bearerToken;
 
     private readonly string getLocationEndpointUri = "reference-data/locations?subType=AIRPORT&keyword=";
+    private readonly string flightSearchEndpointUri = "shopping/flight-offers";
 
     public AmadeusApiService(IHttpClientFactory httpClientFactory, ILogger<IAmadeusApiService> logger, IGetToken bearerToken)
     {
@@ -39,7 +40,6 @@ public class AmadeusApiService : IAmadeusApiService
 
         return await ProcessFlightSearchResponse(response);
     }
-
 
     // Universal helper methods
     private async Task<string> GetToken()
@@ -106,24 +106,29 @@ public class AmadeusApiService : IAmadeusApiService
     
     private async Task<HttpResponseMessage> GetFlightSearchFromApi(FlightSearchParameters flightSearchParameters)
     {
-        var requestUri = BuildFlightSearchRequestUri(flightSearchParameters);
+        var requestContent = BuildFlightSearchRequestUri(flightSearchParameters);
 
-        _logger.LogInformation("URI: {requestUri}", requestUri);
+        _logger.LogInformation("Request Content: {requestContent}", requestContent);
 
-        var response = await _httpClient.GetAsync(requestUri);
+        var response = await _httpClient.PostAsync(flightSearchEndpointUri, requestContent);
 
         ValidateResponse(response);
 
         return response;
     }
 
-    private string BuildFlightSearchRequestUri(FlightSearchParameters flightSearchParameters)
+    private HttpContent BuildFlightSearchRequestUri(FlightSearchParameters flightSearchParameters)
     {
-        return $"shopping/flight-offers?originLocationCode={flightSearchParameters.OriginLocationCode}&" +
-            $"destinationLocationCode={flightSearchParameters.DestinationLocationCode}&" +
-            $"departureDate={flightSearchParameters.DepartureDate}&" +
-            $"adults={flightSearchParameters.Adults}&" +
-            $"max={flightSearchParameters.Max}";
+    var parameters = new Dictionary<string, string>
+    {
+        { "originLocationCode", flightSearchParameters.OriginLocationCode },
+        { "destinationLocationCode", flightSearchParameters.DestinationLocationCode },
+        { "departureDate", flightSearchParameters.DepartureDate },
+        { "adults", flightSearchParameters.Adults.ToString() },
+        { "max", flightSearchParameters.Max.ToString() }
+    };
+
+    return new FormUrlEncodedContent(parameters);
     }
 
     private void ValidateResponse(HttpResponseMessage response)

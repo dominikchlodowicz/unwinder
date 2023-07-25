@@ -29,17 +29,17 @@ public class FlightSearchOutput
     public string Id { get; set; }
     public string Source { get; set; }
     public string Destination { get; set; }
-    public Price Price { get; set; }
-    public List<Segment> Segments { get; set; }
+    public PriceObjectClass Price { get; set; }
+    public List<SegmentObject> Segments { get; set; }
 }
 
-public class Price
+public class PriceObjectClass
 {
     public string Currency { get; set; }
     public string Total { get; set; }
 }
 
-public class Segment
+public class SegmentObject
 {
     public string Departure { get; set; }
     public string Arrival { get; set; }

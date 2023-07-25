@@ -10,54 +10,57 @@
             "instantTicketingRequired": false,
             "nonHomogeneous": false,
             "oneWay": false,
-            "lastTicketingDate": "2023-11-01",
-            "lastTicketingDateTime": "2023-11-01",
-            "numberOfBookableSeats": 3,
+            "lastTicketingDate": "2023-07-28",
+            "lastTicketingDateTime": "2023-07-28",
+            "numberOfBookableSeats": 9,
             "itineraries": [
                 {
-                    "duration": "PT24H55M",
+                    "duration": "PT9H50M",
                     "segments": [
                         {
                             "departure": {
-                                "iataCode": "WAW",
-                                "at": "2023-11-01T11:25:00"
+                                "iataCode": "EWR",
+                                "terminal": "B",
+                                "at": "2023-11-01T18:40:00"
                             },
                             "arrival": {
-                                "iataCode": "ATH",
-                                "at": "2023-11-01T14:55:00"
+                                "iataCode": "LIS",
+                                "terminal": "1",
+                                "at": "2023-11-02T05:25:00"
                             },
-                            "carrierCode": "A3",
-                            "number": "871",
+                            "carrierCode": "TP",
+                            "number": "202",
                             "aircraft": {
-                                "code": "321"
+                                "code": "32Q"
                             },
                             "operating": {
-                                "carrierCode": "A3"
+                                "carrierCode": "TP"
                             },
-                            "duration": "PT2H30M",
+                            "duration": "PT6H45M",
                             "id": "3",
                             "numberOfStops": 0,
                             "blacklistedInEU": false
                         },
                         {
                             "departure": {
-                                "iataCode": "ATH",
-                                "at": "2023-11-02T09:20:00"
+                                "iataCode": "LIS",
+                                "terminal": "1",
+                                "at": "2023-11-02T07:10:00"
                             },
                             "arrival": {
                                 "iataCode": "MAD",
                                 "terminal": "2",
-                                "at": "2023-11-02T12:20:00"
+                                "at": "2023-11-02T09:30:00"
                             },
-                            "carrierCode": "A3",
-                            "number": "700",
+                            "carrierCode": "TP",
+                            "number": "1010",
                             "aircraft": {
-                                "code": "32Q"
+                                "code": "E90"
                             },
                             "operating": {
-                                "carrierCode": "A3"
+                                "carrierCode": "NI"
                             },
-                            "duration": "PT4H",
+                            "duration": "PT1H20M",
                             "id": "4",
                             "numberOfStops": 0,
                             "blacklistedInEU": false
@@ -67,8 +70,8 @@
             ],
             "price": {
                 "currency": "USD",
-                "total": "492.40",
-                "base": "427.00",
+                "total": "2162.60",
+                "base": "1367.00",
                 "fees": [
                     {
                         "amount": "0.00",
@@ -79,13 +82,7 @@
                         "type": "TICKETING"
                     }
                 ],
-                "grandTotal": "492.40",
-                "additionalServices": [
-                    {
-                        "amount": "37.30",
-                        "type": "CHECKED_BAGS"
-                    }
-                ]
+                "grandTotal": "2162.60"
             },
             "pricingOptions": {
                 "fareType": [
@@ -94,7 +91,7 @@
                 "includedCheckedBagsOnly": true
             },
             "validatingAirlineCodes": [
-                "A3"
+                "TP"
             ],
             "travelerPricings": [
                 {
@@ -103,28 +100,28 @@
                     "travelerType": "ADULT",
                     "price": {
                         "currency": "USD",
-                        "total": "492.40",
-                        "base": "427.00"
+                        "total": "2162.60",
+                        "base": "1367.00"
                     },
                     "fareDetailsBySegment": [
                         {
                             "segmentId": "3",
-                            "cabin": "ECONOMY",
-                            "fareBasis": "TLCMFSW",
-                            "brandedFare": "COMFORTFLE",
-                            "class": "T",
+                            "cabin": "BUSINESS",
+                            "fareBasis": "ZF0EXI03",
+                            "brandedFare": "EXECUTIVE",
+                            "class": "Z",
                             "includedCheckedBags": {
-                                "quantity": 1
+                                "quantity": 2
                             }
                         },
                         {
                             "segmentId": "4",
                             "cabin": "BUSINESS",
-                            "fareBasis": "ZLCCFLW",
-                            "brandedFare": "COMFORTFLE",
+                            "fareBasis": "ZF0EXI03",
+                            "brandedFare": "EXECUTIVE",
                             "class": "Z",
                             "includedCheckedBags": {
-                                "quantity": 1
+                                "quantity": 2
                             }
                         }
                     ]
@@ -138,54 +135,57 @@
             "instantTicketingRequired": false,
             "nonHomogeneous": false,
             "oneWay": false,
-            "lastTicketingDate": "2023-11-01",
-            "lastTicketingDateTime": "2023-11-01",
-            "numberOfBookableSeats": 4,
+            "lastTicketingDate": "2023-07-28",
+            "lastTicketingDateTime": "2023-07-28",
+            "numberOfBookableSeats": 9,
             "itineraries": [
                 {
-                    "duration": "PT28H30M",
+                    "duration": "PT10H10M",
                     "segments": [
                         {
                             "departure": {
-                                "iataCode": "WAW",
-                                "at": "2023-11-01T11:25:00"
+                                "iataCode": "JFK",
+                                "terminal": "1",
+                                "at": "2023-11-01T23:00:00"
                             },
                             "arrival": {
-                                "iataCode": "ATH",
-                                "at": "2023-11-01T14:55:00"
+                                "iataCode": "LIS",
+                                "terminal": "1",
+                                "at": "2023-11-02T09:40:00"
                             },
-                            "carrierCode": "A3",
-                            "number": "871",
+                            "carrierCode": "TP",
+                            "number": "210",
                             "aircraft": {
-                                "code": "321"
+                                "code": "32Q"
                             },
                             "operating": {
-                                "carrierCode": "A3"
+                                "carrierCode": "TP"
                             },
-                            "duration": "PT2H30M",
+                            "duration": "PT6H40M",
                             "id": "1",
                             "numberOfStops": 0,
                             "blacklistedInEU": false
                         },
                         {
                             "departure": {
-                                "iataCode": "ATH",
-                                "at": "2023-11-02T13:05:00"
+                                "iataCode": "LIS",
+                                "terminal": "1",
+                                "at": "2023-11-02T11:50:00"
                             },
                             "arrival": {
                                 "iataCode": "MAD",
                                 "terminal": "2",
-                                "at": "2023-11-02T15:55:00"
+                                "at": "2023-11-02T14:10:00"
                             },
-                            "carrierCode": "A3",
-                            "number": "702",
+                            "carrierCode": "TP",
+                            "number": "1014",
                             "aircraft": {
                                 "code": "320"
                             },
                             "operating": {
-                                "carrierCode": "A3"
+                                "carrierCode": "TP"
                             },
-                            "duration": "PT3H50M",
+                            "duration": "PT1H20M",
                             "id": "2",
                             "numberOfStops": 0,
                             "blacklistedInEU": false
@@ -195,8 +195,8 @@
             ],
             "price": {
                 "currency": "USD",
-                "total": "492.40",
-                "base": "427.00",
+                "total": "2162.60",
+                "base": "1367.00",
                 "fees": [
                     {
                         "amount": "0.00",
@@ -207,13 +207,7 @@
                         "type": "TICKETING"
                     }
                 ],
-                "grandTotal": "492.40",
-                "additionalServices": [
-                    {
-                        "amount": "37.30",
-                        "type": "CHECKED_BAGS"
-                    }
-                ]
+                "grandTotal": "2162.60"
             },
             "pricingOptions": {
                 "fareType": [
@@ -222,7 +216,7 @@
                 "includedCheckedBagsOnly": true
             },
             "validatingAirlineCodes": [
-                "A3"
+                "TP"
             ],
             "travelerPricings": [
                 {
@@ -231,28 +225,28 @@
                     "travelerType": "ADULT",
                     "price": {
                         "currency": "USD",
-                        "total": "492.40",
-                        "base": "427.00"
+                        "total": "2162.60",
+                        "base": "1367.00"
                     },
                     "fareDetailsBySegment": [
                         {
                             "segmentId": "1",
-                            "cabin": "ECONOMY",
-                            "fareBasis": "TLCMFSW",
-                            "brandedFare": "COMFORTFLE",
-                            "class": "T",
+                            "cabin": "BUSINESS",
+                            "fareBasis": "ZF0EXI03",
+                            "brandedFare": "EXECUTIVE",
+                            "class": "Z",
                             "includedCheckedBags": {
-                                "quantity": 1
+                                "quantity": 2
                             }
                         },
                         {
                             "segmentId": "2",
                             "cabin": "BUSINESS",
-                            "fareBasis": "ZLCCFLW",
-                            "brandedFare": "COMFORTFLE",
+                            "fareBasis": "ZF0EXI03",
+                            "brandedFare": "EXECUTIVE",
                             "class": "Z",
                             "includedCheckedBags": {
-                                "quantity": 1
+                                "quantity": 2
                             }
                         }
                     ]
@@ -266,33 +260,30 @@
                 "cityCode": "MAD",
                 "countryCode": "ES"
             },
-            "ATH": {
-                "cityCode": "ATH",
-                "countryCode": "GR"
+            "EWR": {
+                "cityCode": "NYC",
+                "countryCode": "US"
             },
-            "WAW": {
-                "cityCode": "WAW",
-                "countryCode": "PL"
+            "LIS": {
+                "cityCode": "LIS",
+                "countryCode": "PT"
+            },
+            "JFK": {
+                "cityCode": "NYC",
+                "countryCode": "US"
             }
         },
         "aircraft": {
             "320": "AIRBUS A320",
-            "321": "AIRBUS A321",
-            "32Q": "AIRBUS A321NEO"
+            "32Q": "AIRBUS A321NEO",
+            "E90": "EMBRAER 190"
         },
         "currencies": {
             "USD": "US DOLLAR"
         },
         "carriers": {
-            "A3": "AEGEAN AIRLINES"
+            "NI": "PORTUGALIA",
+            "TP": "TAP PORTUGAL"
         }
     }
 }
-
-
-
-
-
-
-
-
