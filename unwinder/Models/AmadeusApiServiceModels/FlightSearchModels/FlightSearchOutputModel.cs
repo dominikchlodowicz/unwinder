@@ -56,7 +56,7 @@ public class FlightOfferData
     public PriceObject Price { get; set; }
 }
 
-public class FlightOfferResponse
+public class FlightSearchOutputModel
 {
     [JsonProperty("meta")]
     public MetaObject Meta { get; set; }

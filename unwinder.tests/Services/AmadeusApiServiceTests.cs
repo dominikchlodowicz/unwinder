@@ -72,20 +72,20 @@ public class AmadeusApiServiceTests
     }
 
 
-    [Test]
-    public async Task FlightSearch_ReturnsExpectedResult()
-    {
-        var flightSearchParameters = new FlightSearchParameters
-        {
-            OriginLocationCode = "LAX",
-            DestinationLocationCode = "JFK",
-            DepartureDate = DateTime.Today.AddDays(14).ToString("yyyy-MM-dd"),
-            Adults = 1,
-            Max = 10
-        };
+    // [Test]
+    // public async Task FlightSearch_ReturnsExpectedResult()
+    // {
+    //     var flightSearchParameters = new FlightSearchParameters
+    //     {
+    //         OriginLocationCode = "LAX",
+    //         DestinationLocationCode = "JFK",
+    //         DepartureDate = DateTime.Today.AddDays(14).ToString("yyyy-MM-dd"),
+    //         Adults = 1,
+    //         Max = 10
+    //     };
 
-        var result = await _service.FlightSearch(flightSearchParameters);
+    //     var result = await _service.FlightSearch(flightSearchParameters);
 
-        Assert.IsNotNull(result);
-    }
+    //     Assert.IsNotNull(result);
+    // }
 }

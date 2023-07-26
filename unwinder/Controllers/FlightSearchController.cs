@@ -4,6 +4,7 @@ using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Text;
+using System.Diagnostics;
 
 namespace unwinder.Controllers;
 
@@ -30,43 +31,17 @@ public class FlightSearchController : ControllerBase
     }
 
 
-    // [HttpGet]
-    // public async Task<string> GetLocation()
-    // {
-    //     var airports = await _amadeusApiService.GetLocation("Paris");
-    //     return airports;
-    // }
-
-    // [HttpGet]
-    // public async void FlightSearch()
-    // {
-    //     var flightSearchParameters = new FlightSearchParameters
-    //     {
-    //         OriginLocationCode = "LAX",
-    //         DestinationLocationCode = "JFK",
-    //         DepartureDate = DateTime.Today.AddDays(14).ToString("yyyy-MM-dd"),
-    //         Adults = 1,
-    //         Max = 10
-    //     };
-
-    //     var flightOffers = await _amadeusApiService.FlightSearch(flightSearchParameters);
-
-
-
-    //     // TODO: deserialization returns nulls
-    //     foreach (var flight in flightOffers)
-    //     {
-    //         _logger.LogInformation("This is flight object: {Price count}", flight.FlightSearchOutput);
-    //     }
-
-    // }
-
-    [HttpGet]
-    public async Task<IActionResult> PostFlightSearch()
+    [HttpGet("GetLocation")]
+    public async Task<string> GetLocation()
     {
-        var token = await _bearerToken.GetAuthToken();
+        var airports = await _amadeusApiService.GetLocation("Paris");
+        return airports;
+    }
 
-        var request = new FlightOfferRequest
+    [HttpPost("FlightSearch")]
+    public async void FlightSearch()
+    {
+        var requestParameters = new FlightSearchParameters
         {
             CurrencyCode = "USD",
             OriginDestinations = new List<OriginDestination>
@@ -110,29 +85,7 @@ public class FlightSearchController : ControllerBase
             }
         };
 
-        var json = JsonConvert.SerializeObject(request);
+        var flightSearchResult = await _amadeusApiService.FlightSearch(requestParameters);
 
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        
-        var response = await _httpClient.PostAsync("shopping/flight-offers", content);
-
-        var responseString = await response.Content.ReadAsStringAsync();
-
-        if (response.IsSuccessStatusCode)
-        {
-            var result = await response.Content.ReadAsStringAsync();
-            // _logger.LogInformation("This is response from post action: {response}", response);
-            var deserializedRepsonse = JsonConvert.DeserializeObject<FlightOfferResponse>(responseString);
-            _logger.LogInformation("This is response from post action meta.count: {response}", deserializedRepsonse.Meta.Count);
-            return Ok(result);
-        }
-        else
-        {
-            var log = await response.Content.ReadAsStringAsync();
-            _logger.LogInformation("Error calling the third-party API: {log}",  log);
-            return StatusCode((int)response.StatusCode, "Error calling the third-party API");
-        }
     }
 }
