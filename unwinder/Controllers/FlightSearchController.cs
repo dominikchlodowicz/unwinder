@@ -9,7 +9,6 @@ using System.Diagnostics;
 namespace unwinder.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
 public class FlightSearchController : ControllerBase
 {
 
@@ -31,14 +30,14 @@ public class FlightSearchController : ControllerBase
     }
 
 
-    [HttpGet("GetLocation")]
+    [HttpGet("api/getlocation")]
     public async Task<string> GetLocation()
     {
         var airports = await _amadeusApiService.GetLocation("Paris");
         return airports;
     }
 
-    [HttpPost("FlightSearch")]
+    [HttpGet("api/flightsearch")]
     public async void FlightSearch()
     {
         var requestParameters = new FlightSearchParameters
