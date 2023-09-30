@@ -34,11 +34,12 @@ public class FlightSearchController : ControllerBase
     public async Task<string> GetLocation()
     {
         var airports = await _amadeusApiService.GetLocation("Paris");
-        return airports;
+        var serializedAirports = JsonConvert.SerializeObject(airports);
+        return serializedAirports;
     }
 
     [HttpGet("api/flightsearch")]
-    public async void FlightSearch()
+    public async Task<string> FlightSearch()
     {
         var requestParameters = new FlightSearchParameters
         {
@@ -85,6 +86,7 @@ public class FlightSearchController : ControllerBase
         };
 
         var flightSearchResult = await _amadeusApiService.FlightSearch(requestParameters);
-
+        var serializedflighSearchResult = JsonConvert.SerializeObject(flightSearchResult);
+        return serializedflighSearchResult;
     }
 }

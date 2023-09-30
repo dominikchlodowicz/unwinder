@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using unwinder.Models.AmadeusApiServiceModels.KeyModels;
+using System;
 
 namespace unwinder.Services;
 
@@ -29,15 +30,26 @@ public class GetToken : IGetToken
             {"client_id", $"{_serviceApiKey}"},
             {"client_secret", $"{_serviceApiSecretKey}"}
         };
-        
+
         var content = new FormUrlEncodedContent(parameters);
 
         var response = await _httpClient.PostAsync("security/oauth2/token", content);
 
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Received {response.StatusCode} from the server.");
+        }
+
         var responseString = await response.Content.ReadAsStringAsync();
         _logger.LogInformation("Bearer response: {responseString}", responseString);
+
         var deserializedResponse = JsonConvert.DeserializeObject<BearerTokenModel>(responseString);
 
-        return deserializedResponse != null ? deserializedResponse.access_token :  "Error";
+        if (deserializedResponse?.access_token == null)
+        {
+            throw new JsonSerializationException("Unexpected JSON structure: missing access_token.");
+        }
+
+        return deserializedResponse != null ? deserializedResponse.access_token : "Error";
     }
 }

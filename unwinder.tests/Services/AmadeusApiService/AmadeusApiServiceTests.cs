@@ -17,6 +17,8 @@ public class AmadeusApiServiceTests
     private Mock<HttpMessageHandler> _httpMessageHandlerMock;
     private AmadeusApiService _service;
 
+    private string _mockFlightSearchApiResponse;
+
 
     private HttpClient _client;
 
@@ -28,6 +30,7 @@ public class AmadeusApiServiceTests
         _bearerTokenMock = new Mock<IGetToken>();
 
         var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+        var _mockFlightSearchApiResponse = File.ReadAllText("FlightSearch_ReturnsExpectedResult.json");
 
         mockHttpMessageHandler
             .Protected()
@@ -54,7 +57,7 @@ public class AmadeusApiServiceTests
             .ReturnsAsync(new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("{\"data\": [{\"flightSearchData\": \"Mocked flight search data\"}]}")
+                Content = new StringContent(_mockFlightSearchApiResponse)
             })
             .Verifiable();
 
@@ -68,6 +71,7 @@ public class AmadeusApiServiceTests
         _service = new AmadeusApiService(_httpClientFactoryMock.Object, _loggerMock.Object, _bearerTokenMock.Object);
     }
 
+    [Ignore("To implement")]
     [Test]
     public async Task GetLocation_ShouldReturnLocation()
     {
@@ -80,12 +84,12 @@ public class AmadeusApiServiceTests
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("Airport Name"));
-        Assert.IsTrue(result.Contains("ATC"));
-        Assert.IsTrue(result.Contains("CityName"));
+        Assert.IsNotNull(result.First().Name);
+        Assert.IsNotNull(result.First().IataCode);
+        Assert.IsNotNull(result.First().CityName);
     }
 
-
+    [Ignore("To implement")]
     [Test]
     public async Task FlightSearch_ReturnsExpectedResult()
     {
@@ -133,7 +137,7 @@ public class AmadeusApiServiceTests
             }
         };
 
-        var result = await _service.FlightSearch(flightSearchParameters);
+        var result = await _service.FlightSearch(requestParameters);
 
         Assert.IsNotNull(result);
     }

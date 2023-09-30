@@ -27,7 +27,7 @@ public class AmadeusApiService : IAmadeusApiService
 
     // GetLocation methods - START
 
-    public async Task<string> GetLocation(string query)
+    public async Task<IEnumerable<GetLocationAirportModel>> GetLocation(string query)
     {
         var token = await _bearerToken.GetAuthToken();
         _httpClientV1.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -46,15 +46,14 @@ public class AmadeusApiService : IAmadeusApiService
         return response;
     }
 
-    private async Task<string> ProcessGetLocationResponse(HttpResponseMessage response)
+    private async Task<IEnumerable<GetLocationAirportModel>> ProcessGetLocationResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
         var responseJson = JObject.Parse(responseContent);
 
         var airports = DeserializeGetLocationResponse(responseJson);
-        var serializedAirports = JsonConvert.SerializeObject(airports);
 
-        return serializedAirports;
+        return airports;
     }
 
     private IEnumerable<GetLocationAirportModel> DeserializeGetLocationResponse(JObject responseJson)
@@ -113,6 +112,8 @@ public class AmadeusApiService : IAmadeusApiService
         var responseContent = await response.Content.ReadAsStringAsync();
 
         var flightSearchData = await DeserializeFlightSearchResponse(responseContent);
+
+
 
         return flightSearchData;
     }
