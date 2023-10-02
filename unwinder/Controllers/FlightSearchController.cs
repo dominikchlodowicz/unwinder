@@ -5,25 +5,29 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Text;
 using System.Diagnostics;
+using unwinder.Services.AmadeusApiService;
 
 namespace unwinder.Controllers;
 
 [ApiController]
 public class FlightSearchController : ControllerBase
 {
-
-    private readonly IAmadeusApiService _amadeusApiService;
+    private readonly IFlightSearchService _flightSearchService;
+    private readonly IGetLocationService _getLocationService;
     private readonly ILogger<FlightSearchController> _logger;
     private readonly HttpClient _httpClient;
     private readonly IGetToken _bearerToken;
 
 
-    public FlightSearchController(IAmadeusApiService amadeusApiService,
-         ILogger<FlightSearchController> logger,
-         IHttpClientFactory httpClientFactory,
-         IGetToken bearerToken)
+    public FlightSearchController(
+        IFlightSearchService flightSearchService,
+        IGetLocationService getLocationService,
+        ILogger<FlightSearchController> logger,
+        IHttpClientFactory httpClientFactory,
+        IGetToken bearerToken)
     {
-        _amadeusApiService = amadeusApiService;
+        _flightSearchService = flightSearchService;
+        _getLocationService = getLocationService;
         _logger = logger;
         _httpClient = httpClientFactory.CreateClient("AmadeusApiV2");
         _bearerToken = bearerToken;
@@ -33,7 +37,7 @@ public class FlightSearchController : ControllerBase
     [HttpGet("api/getlocation")]
     public async Task<string> GetLocation()
     {
-        var airports = await _amadeusApiService.GetLocation("Paris");
+        var airports = await _getLocationService.GetLocation("Paris");
         var serializedAirports = JsonConvert.SerializeObject(airports);
         return serializedAirports;
     }
@@ -85,7 +89,7 @@ public class FlightSearchController : ControllerBase
             }
         };
 
-        var flightSearchResult = await _amadeusApiService.FlightSearch(requestParameters);
+        var flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
         var serializedflighSearchResult = JsonConvert.SerializeObject(flightSearchResult);
         return serializedflighSearchResult;
     }

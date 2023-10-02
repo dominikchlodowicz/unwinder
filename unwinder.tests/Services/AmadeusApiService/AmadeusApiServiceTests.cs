@@ -73,7 +73,7 @@ public class AmadeusApiServiceTests
 
     [Ignore("To implement")]
     [Test]
-    public async Task GetLocation_ShouldReturnLocation()
+    public async Task GetLocation_ReturnsLocation_EverythingIsRight()
     {
         // Arrange
         var service = new AmadeusApiService(_httpClientFactoryMock.Object, _loggerMock.Object, _bearerTokenMock.Object);
