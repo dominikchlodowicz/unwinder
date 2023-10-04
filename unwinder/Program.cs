@@ -30,8 +30,6 @@ builder.Services.AddHttpClient("AmadeusApiV2", httpClient =>
 });
 
 
-
-
 // AMADEUS Api Services DI - START
 
 // Bearer Token
@@ -59,16 +57,15 @@ builder.Services.AddTransient<IFlightSearchService, FlightSearchService>(sp =>
     return new FlightSearchService(commonService);
 });
 
-// builder.Services.AddTransient<IAmadeusApiService, AmadeusApiService>(sp =>
-// {   
-//     var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-//     var getToken = sp.GetRequiredService<IGetToken>();
-//     var logger = sp.GetRequiredService<ILogger<IAmadeusApiService>>();
-//     return new AmadeusApiService(httpClientFactory, logger, getToken);
-// });
+builder.Services.AddTransient<IGetLocationService, GetLocationService>(sp => 
+{
+    var commonService = sp.GetRequiredService<IAmadeusApiCommonService>();
+    return new GetLocationService(commonService);
+});
 
 // AMADEUS Api Services DI - END
 
+// Controllers - START
 
 // FlightSearchController
 builder.Services.AddTransient<FlightSearchController>(sp => {
@@ -80,12 +77,7 @@ builder.Services.AddTransient<FlightSearchController>(sp => {
     return new FlightSearchController(flightSearchService, getLocationService, logger, httpClientFactory, getToken);
 });
 
-
-// Amadeus API key service
-// builder.Services.AddSingleton<AmadeusFlightSettings>(sp =>
-// {
-
-// });
+// Controllers - END
 
 var app = builder.Build();
 

@@ -8,11 +8,11 @@ namespace unwinder.Services.AmadeusApiService;
 
 public class GetLocationService : IGetLocationService
 {
-    private readonly AmadeusApiCommonService _commonService;
+    private readonly IAmadeusApiCommonService _commonService;
 
     private readonly string getLocationEndpointUri = "reference-data/locations?subType=AIRPORT&keyword=";
 
-    public GetLocationService(AmadeusApiCommonService commonService)
+    public GetLocationService(IAmadeusApiCommonService commonService)
     {
         _commonService = commonService;
     }
