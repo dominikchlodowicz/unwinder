@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using unwinder.Services;
 using Newtonsoft.Json;
 
-namespace unwinder.tests.Services;
+namespace unwinder.tests.Services.AmadeusApiService;
 
 [TestFixture]
 public class GetTokenTests

@@ -4,14 +4,12 @@ public class AmadeusApiCommonService : IAmadeusApiCommonService
 {
     private readonly HttpClient _httpClientV1;
     private readonly HttpClient _httpClientV2;
-    private readonly ILogger<IAmadeusApiCommonService> _logger;
     private readonly IGetToken _bearerToken;
 
-    public AmadeusApiCommonService(IHttpClientFactory httpClientFactory, ILogger<IAmadeusApiCommonService> logger, IGetToken bearerToken)
+    public AmadeusApiCommonService(IHttpClientFactory httpClientFactory, IGetToken bearerToken)
     {
         _httpClientV1 = httpClientFactory.CreateClient("AmadeusApiV1");
         _httpClientV2 = httpClientFactory.CreateClient("AmadeusApiV2");
-        _logger = logger;
         _bearerToken = bearerToken;
     }
 

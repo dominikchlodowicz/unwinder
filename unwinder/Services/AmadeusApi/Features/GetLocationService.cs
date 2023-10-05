@@ -30,8 +30,11 @@ public class GetLocationService : IGetLocationService
     private async Task<HttpResponseMessage> GetLocationFromApi(string query)
     {   
         string httpQuery = getLocationEndpointUri + query;
-        var response = await _commonService.GetHttpClientV2().GetAsync(httpQuery);
-        _commonService.ValidateResponse(response);
+        var response = await _commonService.GetHttpClientV1().GetAsync(httpQuery);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Received {response.StatusCode} from the server.");
+        }
 
         return response;
     }

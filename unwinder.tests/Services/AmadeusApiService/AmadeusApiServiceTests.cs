@@ -47,19 +47,19 @@
 //             })
 //             .Verifiable();
 
-//         mockHttpMessageHandler
-//             .Protected()
-//             .Setup<Task<HttpResponseMessage>>(
-//                 "SendAsync",
-//                 ItExpr.Is<HttpRequestMessage>(request => request.RequestUri.AbsolutePath.Contains("shopping/flight-offers")),
-//                 ItExpr.IsAny<CancellationToken>()
-//             )
-//             .ReturnsAsync(new HttpResponseMessage
-//             {
-//                 StatusCode = HttpStatusCode.OK,
-//                 Content = new StringContent(_mockFlightSearchApiResponse)
-//             })
-//             .Verifiable();
+//         // mockHttpMessageHandler
+//         //     .Protected()
+//         //     .Setup<Task<HttpResponseMessage>>(
+//         //         "SendAsync",
+//         //         ItExpr.Is<HttpRequestMessage>(request => request.RequestUri.AbsolutePath.Contains("shopping/flight-offers")),
+//         //         ItExpr.IsAny<CancellationToken>()
+//         //     )
+//         //     .ReturnsAsync(new HttpResponseMessage
+//         //     {
+//         //         StatusCode = HttpStatusCode.OK,
+//         //         Content = new StringContent(_mockFlightSearchApiResponse)
+//         //     })
+//         //     .Verifiable();
 
 //         _client = new HttpClient(mockHttpMessageHandler.Object)
 //         {

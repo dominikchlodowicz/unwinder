@@ -37,7 +37,7 @@ public class FlightSearchController : ControllerBase
     [HttpGet("api/getlocation")]
     public async Task<string> GetLocation()
     {
-        var airports = await _getLocationService.GetLocation("Paris");
+        var airports = await _getLocationService.GetLocation("New York");
         var serializedAirports = JsonConvert.SerializeObject(airports);
         return serializedAirports;
     }

@@ -47,8 +47,7 @@ builder.Services.AddTransient<IAmadeusApiCommonService, AmadeusApiCommonService>
 {   
     var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
     var getToken = sp.GetRequiredService<IGetToken>();
-    var logger = sp.GetRequiredService<ILogger<IAmadeusApiCommonService>>();
-    return new AmadeusApiCommonService(httpClientFactory, logger, getToken);
+    return new AmadeusApiCommonService(httpClientFactory, getToken);
 });
 
 builder.Services.AddTransient<IFlightSearchService, FlightSearchService>(sp =>
