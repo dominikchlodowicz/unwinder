@@ -42,10 +42,11 @@ public class GetLocationService : IGetLocationService
     private async Task<IEnumerable<GetLocationAirportModel>> ProcessGetLocationResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
-        // if(responseContent)
-        // {
 
-        // }
+        if(string.IsNullOrEmpty(responseContent) || responseContent == "{}")
+        {
+            throw new InvalidOperationException("Api response is empty.");
+        }
 
         var responseJson = JObject.Parse(responseContent);
 
@@ -68,7 +69,7 @@ public class GetLocationService : IGetLocationService
         }
         else
         {
-            throw new JsonSerializationException("Unexpected JSON structure: missing data.");
+            throw new InvalidOperationException("Unexpected JSON structure: missing data property.");
         }
     }
 }

@@ -1,8 +1,6 @@
 using System.Net;
 using Moq.Protected;
-using Microsoft.Extensions.Logging;
 using unwinder.Services;
-using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 using unwinder.Services.AmadeusApiService;
 
 namespace unwinder.tests.Services.AmadeusApiService;
@@ -112,19 +110,64 @@ public class GetLocationServiceTests
         Assert.ThrowsAsync<HttpRequestException>(async () => await sut.GetLocation(query));
     }
 
-    [Ignore("Todo")]
     [TestCase("{}")]
     [TestCase(null)]
     public async Task GetLocationService_ThrowsException_WhenResponseIsEmpty(string expectedToken)
     {
+        var query = "test_query";
 
+        _httpMessageHandlerMock.Protected()
+        .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+        .ReturnsAsync(new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = expectedToken == null ? null : new StringContent(expectedToken)
+
+        });
+
+        var httpClient = new HttpClient(_httpMessageHandlerMock.Object)
+        {
+            BaseAddress = new Uri("http://test.com")
+        };
+
+        _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
+
+        // System under test: "sut"
+        var sut = new GetLocationService(_commonService);
+
+        // What method should return(
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation(query));
     }
  
-    [Ignore("Todo")]
     [Test]
     public async Task GetLocationService_ThrowsException_WhenJsonStructureIsUnexpected()
     {
+        var query = "test_query";
+        
+        var mockResponseContent = "{\"someOtherKey\": \"someValue\", \"anotherKey\": [1, 2, 3]}";
 
+        _httpMessageHandlerMock.Protected()
+        .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+        .ReturnsAsync(new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(mockResponseContent)
+
+        });
+
+        var httpClient = new HttpClient(_httpMessageHandlerMock.Object)
+        {
+            BaseAddress = new Uri("http://test.com")
+        };
+
+        _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
+
+        // System under test: "sut"
+        var sut = new GetLocationService(_commonService);
+
+        // What method should return(
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation(query));
     }
-
 }
+
+
