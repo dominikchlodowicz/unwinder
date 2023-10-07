@@ -112,7 +112,7 @@ public class GetTokenTests
         var sut = new GetToken(_httpClientFactoryMock.Object, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 
         // What method should return(
-        Assert.ThrowsAsync<JsonSerializationException>(async () => await sut.GetAuthToken());
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetAuthToken());
     }
 
     [Test]

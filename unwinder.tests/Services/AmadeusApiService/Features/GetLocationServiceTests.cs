@@ -119,7 +119,7 @@ public class GetLocationServiceTests
     {
 
     }
-
+ 
     [Ignore("Todo")]
     [Test]
     public async Task GetLocationService_ThrowsException_WhenJsonStructureIsUnexpected()

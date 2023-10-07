@@ -42,6 +42,11 @@ public class GetLocationService : IGetLocationService
     private async Task<IEnumerable<GetLocationAirportModel>> ProcessGetLocationResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
+        // if(responseContent)
+        // {
+
+        // }
+
         var responseJson = JObject.Parse(responseContent);
 
         var airports = DeserializeGetLocationResponse(responseJson);
@@ -63,7 +68,7 @@ public class GetLocationService : IGetLocationService
         }
         else
         {
-            return Enumerable.Empty<GetLocationAirportModel>();
+            throw new JsonSerializationException("Unexpected JSON structure: missing data.");
         }
     }
 }
