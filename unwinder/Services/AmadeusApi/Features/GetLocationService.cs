@@ -51,7 +51,7 @@ public class GetLocationService : IGetLocationService
             throw new InvalidOperationException("Api response is empty.");
         }
 
-        var responseJson = JObject.Parse(responseContent).Children();
+        var responseJson = JObject.Parse(responseContent);
 
         var airports = DeserializeGetLocationResponse(responseJson);
 
@@ -65,9 +65,9 @@ public class GetLocationService : IGetLocationService
             return responseJson["data"]
                 .Select(a => new GetLocationAirportModel
                 {
-                    name = (string)a["name"],
-                    iataCode = (string)a["iataCode"],
-                    cityName = (string)a["address"]["cityName"]
+                    Name = (string)a["name"],
+                    IataCode = (string)a["iataCode"],
+                    CityName = (string)a["address"]["cityName"]
                 });
         }
         else

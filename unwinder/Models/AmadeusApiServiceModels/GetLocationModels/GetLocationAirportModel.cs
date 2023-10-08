@@ -5,11 +5,11 @@ namespace unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 public class GetLocationAirportModel
 {
     [JsonProperty("name")]
-    public string name;
+    public string Name;
 
     [JsonProperty("iataCode")]
-    public string iataCode;
+    public string IataCode;
 
     [JsonProperty("cityName")]
-    public string cityName;
+    public string CityName;
 }

@@ -29,9 +29,9 @@ public class GetLocationServiceTests
     public async Task GetLocationService_ReturnsLocation_WhenEverythingIsRight()
     {
         // Mock output variables
-        var expectedLocations = _fixture.Create<GetLocationAirportModel>();
-        var wrapper = new GetLocationAirportModelWrapper { data = expectedLocations };
-        var httpResponseJson = JsonConvert.SerializeObject(wrapper);
+        var expectedLocations = _fixture.Create<GetLocationAirportResponseModel>();
+        // var wrapper = new GetLocationAirportModelWrapper { data = expectedLocations };
+        var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
 
         var httpCleintMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
         var sut = new GetLocationService(httpCleintMock, _getTokenMock.Object);
@@ -39,7 +39,9 @@ public class GetLocationServiceTests
         // Act
         var result = await sut.GetLocation("test");
 
-        Assert.That(expectedLocations, Is.EqualTo(result));
+        Assert.That(expectedLocations.data[0].name, Is.EqualTo(result.FirstOrDefault().Name));
+        Assert.That(expectedLocations.data[0].iataCode, Is.EqualTo(result.FirstOrDefault().IataCode));
+        Assert.That(expectedLocations.data[0].address.cityName, Is.EqualTo(result.FirstOrDefault().CityName));
     }
 
     [Test]
