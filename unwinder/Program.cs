@@ -43,23 +43,25 @@ builder.Services.AddSingleton<IGetToken, GetToken>(sp =>
 });
 
 // Api Service
-builder.Services.AddTransient<IAmadeusApiCommonService, AmadeusApiCommonService>(sp =>
-{   
-    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-    var getToken = sp.GetRequiredService<IGetToken>();
-    return new AmadeusApiCommonService(httpClientFactory, getToken);
-});
+// builder.Services.AddTransient<IAmadeusApiCommonService, AmadeusApiCommonService>(sp =>
+// {   
+    // var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    // var getToken = sp.GetRequiredService<IGetToken>();
+//     return new AmadeusApiCommonService(httpClientFactory, getToken);
+// });
 
 builder.Services.AddTransient<IFlightSearchService, FlightSearchService>(sp =>
 {
-    var commonService = sp.GetRequiredService<IAmadeusApiCommonService>();
-    return new FlightSearchService(commonService);
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var getToken = sp.GetRequiredService<IGetToken>();
+    return new FlightSearchService(httpClientFactory, getToken);
 });
 
 builder.Services.AddTransient<IGetLocationService, GetLocationService>(sp => 
 {
-    var commonService = sp.GetRequiredService<IAmadeusApiCommonService>();
-    return new GetLocationService(commonService);
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var getToken = sp.GetRequiredService<IGetToken>();
+    return new GetLocationService(httpClientFactory, getToken);
 });
 
 // AMADEUS Api Services DI - END

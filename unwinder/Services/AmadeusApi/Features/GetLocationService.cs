@@ -8,19 +8,22 @@ namespace unwinder.Services.AmadeusApiService;
 
 public class GetLocationService : IGetLocationService
 {
-    private readonly IAmadeusApiCommonService _commonService;
+
+    private readonly HttpClient _httpClientV1;
+    private readonly IGetToken _getToken;
 
     private readonly string getLocationEndpointUri = "reference-data/locations?subType=AIRPORT&keyword=";
 
-    public GetLocationService(IAmadeusApiCommonService commonService)
+    public GetLocationService(IHttpClientFactory httpClientFactory, IGetToken getToken)
     {
-        _commonService = commonService;
+        _httpClientV1 = httpClientFactory.CreateClient("AmadeusApiV1");
+        _getToken = getToken;
     }
 
     public async Task<IEnumerable<GetLocationAirportModel>> GetLocation(string query)
     {
-        var token = await _commonService.GetAuthToken();
-        _commonService.GetHttpClientV1().DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var token = await _getToken.GetAuthToken();
+        _httpClientV1.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var response = await GetLocationFromApi(query);
 
@@ -30,7 +33,7 @@ public class GetLocationService : IGetLocationService
     private async Task<HttpResponseMessage> GetLocationFromApi(string query)
     {   
         string httpQuery = getLocationEndpointUri + query;
-        var response = await _commonService.GetHttpClientV1().GetAsync(httpQuery);
+        var response = await _httpClientV1.GetAsync(httpQuery);
         if (!response.IsSuccessStatusCode)
         {
             throw new HttpRequestException($"Received {response.StatusCode} from the server.");
@@ -48,7 +51,7 @@ public class GetLocationService : IGetLocationService
             throw new InvalidOperationException("Api response is empty.");
         }
 
-        var responseJson = JObject.Parse(responseContent);
+        var responseJson = JObject.Parse(responseContent).Children();
 
         var airports = DeserializeGetLocationResponse(responseJson);
 
@@ -62,9 +65,9 @@ public class GetLocationService : IGetLocationService
             return responseJson["data"]
                 .Select(a => new GetLocationAirportModel
                 {
-                    Name = (string)a["name"],
-                    IataCode = (string)a["iataCode"],
-                    CityName = (string)a["address"]["cityName"]
+                    name = (string)a["name"],
+                    iataCode = (string)a["iataCode"],
+                    cityName = (string)a["address"]["cityName"]
                 });
         }
         else

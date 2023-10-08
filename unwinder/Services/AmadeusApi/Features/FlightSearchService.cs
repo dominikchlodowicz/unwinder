@@ -8,19 +8,21 @@ namespace unwinder.Services.AmadeusApiService;
 
 public class FlightSearchService : IFlightSearchService
 {
-    private readonly IAmadeusApiCommonService _commonService;
+    private readonly HttpClient _httpClientV2;
+    private readonly IGetToken _getToken;
 
-    public FlightSearchService(IAmadeusApiCommonService commonService)
+    public FlightSearchService(IHttpClientFactory httpClientFactory, IGetToken getToken)
     {
-        _commonService = commonService;
+        _httpClientV2 = httpClientFactory.CreateClient("AmadeusApiV2");
+        _getToken = getToken;
     }
 
     private readonly string flightSearchEndpointUri = "shopping/flight-offers";
 
     public async Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters flightSearchParameters)
     {
-        var token = await _commonService.GetAuthToken();
-        _commonService.GetHttpClientV2().DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var token = await _getToken.GetAuthToken();
+        _httpClientV2.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await GetFlightSearchFromApi(flightSearchParameters);
 
         return await ProcessFlightSearchResponse(response);
@@ -31,9 +33,7 @@ public class FlightSearchService : IFlightSearchService
 
         var processedParameters = ProcessFlightSearchParameters(flightSearchParameters);
 
-        var response = await _commonService.GetHttpClientV2().PostAsync(flightSearchEndpointUri, processedParameters);
-
-        _commonService.ValidateResponse(response);
+        var response = await _httpClientV2.PostAsync(flightSearchEndpointUri, processedParameters);
 
         return response;
     }
