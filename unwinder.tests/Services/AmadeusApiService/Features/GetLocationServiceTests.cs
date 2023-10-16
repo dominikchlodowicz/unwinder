@@ -48,7 +48,7 @@ public class GetLocationServiceTests
     [TestCase(HttpStatusCode.InternalServerError)]
     [TestCase(HttpStatusCode.NotFound)]
     [TestCase(HttpStatusCode.BadGateway)]
-    public async Task GetLocationService_ReturnsApiError_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
+    public void GetLocationService_ReturnsApiError_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
     {
         var httpCleintMock = HttpClientTestHelper.SetupHttpClient(statusCode);
         var sut = new GetLocationService(httpCleintMock, _getTokenMock.Object);
@@ -56,71 +56,29 @@ public class GetLocationServiceTests
         Assert.ThrowsAsync<HttpRequestException>(async () => await sut.GetLocation("test"));
     }
 
-    // [TestCase("{}")]
-    // [TestCase(null)]
-    // public void GetLocationService_ThrowsException_WhenResponseIsEmpty(string expectedToken)
-    // {
-    //     var httpClientFactoryMock = new Mock<IHttpClientFactory>();
-    //     var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+    [TestCase("{}")]
+    [TestCase(null)]
+    public void GetLocationService_ThrowsException_WhenResponseIsEmpty(string expectedToken)
+    {
+        var httpCleintMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, expectedToken);
+        var sut = new GetLocationService(httpCleintMock, _getTokenMock.Object);
 
-    //     var query = "test_query";
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation("test"));
+    }
 
-    //     _httpMessageHandlerMock.Protected()
-    //     .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-    //     .ReturnsAsync(new HttpResponseMessage
-    //     {
-    //         StatusCode = HttpStatusCode.OK,
-    //         Content = expectedToken == null ? null : new StringContent(expectedToken)
+    [Test]
+    public void GetLocationService_ThrowsException_WhenJsonStructureIsUnexpected()
+    {
+        var expectedLocations = _fixture.Create<GetLocationAirportResponseModel>();
+        expectedLocations.data[0].name = null;
+        var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
 
-    //     });
+        var httpCleintMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
+        var sut = new GetLocationService(httpCleintMock, _getTokenMock.Object);
 
-    //     var httpClient = new HttpClient(_httpMessageHandlerMock.Object)
-    //     {
-    //         BaseAddress = new Uri("http://test.com")
-    //     };
-
-    //     _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
-
-    //     // System under test: "sut"
-    //     var sut = new GetLocationService(_commonService);
-
-    //     // What method should return(
-    //     Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation(query));
-    // }
- 
-    // [Test]
-    // public void GetLocationService_ThrowsException_WhenJsonStructureIsUnexpected()
-    // {
-
-    //     var httpClientFactoryMock = new Mock<IHttpClientFactory>();
-    //     var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
-
-    //     var query = "test_query";
-        
-    //     var mockResponseContent = "{\"someOtherKey\": \"someValue\", \"anotherKey\": [1, 2, 3]}";
-
-    //     _httpMessageHandlerMock.Protected()
-    //     .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-    //     .ReturnsAsync(new HttpResponseMessage
-    //     {
-    //         StatusCode = HttpStatusCode.OK,
-    //         Content = new StringContent(mockResponseContent)
-
-    //     });
-
-    //     var httpClient = new HttpClient(_httpMessageHandlerMock.Object)
-    //     {
-    //         BaseAddress = new Uri("http://test.com")
-    //     };
-
-    //     _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
-
-    //     // System under test: "sut"
-    //     var sut = new GetLocationService(_commonService);
-
-    //     // What method should return(
-    //     Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation(query));
-    // }
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation("test"));
+    }
 }
+
 
 

@@ -25,7 +25,7 @@ public static class HttpClientTestHelper
             .ReturnsAsync(new HttpResponseMessage
             {
                 StatusCode = statusCode,
-                Content = new StringContent(content)
+                Content = string.IsNullOrEmpty(content) ? null : new StringContent(content)
             });
 
         return httpMessageHandlerMock;
