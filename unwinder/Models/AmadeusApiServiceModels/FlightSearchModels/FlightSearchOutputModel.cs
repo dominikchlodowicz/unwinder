@@ -8,13 +8,13 @@ public class MetaObject
     public int Count { get; set; }
 }
 
-public class Departure
+public class DepartureOutput
 {
     [JsonProperty("iataCode")]
     public string IataCode { get; set; }
 }
 
-public class Arrival
+public class ArrivalOutput
 {
     [JsonProperty("iataCode")]
     public string IataCode { get; set; }
@@ -23,10 +23,19 @@ public class Arrival
 public class SegmentObject1
 {
     [JsonProperty("departure")]
-    public Departure Departure { get; set; }
+    public DepartureOutput Departure { get; set; }
 
     [JsonProperty("arrival")]
-    public Arrival Arrival { get; set; }
+    public ArrivalOutput Arrival { get; set; }
+
+    [JsonProperty("duration")]
+    public string duration { get; set; }
+
+    [JsonProperty("carrierCode")]
+    public string carrierCode { get; set; }
+
+    [JsonProperty("number")]
+    public string number { get; set; }
 }
 
 public class Itinerary
