@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using unwinder.Services;
 using Newtonsoft.Json;
 using unwinder.tests.Services.Helpers;
+using unwinder.Models.AmadeusApiServiceModels.KeyModels;
 
 namespace unwinder.tests.Services.AmadeusApiService;
 
@@ -19,6 +20,7 @@ public class GetTokenTests
     private Mock<ILogger<GetToken>> _loggerMock;
     private string _serviceApiKey;
     private string _serviceApiSecretKey;
+    private Fixture _fixture;
 
     [SetUp]
     public void Setup()
@@ -27,24 +29,23 @@ public class GetTokenTests
 
         _serviceApiKey = "testApiKey";
         _serviceApiSecretKey = "testApiSecretKey";
+        _fixture = new Fixture();
     }
 
     [Test]
     public async Task GetAuthToken_ReturnsToken_WhenEverythingIsRight()
     {
-        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
-        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        var mockedReturnedJsonFixture = _fixture.Create<BearerTokenModel>();
 
-        var mockedReturnedJson = "{{\"access_token\": \"{expectedToken}\"}}";
-        httpMessageHandlerMock = HttpClientTestHelper.SetupHttpMessageHandlerMock(HttpStatusCode.OK, mockedReturnedJson);
-        var httpClient = HttpClientTestHelper.CreateTestHttpClient(httpMessageHandlerMock);
-        HttpClientTestHelper.SetupHttpClientFactoryMock(httpClientFactoryMock, httpClient);
+        var mockedReturnedJsonSerialized = JsonConvert.SerializeObject(mockedReturnedJsonFixture);
 
-        var sut = new GetToken(httpClientFactoryMock.Object, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockedReturnedJsonSerialized);
+
+        var sut = new GetToken(httpClientMock, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 
         var token = await sut.GetAuthToken();
 
-        Assert.That(token, Is.EqualTo(mockedReturnedJson));
+        Assert.That(token, Is.EqualTo(mockedReturnedJsonFixture.access_token));
     }
 
     [Test]
@@ -53,16 +54,9 @@ public class GetTokenTests
     [TestCase(HttpStatusCode.BadGateway)]
     public void GetAuthToken_ReturnsApiError_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
     {
-        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
-        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(statusCode);
 
-        httpMessageHandlerMock = HttpClientTestHelper.SetupHttpMessageHandlerMock(statusCode);
-
-        var httpClient = HttpClientTestHelper.CreateTestHttpClient(httpMessageHandlerMock);
-
-        HttpClientTestHelper.SetupHttpClientFactoryMock(httpClientFactoryMock, httpClient);
-
-        var sut = new GetToken(httpClientFactoryMock.Object, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
+        var sut = new GetToken(httpClientMock, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 
         Assert.ThrowsAsync<HttpRequestException>(async () => await sut.GetAuthToken());
     }
@@ -71,18 +65,11 @@ public class GetTokenTests
     [TestCase(null)]
     public void GetAuthToken_ThrowsException_WhenResponseIsEmpty(string expectedToken)
     {
-        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
-        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
-
         var mockReturnedJson = expectedToken == null ? null : expectedToken;
 
-        httpMessageHandlerMock = HttpClientTestHelper.SetupHttpMessageHandlerMock(HttpStatusCode.OK, mockReturnedJson);
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockReturnedJson);
 
-        var httpClient = HttpClientTestHelper.CreateTestHttpClient(httpMessageHandlerMock);
-
-        HttpClientTestHelper.SetupHttpClientFactoryMock(httpClientFactoryMock, httpClient);
-
-        var sut = new GetToken(httpClientFactoryMock.Object, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
+        var sut = new GetToken(httpClientMock, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 
         Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetAuthToken());
     }
@@ -90,19 +77,14 @@ public class GetTokenTests
     [Test]
     public void GetAuthToken_ThrowsException_WhenJsonStructureIsUnexpected()
     {
-        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
-        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        var mockReturnedJsonFull = _fixture.Create<BearerTokenModel>();
+        mockReturnedJsonFull.access_token = null;
+        var mockedReturnedJsonSerialized = JsonConvert.SerializeObject(mockReturnedJsonFull);
 
-        var mockReturnedJson = "{\"unexpected_property\":\"unexpectedValue\", \"type\":\"sampleType\"}";
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockedReturnedJsonSerialized);
 
-        httpMessageHandlerMock = HttpClientTestHelper.SetupHttpMessageHandlerMock(HttpStatusCode.OK, mockReturnedJson);
+        var sut = new GetToken(httpClientMock, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 
-        var httpClient = HttpClientTestHelper.CreateTestHttpClient(httpMessageHandlerMock);
-
-        HttpClientTestHelper.SetupHttpClientFactoryMock(httpClientFactoryMock, httpClient);
-
-        var sut = new GetToken(httpClientFactoryMock.Object, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
-
-        Assert.ThrowsAsync<JsonReaderException>(async () => await sut.GetAuthToken());
+        Assert.ThrowsAsync<JsonSerializationException>(async () => await sut.GetAuthToken());
     }
 }

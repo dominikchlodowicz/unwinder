@@ -163,7 +163,7 @@ namespace unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
         public string number { get; set; }
         public Aircraft aircraft { get; set; }
         public Operating operating { get; set; }
-        public string duration { get; set; }
+        
         public string id { get; set; }
         public int numberOfStops { get; set; }
         public bool blacklistedInEU { get; set; }

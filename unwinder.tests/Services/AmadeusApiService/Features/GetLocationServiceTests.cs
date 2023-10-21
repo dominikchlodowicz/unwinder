@@ -33,8 +33,8 @@ public class GetLocationServiceTests
         // var wrapper = new GetLocationAirportModelWrapper { data = expectedLocations };
         var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
 
-        var httpCleintMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
-        var sut = new GetLocationService(httpCleintMock, _getTokenMock.Object);
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
+        var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         // Act
         var result = await sut.GetLocation("test");
@@ -50,8 +50,8 @@ public class GetLocationServiceTests
     [TestCase(HttpStatusCode.BadGateway)]
     public void GetLocationService_ReturnsApiError_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
     {
-        var httpCleintMock = HttpClientTestHelper.SetupHttpClient(statusCode);
-        var sut = new GetLocationService(httpCleintMock, _getTokenMock.Object);
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(statusCode);
+        var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         Assert.ThrowsAsync<HttpRequestException>(async () => await sut.GetLocation("test"));
     }
@@ -60,8 +60,8 @@ public class GetLocationServiceTests
     [TestCase(null)]
     public void GetLocationService_ThrowsException_WhenResponseIsEmpty(string expectedToken)
     {
-        var httpCleintMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, expectedToken);
-        var sut = new GetLocationService(httpCleintMock, _getTokenMock.Object);
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, expectedToken);
+        var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation("test"));
     }
@@ -73,8 +73,8 @@ public class GetLocationServiceTests
         expectedLocations.data[0].name = null;
         var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
 
-        var httpCleintMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
-        var sut = new GetLocationService(httpCleintMock, _getTokenMock.Object);
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
+        var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation("test"));
     }
