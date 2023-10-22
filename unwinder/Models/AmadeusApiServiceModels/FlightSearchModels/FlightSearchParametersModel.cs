@@ -42,6 +42,9 @@ public class DepartureDateTimeRange
 
     [JsonProperty("time")]
     public string Time { get; set; }
+    
+    [JsonProperty("timeWindow")]
+    public string TimeWindow { get; set; }
 }
 
 public class Traveler

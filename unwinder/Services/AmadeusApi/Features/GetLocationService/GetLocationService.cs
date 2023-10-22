@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 
-namespace unwinder.Services.AmadeusApiService;
+namespace unwinder.Services.AmadeusApiService.GetLocation;
 
 public class GetLocationService : IGetLocationService
 {

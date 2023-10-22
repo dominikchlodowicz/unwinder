@@ -1,6 +1,6 @@
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
-namespace unwinder.Services.AmadeusApiService;
+namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
 public interface IFlightSearchService
 {

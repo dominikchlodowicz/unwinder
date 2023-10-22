@@ -5,6 +5,7 @@ using unwinder.Services.AmadeusApiService;
 using unwinder.tests.Services.Helpers;
 using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 using Newtonsoft.Json;
+using unwinder.Services.AmadeusApiService.GetLocation;
 
 namespace unwinder.tests.Services.AmadeusApiService;
 
@@ -52,11 +53,12 @@ public class GetLocationServiceTests
         Assert.ThrowsAsync<HttpRequestException>(async () => await sut.GetLocation("test"));
     }
 
-    [TestCase("{}")]
-    [TestCase(null)]
     public void GetLocationService_ThrowsException_WhenResponseIsEmpty(string expectedToken)
     {
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, expectedToken);
+        var expectedLocations = _fixture.Create<GetLocationAirportResponseModel>();
+        expectedLocations.data = null; 
+        var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
+        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
         var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation("test"));

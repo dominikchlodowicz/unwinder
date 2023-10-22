@@ -1,6 +1,6 @@
 using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 
-namespace unwinder.Services.AmadeusApiService;
+namespace unwinder.Services.AmadeusApiService.GetLocation;
 
 public interface IGetLocationService
 {

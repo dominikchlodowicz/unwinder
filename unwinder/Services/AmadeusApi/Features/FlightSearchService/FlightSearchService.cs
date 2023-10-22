@@ -4,8 +4,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 using unwinder.Helpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Reflection.Metadata;
+using System.Reflection.Emit;
 
-namespace unwinder.Services.AmadeusApiService;
+namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
 public class FlightSearchService : IFlightSearchService
 {
@@ -19,6 +22,14 @@ public class FlightSearchService : IFlightSearchService
     }
 
     private readonly string flightSearchEndpointUri = "shopping/flight-offers";
+
+    // public async FlightSearchParameters BuildFlightSearchRequestParameters
+    // (
+        
+    // )
+    // {
+
+    // }
 
     public async Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters flightSearchParameters)
     {

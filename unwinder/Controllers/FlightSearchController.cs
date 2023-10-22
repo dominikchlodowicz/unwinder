@@ -5,7 +5,9 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Text;
 using System.Diagnostics;
-using unwinder.Services.AmadeusApiService;
+using unwinder.Services.AmadeusApiService.FlightSearch;
+using unwinder.Services.AmadeusApiService.GetLocation;
+
 
 namespace unwinder.Controllers;
 
@@ -66,7 +68,7 @@ public class FlightSearchController : ControllerBase
             {
                 new Traveler
                 {
-                    Id = "1",
+                    Id = "2",
                     TravelerType = "ADULT"
                 }
             },
@@ -80,7 +82,7 @@ public class FlightSearchController : ControllerBase
                     {
                         new CabinRestriction
                         {
-                            Cabin = "BUSINESS",
+                            Cabin = "ECONOMY",
                             Coverage = "MOST_SEGMENTS",
                             OriginDestinationIds = new List<string> { "1" }
                         }
