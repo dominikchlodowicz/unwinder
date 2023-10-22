@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using unwinder.Models.AmadeusApiServiceModels.KeyModels;
 using System;
+using unwinder.Helpers;
 
 namespace unwinder.Services;
 
@@ -8,7 +9,6 @@ public class GetToken : IGetToken
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger _logger;
-
     private readonly string _serviceApiKey;
     private readonly string _serviceApiSecretKey;
 
@@ -37,7 +37,7 @@ public class GetToken : IGetToken
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException($"Received {response.StatusCode} from the server.");
+            throw new HttpRequestException(string.Format(ErrorMessages.RecievedErrorCode, response.StatusCode));
         }
 
         var responseString = await response.Content.ReadAsStringAsync();
@@ -53,7 +53,7 @@ public class GetToken : IGetToken
 
         if (deserializedResponse?.access_token == null)
         {
-            throw new JsonSerializationException("Unexpected JSON structure: missing access_token.");
+            throw new JsonSerializationException(string.Format(ErrorMessages.UnexpectedJsonStructure, "missing access_token"));
         }
 
         return deserializedResponse != null ? deserializedResponse.access_token : "Error";

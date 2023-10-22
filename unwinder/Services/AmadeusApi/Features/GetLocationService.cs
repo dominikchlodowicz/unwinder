@@ -46,96 +46,40 @@ public class GetLocationService : IGetLocationService
     {
         var responseContent = await response.Content.ReadAsStringAsync();
 
-        if(string.IsNullOrEmpty(responseContent) || responseContent == "{}")
+        var responseJson = JObject.Parse(responseContent);
+
+        if(responseJson["data"] is JArray dataArray && !dataArray.Any())
         {
             throw new InvalidOperationException("Api response is empty.");
         }
-
-        var responseJson = JObject.Parse(responseContent);
 
         var airports = DeserializeGetLocationResponse(responseJson);
 
         return airports;
     }
 
-    // private IEnumerable<GetLocationAirportModel> DeserializeGetLocationResponse(JObject responseJson)
-    // {
-    //     if (responseJson["data"] != null)
-    //     {
-    //         return responseJson["data"]
-    //             .Select(a => new GetLocationAirportModel
-    //             {
-    //                 Name = (string)a["name"],
-    //                 IataCode = (string)a["iataCode"],
-    //                 CityName = (string)a["address"]["cityName"]
-    //             });
-    //     }
-    //     else
-    //     {
-    //         throw new InvalidOperationException("Unexpected JSON structure: missing data property.");
-    //     }
-    // }
-
-    // private IEnumerable<GetLocationAirportModel> DeserializeGetLocationResponse(JObject responseJson)
-    // {
-    //     if (responseJson["data"] != null)
-    //     {
-    //         return responseJson["data"]
-    //             .Select(a => 
-    //             {
-    //                 var name = (string)a["name"];
-    //                 var iataCode = (string)a["iataCode"];
-    //                 var cityName = a["address"]?["cityName"] != null ? (string)a["address"]["cityName"] : null;
-
-    //                 if (name == null || iataCode == null || cityName == null)
-    //                 {
-    //                     throw new InvalidOperationException("Unexpected JSON structure: Some required properties are missing.");
-    //                 }
-
-    //                 return new GetLocationAirportModel
-    //                 {
-    //                     Name = name,
-    //                     IataCode = iataCode,
-    //                     CityName = cityName
-    //                 };
-    //             });
-    //     }
-    //     else
-    //     {
-    //         throw new InvalidOperationException("Unexpected JSON structure: missing data property.");
-    //     }
-    // }
-
     private IEnumerable<GetLocationAirportModel> DeserializeGetLocationResponse(JObject responseJson)
     {
-        if (responseJson["data"] != null)
+        var results = new List<GetLocationAirportModel>();
+        foreach (var a in responseJson["data"])
         {
-            var results = new List<GetLocationAirportModel>();
-            foreach (var a in responseJson["data"])
+            // Debugging is easier here
+            var name = (string)a["name"];
+            var iataCode = (string)a["iataCode"];
+            var cityName = (string)a["address"]["cityName"];
+
+            if (name == null || iataCode == null || cityName == null)
             {
-                // Debugging is easier here
-                var name = (string)a["name"];
-                var iataCode = (string)a["iataCode"];
-                var cityName = (string)a["address"]["cityName"];
-
-                if (name == null || iataCode == null || cityName == null)
-                {
-                    throw new InvalidOperationException("Unexpected JSON structure: Some required properties are missing.");
-                }
-
-                results.Add(new GetLocationAirportModel
-                {
-                    Name = name,
-                    IataCode = iataCode,
-                    CityName = cityName
-                });
+                throw new InvalidOperationException("Unexpected JSON structure: Some required properties are missing.");
             }
-            return results;
-        }
-        else
-        {
-            throw new InvalidOperationException("Unexpected JSON structure: missing data property.");
-        }
-    }
 
+            results.Add(new GetLocationAirportModel
+            {
+                Name = name,
+                IataCode = iataCode,
+                CityName = cityName
+            });
+        }
+        return results;
+    }
 }

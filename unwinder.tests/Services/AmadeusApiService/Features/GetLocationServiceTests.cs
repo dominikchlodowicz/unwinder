@@ -11,10 +11,6 @@ namespace unwinder.tests.Services.AmadeusApiService;
 public class GetLocationServiceTests
 {
     private Mock<IGetToken> _getTokenMock;
-    private Mock<IHttpClientFactory> _httpClientFactoryMock;
-    private Mock<HttpMessageHandler> _httpMessageHandlerMock;
-    private HttpClient _client;
-
     private Fixture _fixture;
 
     [SetUp]

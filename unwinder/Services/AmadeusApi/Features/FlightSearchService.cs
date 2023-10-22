@@ -3,6 +3,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
+using unwinder.Helpers;
 
 namespace unwinder.Services.AmadeusApiService;
 
@@ -32,7 +33,6 @@ public class FlightSearchService : IFlightSearchService
     {
 
         var processedParameters = ProcessFlightSearchParameters(flightSearchParameters);
-
         var response = await _httpClientV2.PostAsync(flightSearchEndpointUri, processedParameters);
 
         return response;
@@ -49,7 +49,6 @@ public class FlightSearchService : IFlightSearchService
     private async Task<FlightSearchOutputModel> ProcessFlightSearchResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
-
         var flightSearchData = await DeserializeFlightSearchResponse(responseContent);
 
         return flightSearchData;
@@ -61,7 +60,7 @@ public class FlightSearchService : IFlightSearchService
         var data = JsonConvert.DeserializeObject<FlightSearchOutputModel>(flightResponse);
         if (data == null)
         {
-            throw new Exception("Failed to deserialize API response.");
+            throw new Exception(ErrorMessages.DeserializeError);
         }
 
         return Task.FromResult(data);
