@@ -1,12 +1,18 @@
+using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
+
 namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
 public interface IFlightSearchParametersBuilder
 {
-    public void BuildDefaultValues();
+    public FlightSearchParametersBuilder BuildNumberOfTravelers(List<string> numberOfTravelers);
 
-    public void BuildOriginDestinations();
+    public FlightSearchParametersBuilder BuildDateTimeRange(string departureDate, string departureTime);
 
-    public void BuildDateTimeRange();
+    public FlightSearchParametersBuilder BuildOriginDestinations(string originLocationCode, string destinationLocationCode, DepartureDateTimeRange departureDateTimeRange);
 
-    public void BuidNumberOfTravelers();
+    public FlightSearchParametersBuilder BuildCurrencyCode(string currencyCode);
+
+    public FlightSearchParametersBuilder BuildDefaultValues();
+
+    public FlightSearchParameters Build();
 }

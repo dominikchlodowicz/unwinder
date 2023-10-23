@@ -2,6 +2,8 @@ using unwinder.Services;
 using unwinder.Models.AmadeusApiServiceModels.KeyModels;
 using unwinder.Controllers;
 using unwinder.Services.AmadeusApiService;
+using unwinder.Services.AmadeusApiService.FlightSearch;
+using unwinder.Services.AmadeusApiService.GetLocation;
 
 var builder = WebApplication.CreateBuilder(args);
 

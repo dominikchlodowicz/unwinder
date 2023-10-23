@@ -2,13 +2,14 @@ using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic;
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
+using unwinder.Services.AmadeusApiService.FlightSearch.Helpers;
+
 namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
 public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
 {
     private FlightSearchParameters _parameters = new FlightSearchParameters();
 
-    private string defaultTravelerType = "ADULT";
     private string defaultTimeWindow = "12H";
     private string defaultCabin = "ECONOMY";
     private string defaultCoverage = "MOST_SEGMENTS";
@@ -16,20 +17,28 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
     private List<string> OriginDestinationIds = new List<string> { "1" };
     private int defaultNumberOfFlightOffers = 5;
 
+    private List<string> defaultDataSource = new List<string> {"GDS"};
+
     private DepartureDateTimeRange _departureDateTimeRange;
 
-    // TODO: Add for loop creating travelers if more than 1
-    public void BuildNumberOfTravelers(int numberOfTravelers)
+    public FlightSearchParametersBuilder BuildNumberOfTravelers(List<string> numberOfTravelers)
     {
-        _parameters.Travelers.Add(
-            new Traveler{
-                Id = numberOfTravelers.ToString(),
-                TravelerType = defaultTravelerType
-            }
-        );
+        List<string> typeVerifiedNumberOfTravelers = numberOfTravelers.Select(t => t.ToTravelerType()).ToList();
+
+        for(int traveler_id = 0; traveler_id < typeVerifiedNumberOfTravelers.Count; traveler_id++)
+        {
+            _parameters.Travelers.Add(
+                new Traveler{
+                    Id = traveler_id.ToString(),
+                    TravelerType = typeVerifiedNumberOfTravelers[traveler_id]
+                }
+            );
+        }
+
+        return this;
     }
 
-    public DepartureDateTimeRange BuildDateTimeRange(string departureDate, string departureTime)
+    public FlightSearchParametersBuilder BuildDateTimeRange(string departureDate, string departureTime)
     {
         _departureDateTimeRange = new DepartureDateTimeRange{
             Date = departureDate,
@@ -37,10 +46,10 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
             TimeWindow = defaultTimeWindow
         };
 
-        return _departureDateTimeRange;
+        return this;
     }
 
-    public void BuildOriginDestinations(string originLocationCode, string destinationLocationCode, DepartureDateTimeRange departureDateTimeRange)
+    public FlightSearchParametersBuilder BuildOriginDestinations(string originLocationCode, string destinationLocationCode, DepartureDateTimeRange departureDateTimeRange)
     {
         _parameters.OriginDestinations.Add(new OriginDestination{
             // only one origin destination
@@ -49,10 +58,20 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
             DestinationLocationCode = destinationLocationCode,
             DepartureDateTimeRange = departureDateTimeRange
         });
+
+        return this;
     }
 
-    // TODO: Add all default values from FlightSearcgParametersModels
-    public void BuildDefaultValues()
+    public FlightSearchParametersBuilder BuildCurrencyCode(string currencyCode)
+    {
+        string typeVerifiedCurrencyCode = currencyCode.ToCurrencyCodeType();
+
+        _parameters.CurrencyCode = typeVerifiedCurrencyCode;
+
+        return this;
+    }
+
+    public FlightSearchParametersBuilder BuildDefaultValues()
     {
         _parameters.SearchCriteria.FlightFilters.CabinRestrictions.Add(new CabinRestriction{
             Cabin = defaultCabin,
@@ -62,5 +81,13 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
 
         _parameters.SearchCriteria.MaxFlightOffers = defaultNumberOfFlightOffers;
 
+        _parameters.Sources = defaultDataSource;
+
+        return this;
+    }
+
+    public FlightSearchParameters Build()
+    {
+        return _parameters;
     }
 }
