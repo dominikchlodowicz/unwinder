@@ -7,6 +7,7 @@ using System.Text;
 using System.Diagnostics;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
+using FluentAssertions;
 
 
 namespace unwinder.Controllers;
@@ -47,7 +48,15 @@ public class FlightSearchController : ControllerBase
     [HttpGet("api/flightsearch")]
     public async Task<string> FlightSearch()
     {
-        var requestParameters = new FlightSearchParameters
+        FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
+            .BuildNumberOfTravelers(new List<string> { "ADULT" })
+            .BuildDateTimeRange("2023-11-01", "10:00:00")
+            .BuildOriginDestinations("NYC", "MAD")
+            .BuildCurrencyCode("USD")
+            .BuildDefaultValues()
+            .Build();
+
+        var requestParameters2 = new FlightSearchParameters
         {
             CurrencyCode = "USD",
             OriginDestinations = new List<OriginDestination>
@@ -68,7 +77,7 @@ public class FlightSearchController : ControllerBase
             {
                 new Traveler
                 {
-                    Id = "2",
+                    Id = "0",
                     TravelerType = "ADULT"
                 }
             },
@@ -90,6 +99,16 @@ public class FlightSearchController : ControllerBase
                 }
             }
         };
+
+        // Use FluentAssertions for structural comparison
+        try
+        {
+            requestParameters.Should().BeEquivalentTo(requestParameters2, options => options.ExcludingMissingMembers());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation("FluentAssertions: Objects are not structurally equivalent. Reason: {Reason}", ex.Message);
+        }
 
         var flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
         var serializedflighSearchResult = JsonConvert.SerializeObject(flightSearchResult);

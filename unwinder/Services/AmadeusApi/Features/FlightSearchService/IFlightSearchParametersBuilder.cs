@@ -8,7 +8,7 @@ public interface IFlightSearchParametersBuilder
 
     public FlightSearchParametersBuilder BuildDateTimeRange(string departureDate, string departureTime);
 
-    public FlightSearchParametersBuilder BuildOriginDestinations(string originLocationCode, string destinationLocationCode, DepartureDateTimeRange departureDateTimeRange);
+    public FlightSearchParametersBuilder BuildOriginDestinations(string originLocationCode, string destinationLocationCode);
 
     public FlightSearchParametersBuilder BuildCurrencyCode(string currencyCode);
 

@@ -23,14 +23,6 @@ public class FlightSearchService : IFlightSearchService
 
     private readonly string flightSearchEndpointUri = "shopping/flight-offers";
 
-    // public async FlightSearchParameters BuildFlightSearchRequestParameters
-    // (
-        
-    // )
-    // {
-
-    // }
-
     public async Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters flightSearchParameters)
     {
         var token = await _getToken.GetAuthToken();

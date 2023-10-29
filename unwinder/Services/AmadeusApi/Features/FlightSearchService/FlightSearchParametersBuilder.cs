@@ -8,7 +8,20 @@ namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
 public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
 {
-    private FlightSearchParameters _parameters = new FlightSearchParameters();
+    private FlightSearchParameters _parameters = new FlightSearchParameters
+    {
+        Travelers = new List<Traveler>(),
+        OriginDestinations = new List<OriginDestination>(),
+        CurrencyCode = string.Empty, // Assuming a default empty value
+        SearchCriteria = new SearchCriteria
+        {
+            FlightFilters = new FlightFilters
+            {
+                CabinRestrictions = new List<CabinRestriction>()
+            }
+        },
+        Sources = new List<string>()
+    };
 
     private string defaultTimeWindow = "12H";
     private string defaultCabin = "ECONOMY";
@@ -43,20 +56,25 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
         _departureDateTimeRange = new DepartureDateTimeRange{
             Date = departureDate,
             Time = departureTime,
-            TimeWindow = defaultTimeWindow
+            // TimeWindow = defaultTimeWindow
         };
 
         return this;
     }
 
-    public FlightSearchParametersBuilder BuildOriginDestinations(string originLocationCode, string destinationLocationCode, DepartureDateTimeRange departureDateTimeRange)
+    public FlightSearchParametersBuilder BuildOriginDestinations(string originLocationCode, string destinationLocationCode)
     {
+        if (_departureDateTimeRange == null)
+        {
+            throw new InvalidOperationException("The departure date and time must be set before setting origin and destination.");
+        }
+
         _parameters.OriginDestinations.Add(new OriginDestination{
             // only one origin destination
             Id = "1",
             OriginLocationCode = originLocationCode,
             DestinationLocationCode = destinationLocationCode,
-            DepartureDateTimeRange = departureDateTimeRange
+            DepartureDateTimeRange = _departureDateTimeRange
         });
 
         return this;
