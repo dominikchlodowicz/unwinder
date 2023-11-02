@@ -36,6 +36,11 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
 
     public FlightSearchParametersBuilder BuildNumberOfTravelers(List<string> numberOfTravelers)
     {
+        if(numberOfTravelers.Count == 0 || numberOfTravelers == null)
+        {
+            throw new ArgumentNullException("numberOfTravelers cannot be empty");
+        }
+        
         List<string> typeVerifiedNumberOfTravelers = numberOfTravelers.Select(t => t.ToTravelerType()).ToList();
 
         for(int traveler_id = 0; traveler_id < typeVerifiedNumberOfTravelers.Count; traveler_id++)
@@ -51,17 +56,30 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
         return this;
     }
 
+    /// <summary>
+    ///     Sets DepratureDateTimeRange for OriginDestinations object.
+    /// </summary>
+    /// <param name="departureDate">In ISO 8601 YYYY-MM-DD format.</param>
+    /// <param name="departureTime">Local time. hh:mm:ss format, e.g 10:30:00</param>
+    /// <returns></returns>
     public FlightSearchParametersBuilder BuildDateTimeRange(string departureDate, string departureTime)
     {
+        DateTimeRangeTypeExtension.DateTimeToCorrectIsoFormat(departureDate, departureTime);
+
         _departureDateTimeRange = new DepartureDateTimeRange{
             Date = departureDate,
             Time = departureTime,
-            // TimeWindow = defaultTimeWindow
         };
 
         return this;
     }
 
+    /// <summary>
+    ///    
+    /// </summary>
+    /// <param name="originLocationCode">Locaiton aiport IATA string</param>
+    /// <param name="destinationLocationCode">Locaiton aiport IATA string</param>
+    /// <exception cref="InvalidOperationException"></exception>
     public FlightSearchParametersBuilder BuildOriginDestinations(string originLocationCode, string destinationLocationCode)
     {
         if (_departureDateTimeRange == null)
@@ -80,6 +98,10 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
         return this;
     }
 
+    /// <summary>
+    ///     Adds currency code to request
+    /// </summary>
+    /// <param name="currencyCode">Currently allowed currencies are defined in CurrencyCodeTypeExtension</param>
     public FlightSearchParametersBuilder BuildCurrencyCode(string currencyCode)
     {
         string typeVerifiedCurrencyCode = currencyCode.ToCurrencyCodeType();

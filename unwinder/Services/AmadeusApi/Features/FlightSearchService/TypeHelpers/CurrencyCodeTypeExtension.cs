@@ -2,7 +2,7 @@ using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels.HelperModels;
 
 namespace unwinder.Services.AmadeusApiService.FlightSearch.Helpers;
 
-public static class CurrencyCodeTpeExtentions
+public static class CurrencyCodeTypeExtension
 {
     public static string ToCurrencyCodeType(this string value)
     {

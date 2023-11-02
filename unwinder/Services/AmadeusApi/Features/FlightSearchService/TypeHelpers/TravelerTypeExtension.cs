@@ -2,7 +2,7 @@ using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels.HelperModels;
 
 namespace unwinder.Services.AmadeusApiService.FlightSearch.Helpers;
 
-public static class TravelerTypeExtensions
+public static class TravelerTypeExtension
 {
     public static string ToTravelerType(this string value)
     {
