@@ -1,9 +1,10 @@
 using System.Net;
 using Moq.Protected;
+using unwinder.Services.AmadeusApiService.FlightSearch;
 
 namespace unwinder.tests.Services.Helpers;
 
-public static class HttpClientTestHelper
+public static class AmadeusApiHttpClientTestHelper
 {
 
     public static IHttpClientFactory SetupHttpClient(HttpStatusCode statusCode, string mockReturnContent = "")
@@ -43,4 +44,15 @@ public static class HttpClientTestHelper
     {
         httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
     }
+
+    public static FlightSearchParametersBuilder CreateDefaultFlightSearchParametersBuilder()
+    {
+        return new FlightSearchParametersBuilder()
+            .BuildNumberOfTravelers(new List<string> { "ADULT" })
+            .BuildDateTimeRange("2023-11-22", "10:30:00")
+            .BuildOriginDestinations("WAW", "LAX")
+            .BuildCurrencyCode("PLN")
+            .BuildDefaultValues();
+    }    
+
 }

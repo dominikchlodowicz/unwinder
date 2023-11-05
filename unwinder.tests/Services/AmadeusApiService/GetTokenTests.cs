@@ -39,7 +39,7 @@ public class GetTokenTests
 
         var mockedReturnedJsonSerialized = JsonConvert.SerializeObject(mockedReturnedJsonFixture);
 
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockedReturnedJsonSerialized);
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockedReturnedJsonSerialized);
 
         var sut = new GetToken(httpClientMock, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 
@@ -54,7 +54,7 @@ public class GetTokenTests
     [TestCase(HttpStatusCode.BadGateway)]
     public void GetAuthToken_ReturnsApiError_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
     {
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(statusCode);
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(statusCode);
 
         var sut = new GetToken(httpClientMock, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 
@@ -67,7 +67,7 @@ public class GetTokenTests
     {
         var mockReturnedJson = expectedToken == null ? null : expectedToken;
 
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockReturnedJson);
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockReturnedJson);
 
         var sut = new GetToken(httpClientMock, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 
@@ -81,7 +81,7 @@ public class GetTokenTests
         mockReturnedJsonFull.access_token = null;
         var mockedReturnedJsonSerialized = JsonConvert.SerializeObject(mockReturnedJsonFull);
 
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockedReturnedJsonSerialized);
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, mockedReturnedJsonSerialized);
 
         var sut = new GetToken(httpClientMock, _loggerMock.Object, _serviceApiKey, _serviceApiSecretKey);
 

@@ -30,7 +30,7 @@ public class GetLocationServiceTests
         // var wrapper = new GetLocationAirportModelWrapper { data = expectedLocations };
         var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
 
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
         var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         // Act
@@ -45,9 +45,9 @@ public class GetLocationServiceTests
     [TestCase(HttpStatusCode.InternalServerError)]
     [TestCase(HttpStatusCode.NotFound)]
     [TestCase(HttpStatusCode.BadGateway)]
-    public void GetLocationService_ReturnsApiError_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
+    public void GetLocationService_ThrowsHttoRequestException_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
     {
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(statusCode);
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(statusCode);
         var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         Assert.ThrowsAsync<HttpRequestException>(async () => await sut.GetLocation("test"));
@@ -58,7 +58,7 @@ public class GetLocationServiceTests
         var expectedLocations = _fixture.Create<GetLocationAirportResponseModel>();
         expectedLocations.data = null; 
         var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
         var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation("test"));
@@ -71,7 +71,7 @@ public class GetLocationServiceTests
         expectedLocations.data[0].name = null;
         var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
 
-        var httpClientMock = HttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
         var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
 
         Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetLocation("test"));

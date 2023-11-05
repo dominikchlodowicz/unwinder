@@ -38,6 +38,11 @@ public class FlightSearchService : IFlightSearchService
         var processedParameters = ProcessFlightSearchParameters(flightSearchParameters);
         var response = await _httpClientV2.PostAsync(flightSearchEndpointUri, processedParameters);
 
+        if(!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Received {response.StatusCode} from the server.");
+        }
+
         return response;
     }
 
