@@ -12,6 +12,8 @@ using unwinder.Services.AmadeusApiService.GetLocation;
 using Newtonsoft.Json;
 using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 using FluentAssertions;
+using System.Net;
+using NUnit.Framework.Constraints;
 
 
 namespace unwinder.tests.Service.AmadeusApiService;
@@ -47,11 +49,11 @@ public class FlightSearchControllerTests
     }
 
     [Test]
-    public async Task GetLocation_WithValidLocation_ReturnsSerializedAirports()
+    public async Task GetLocation_WithExistingLocation_ReturnsSerializedAirports()
     {
         string testLocation = "New York City";
         List<GetLocationAirportModel> expectedReturnedAirports = _fixture.Build<GetLocationAirportModel>()
-                                                            .With(x => x.Name, "New York City")
+                                                            .With(x => x.Name, testLocation)
                                                             .CreateMany(3)
                                                             .ToList();
 
@@ -62,5 +64,16 @@ public class FlightSearchControllerTests
         Assert.IsInstanceOf<string>(result);
         var deserializedResult = JsonConvert.DeserializeObject<List<GetLocationAirportModel>>(result);
         deserializedResult.Should().BeEquivalentTo(expectedReturnedAirports);
+    }
+
+    [Test]
+    public void GetLocation_WithInvalidLocaton_ThrowsInvalidOperationException()
+    {
+        string testLocation = "Bielawa";
+        List<GetLocationAirportModel> expectedReturnedAirports = new List<GetLocationAirportModel>{};
+
+        _mockGetLocationService.Setup(s => s.GetLocation(testLocation)).ReturnsAsync(expectedReturnedAirports);
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await _controller.GetLocation(testLocation));
     }
 }

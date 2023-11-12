@@ -42,6 +42,10 @@ public class FlightSearchController : ControllerBase
     {
         var airports = await _getLocationService.GetLocation(location);
         var serializedAirports = JsonConvert.SerializeObject(airports);
+        if (String.IsNullOrWhiteSpace(serializedAirports) || serializedAirports == "[]")
+        {
+            throw new InvalidOperationException("The api response is empty or null.");
+        }
         return serializedAirports;
     }
 
@@ -55,60 +59,6 @@ public class FlightSearchController : ControllerBase
             .BuildCurrencyCode("USD")
             .BuildDefaultValues()
             .Build();
-
-        var requestParameters2 = new FlightSearchParameters
-        {
-            CurrencyCode = "USD",
-            OriginDestinations = new List<OriginDestination>
-            {
-                new OriginDestination
-                {
-                    Id = "1",
-                    OriginLocationCode = "NYC",
-                    DestinationLocationCode = "MAD",
-                    DepartureDateTimeRange = new DepartureDateTimeRange
-                    {
-                        Date = "2023-11-01",
-                        Time = "10:00:00"
-                    }
-                }
-            },
-            Travelers = new List<Traveler>
-            {
-                new Traveler
-                {
-                    Id = "0",
-                    TravelerType = "ADULT"
-                }
-            },
-            Sources = new List<string> { "GDS" },
-            SearchCriteria = new SearchCriteria
-            {
-                MaxFlightOffers = 2,
-                FlightFilters = new FlightFilters
-                {
-                    CabinRestrictions = new List<CabinRestriction>
-                    {
-                        new CabinRestriction
-                        {
-                            Cabin = "ECONOMY",
-                            Coverage = "MOST_SEGMENTS",
-                            OriginDestinationIds = new List<string> { "1" }
-                        }
-                    }
-                }
-            }
-        };
-
-        // Use FluentAssertions for structural comparison
-        try
-        {
-            requestParameters.Should().BeEquivalentTo(requestParameters2, options => options.ExcludingMissingMembers());
-        }
-        catch (Exception ex)
-        {
-            _logger.LogInformation("FluentAssertions: Objects are not structurally equivalent. Reason: {Reason}", ex.Message);
-        }
 
         var flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
         var serializedflighSearchResult = JsonConvert.SerializeObject(flightSearchResult);
