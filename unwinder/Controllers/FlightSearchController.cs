@@ -36,20 +36,36 @@ public class FlightSearchController : ControllerBase
         _bearerToken = bearerToken;
     }
 
-    [HttpGet("api/get-airport/{location}")]
-    public async Task<string> GetLocation(string location)
+    [HttpGet("api/flight-search/get-airport/{location}")]
+    public async Task<ActionResult<IEnumerable<string>>> GetAirportLocation(string location)
     {
         var airports = await _getLocationService.GetLocation(location);
-        var serializedAirports = JsonConvert.SerializeObject(airports);
-        if (String.IsNullOrWhiteSpace(serializedAirports) || serializedAirports == "[]")
+
+        if (airports == null || !airports.Any())
         {
-            throw new InvalidOperationException("The api response is empty or null.");
+            return NotFound("No airports found for the given location.");
         }
-        return serializedAirports;
+
+        return Ok(airports);
     }
 
-    [HttpGet("api/flightsearch")]
-    public async Task<string> FlightSearch()
+    [HttpGet("api/flight-search/get-city/{location}")]
+    public async Task<ActionResult<IEnumerable<string>>> GetCityLocation(string location)
+    {
+        var airports = await _getLocationService.GetLocation(location);
+
+        if (airports == null || !airports.Any())
+        {
+            return NotFound("No airports found for the given location.");
+        }
+
+        var cityNames = airports.Select(a => a.CityName).Distinct().ToList();
+
+        return Ok(cityNames);
+    }
+
+    [HttpGet("api/flight-search")]
+    public async Task<ActionResult<string>> FlightSearch()
     {
         FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
             .BuildNumberOfTravelers(new List<string> { "ADULT" })
@@ -60,7 +76,12 @@ public class FlightSearchController : ControllerBase
             .Build();
 
         var flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
-        var serializedflighSearchResult = JsonConvert.SerializeObject(flightSearchResult);
-        return serializedflighSearchResult;
+
+        if (flightSearchResult == null)
+        {
+            return NotFound("Flight search did not return any results.");
+        }
+
+        return Ok(flightSearchResult);
     }
 }
