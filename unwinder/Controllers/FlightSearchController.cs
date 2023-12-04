@@ -36,8 +36,7 @@ public class FlightSearchController : ControllerBase
         _bearerToken = bearerToken;
     }
 
-
-    [HttpGet("api/getlocation/{location}")]
+    [HttpGet("api/get-airport/{location}")]
     public async Task<string> GetLocation(string location)
     {
         var airports = await _getLocationService.GetLocation(location);

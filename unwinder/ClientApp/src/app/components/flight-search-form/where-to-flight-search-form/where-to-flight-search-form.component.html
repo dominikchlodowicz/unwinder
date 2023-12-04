@@ -1,1 +1,9 @@
-<p>where-to-flight-search-form works!</p>
+<mat-form-field>
+  <mat-label>Enter city name</mat-label>
+  <input matInput [matAutocomplete]="auto" [formControl]="citiesAutocomplete" />
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredCities" [value]="option">
+      {{ option }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
