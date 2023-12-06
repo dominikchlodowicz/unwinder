@@ -12,4 +12,7 @@ public class GetLocationAirportModel
 
     [JsonProperty("cityName")]
     public string CityName;
+
+    [JsonProperty("countryName")]
+    public string CountryName;
 }

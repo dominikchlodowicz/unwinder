@@ -59,7 +59,7 @@ public class FlightSearchController : ControllerBase
             return NotFound("No airports found for the given location.");
         }
 
-        var cityNames = airports.Select(a => a.CityName).Distinct().ToList();
+        var cityNames = airports.Select(a => a.CityName + ", " + a.CountryName).Distinct().ToList();
 
         return Ok(cityNames);
     }

@@ -31,7 +31,7 @@ public class GetLocationService : IGetLocationService
     }
 
     private async Task<HttpResponseMessage> GetLocationFromApi(string query)
-    {   
+    {
         string httpQuery = getLocationEndpointUri + query;
         var response = await _httpClientV1.GetAsync(httpQuery);
         if (!response.IsSuccessStatusCode)
@@ -48,7 +48,7 @@ public class GetLocationService : IGetLocationService
 
         var responseJson = JObject.Parse(responseContent);
 
-        if(responseJson["data"] is JArray dataArray && !dataArray.Any())
+        if (responseJson["data"] is JArray dataArray && !dataArray.Any())
         {
             throw new InvalidOperationException("Api response is empty.");
         }
@@ -67,6 +67,7 @@ public class GetLocationService : IGetLocationService
             var name = (string)a["name"];
             var iataCode = (string)a["iataCode"];
             var cityName = (string)a["address"]["cityName"];
+            var countryName = (string)a["address"]["countryName"];
 
             if (name == null || iataCode == null || cityName == null)
             {
@@ -77,7 +78,8 @@ public class GetLocationService : IGetLocationService
             {
                 Name = name,
                 IataCode = iataCode,
-                CityName = cityName
+                CityName = cityName,
+                CountryName = countryName
             });
         }
         return results;
