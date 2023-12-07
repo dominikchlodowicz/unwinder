@@ -10,9 +10,7 @@ export class FlightSearchCitiesService {
 
   apiUrl = '/api/flight-search';
 
-  getCities(cityName: string): Observable<string[]> {
-    return this.httpClient.get<string[]>(
-      `${this.apiUrl}/get-airport/${location}`,
-    );
+  getCities(location: string): Observable<string[]> {
+    return this.httpClient.get<string[]>(`${this.apiUrl}/get-city/${location}`);
   }
 }

@@ -6,6 +6,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FlightSearchCitiesService } from '../../../services/flight-search-form/flight-search-cities.service';
+import { switchMap, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-where-to-flight-search-form',
@@ -23,26 +24,29 @@ import { FlightSearchCitiesService } from '../../../services/flight-search-form/
 export class WhereToFlightSearchFormComponent implements OnInit {
   responseCities: string[] = [];
 
-  // flightSearchCitiesService: FlightSearchCitiesService = inject(
-  //   FlightSearchCitiesService,
-  // );
   constructor(private flightSearchCitiesService: FlightSearchCitiesService) {}
 
   filteredCities: string[] = [];
   citiesAutocomplete = new FormControl();
 
   ngOnInit(): void {
-    this.citiesAutocomplete.valueChanges.subscribe((newValue) => {
-      this.flightSearchCitiesService.getCities(newValue).subscribe((cities) => {
+    this.citiesAutocomplete.valueChanges
+      .pipe(
+        debounceTime(300),
+        switchMap((newValue) =>
+          this.flightSearchCitiesService.getCities(newValue),
+        ),
+      )
+      .subscribe((cities) => {
         this.responseCities = cities;
-        this.filteredCities = this.filterValues(newValue);
+        this.filteredCities = this.filterValues(this.citiesAutocomplete.value);
       });
-    });
   }
 
   filterValues(search: string): string[] {
     return this.responseCities.filter(
-      (value) => value.toLowerCase().indexOf(search.toLowerCase()) === 0,
+      (value) =>
+        String(value).toLowerCase().indexOf(search.toLowerCase()) === 0,
     );
   }
 }
