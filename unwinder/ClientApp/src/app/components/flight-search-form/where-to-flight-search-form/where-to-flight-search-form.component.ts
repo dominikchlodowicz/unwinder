@@ -1,4 +1,4 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -6,7 +6,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FlightSearchCitiesService } from '../../../services/flight-search-form/flight-search-cities.service';
-import { switchMap, debounceTime } from 'rxjs';
+import { switchMap, debounceTime, startWith, tap } from 'rxjs';
 
 @Component({
   selector: 'app-where-to-flight-search-form',
@@ -20,9 +20,9 @@ import { switchMap, debounceTime } from 'rxjs';
   ],
   templateUrl: './where-to-flight-search-form.component.html',
   styleUrl: './where-to-flight-search-form.component.css',
-  encapsulation: ViewEncapsulation.None
 })
 export class WhereToFlightSearchFormComponent implements OnInit {
+  autocompleteOptionSelected = false;
   responseCities: string[] = [];
 
   constructor(private flightSearchCitiesService: FlightSearchCitiesService) {}
@@ -33,7 +33,14 @@ export class WhereToFlightSearchFormComponent implements OnInit {
   ngOnInit(): void {
     this.citiesAutocomplete.valueChanges
       .pipe(
+        // startWith(''),
         debounceTime(300),
+        tap(() => {
+          if (this.autocompleteOptionSelected) {
+            this.autocompleteOptionSelected = false;
+            return;
+          }
+        }),
         switchMap((newValue) =>
           this.flightSearchCitiesService.getCities(newValue),
         ),
