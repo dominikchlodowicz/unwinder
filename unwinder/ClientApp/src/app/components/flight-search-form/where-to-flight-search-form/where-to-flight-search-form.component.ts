@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -20,6 +20,7 @@ import { switchMap, debounceTime } from 'rxjs';
   ],
   templateUrl: './where-to-flight-search-form.component.html',
   styleUrl: './where-to-flight-search-form.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class WhereToFlightSearchFormComponent implements OnInit {
   responseCities: string[] = [];

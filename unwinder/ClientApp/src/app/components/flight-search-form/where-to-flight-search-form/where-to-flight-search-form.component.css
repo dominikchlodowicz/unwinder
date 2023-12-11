@@ -1,0 +1,7 @@
+:host ::ng-deep .mat-form-field-underline {
+    background-color: rgb(196, 15, 15) !important; 
+}
+
+:host ::ng-deep .mat-focused .mat-form-field-underline .mat-form-field-ripple {
+    background-color: rgb(209, 23, 23) !important;
+}
