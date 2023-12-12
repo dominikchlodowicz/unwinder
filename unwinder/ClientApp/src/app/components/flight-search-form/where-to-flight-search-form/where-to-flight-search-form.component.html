@@ -2,7 +2,7 @@
   <mat-form-field>
     <mat-label>Enter city name</mat-label>
     <input matInput [matAutocomplete]="auto" [formControl]="citiesAutocomplete"/>
-    <mat-autocomplete #auto="matAutocomplete">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected) = "  onOptionSelected()">
       <mat-option *ngFor="let city of this.filteredCities" [value]="city">
         {{ city }}
       </mat-option>

@@ -6,7 +6,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FlightSearchCitiesService } from '../../../services/flight-search-form/flight-search-cities.service';
-import { switchMap, debounceTime, startWith, tap } from 'rxjs';
+import { switchMap, debounceTime, filter, tap } from 'rxjs';
 
 @Component({
   selector: 'app-where-to-flight-search-form',
@@ -24,6 +24,7 @@ import { switchMap, debounceTime, startWith, tap } from 'rxjs';
 export class WhereToFlightSearchFormComponent implements OnInit {
   autocompleteOptionSelected = false;
   responseCities: string[] = [];
+  private selectedFromDropdown = false;
 
   constructor(private flightSearchCitiesService: FlightSearchCitiesService) {}
 
@@ -33,14 +34,8 @@ export class WhereToFlightSearchFormComponent implements OnInit {
   ngOnInit(): void {
     this.citiesAutocomplete.valueChanges
       .pipe(
-        // startWith(''),
         debounceTime(300),
-        tap(() => {
-          if (this.autocompleteOptionSelected) {
-            this.autocompleteOptionSelected = false;
-            return;
-          }
-        }),
+        filter(newValue => typeof newValue === 'string' && !this.selectedFromDropdown),
         switchMap((newValue) =>
           this.flightSearchCitiesService.getCities(newValue),
         ),
@@ -48,6 +43,7 @@ export class WhereToFlightSearchFormComponent implements OnInit {
       .subscribe((cities) => {
         this.responseCities = cities;
         this.filteredCities = this.filterValues(this.citiesAutocomplete.value);
+        this.selectedFromDropdown = false;
       });
   }
 
@@ -56,5 +52,10 @@ export class WhereToFlightSearchFormComponent implements OnInit {
       (value) =>
         String(value).toLowerCase().indexOf(search.toLowerCase()) === 0,
     );
+  }
+
+  onOptionSelected() {
+    console.log("click event !!!");
+    this.selectedFromDropdown = true;
   }
 }
