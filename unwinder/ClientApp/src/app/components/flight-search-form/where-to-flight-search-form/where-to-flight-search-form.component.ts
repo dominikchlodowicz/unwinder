@@ -35,7 +35,10 @@ export class WhereToFlightSearchFormComponent implements OnInit {
     this.citiesAutocomplete.valueChanges
       .pipe(
         debounceTime(300),
-        filter(newValue => typeof newValue === 'string' && !this.selectedFromDropdown),
+        filter(
+          (newValue) =>
+            typeof newValue === 'string' && !this.selectedFromDropdown,
+        ),
         switchMap((newValue) =>
           this.flightSearchCitiesService.getCities(newValue),
         ),
@@ -55,7 +58,7 @@ export class WhereToFlightSearchFormComponent implements OnInit {
   }
 
   onOptionSelected() {
-    console.log("click event !!!");
+    console.log('click event !!!');
     this.selectedFromDropdown = true;
   }
 }
