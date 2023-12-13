@@ -10,7 +10,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { FlightSearchWeekendRangeSelectionStrategyService } from '../../../services/flight-search-form/flight-search-weekend-range-selection-strategy.service';
+import { WeekendRangeSelectionStategyService } from '../../../services/material-customs/weekend-range-selection-strategy.service';
+import { MondayCustomDateAdapterService } from '../../../services/material-customs/monday-custom-date-adapter.service';
+import { CustomDateFormatService } from '../../../services/material-customs/custom-date-format.service';
 
 @Component({
   selector: 'app-which-weekend',
@@ -25,11 +27,20 @@ import { FlightSearchWeekendRangeSelectionStrategyService } from '../../../servi
   providers: [
     {
       provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
-      useClass: FlightSearchWeekendRangeSelectionStrategyService,
+      useClass: WeekendRangeSelectionStategyService,
+    },
+    {
+      provide: DateAdapter,
+      useClass: MondayCustomDateAdapterService,
+    },
+    { 
+      provide: MAT_DATE_FORMATS,
+      useFactory: (customDateFormatService: CustomDateFormatService) => customDateFormatService.getFormats(),
+      deps: [CustomDateFormatService],
     },
   ],
-  templateUrl: './which-weekend.component.html',
-  styleUrl: './which-weekend.component.css',
+  templateUrl: './which-weekend-flight-search-form.component.html',
+  styleUrl: './which-weekend-flight-search-form.component.css',
 })
 export class WhichWeekendFlightSearchComponent {
   weekendFilter = (d: Date | null): boolean => {
@@ -38,6 +49,4 @@ export class WhichWeekendFlightSearchComponent {
     // Allow only Saturday (6) and Sunday (0)
     return day === 0 || day === 6;
   };
-
-  //TODO: Date range selector color change, Make monday as a first day of the week.
 }
