@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WhereToFlightSearchFormComponent } from '../where-to-flight-search-form/where-to-flight-search-form.component';
-import { WhichWeekendComponent } from '../which-weekend/which-weekend.component';
+import { WhichWeekendFlightSearchComponent } from '../which-weekend-flight-search-form/which-weekend-flight-search-form.component';
 
 @Component({
   selector: 'app-main-flight-search-form',
@@ -9,7 +9,7 @@ import { WhichWeekendComponent } from '../which-weekend/which-weekend.component'
   imports: [
     CommonModule,
     WhereToFlightSearchFormComponent,
-    WhichWeekendComponent,
+    WhichWeekendFlightSearchComponent,
   ],
   templateUrl: './main-flight-search-form.component.html',
   styleUrl: './main-flight-search-form.component.css',

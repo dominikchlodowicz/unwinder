@@ -31,7 +31,7 @@ import { FlightSearchWeekendRangeSelectionStrategyService } from '../../../servi
   templateUrl: './which-weekend.component.html',
   styleUrl: './which-weekend.component.css',
 })
-export class WhichWeekendComponent {
+export class WhichWeekendFlightSearchComponent {
   weekendFilter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
     console.log('test');
