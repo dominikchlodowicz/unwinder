@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+
 import { FlightSearchCitiesService } from '../../../services/flight-search-form/flight-search-cities.service';
 import { switchMap, debounceTime, filter, tap } from 'rxjs';
 
 @Component({
-  selector: 'app-where-to-flight-search-form',
+  selector: 'app-origin-flight-search-form',
   standalone: true,
   imports: [
     CommonModule,
@@ -18,10 +20,10 @@ import { switchMap, debounceTime, filter, tap } from 'rxjs';
     MatInputModule,
     HttpClientModule,
   ],
-  templateUrl: './where-to-flight-search-form.component.html',
-  styleUrl: './where-to-flight-search-form.component.css',
+  templateUrl: './origin-flight-search-form.component.html',
+  styleUrl: './origin-flight-search-form.component.css',
 })
-export class WhereToFlightSearchFormComponent implements OnInit {
+export class OriginFlightSearchFormComponent implements OnInit {
   autocompleteOptionSelected = false;
   responseCities: string[] = [];
   private selectedFromDropdown = false;
