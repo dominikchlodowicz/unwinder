@@ -1,3 +1,51 @@
-<app-origin-flight-search-form></app-origin-flight-search-form>
-<app-where-to-flight-search-form></app-where-to-flight-search-form>
-<app-which-weekend></app-which-weekend>
+<!-- <div class="example-input-wrapper">
+  <label for="duration">Animation duration:</label>
+  <input
+    id="duration"
+    value="2000"
+    type="number"
+    min="0"
+    step="100"
+    #duration
+  />
+</div> -->
+
+<mat-vertical-stepper [linear]="false" #stepper [animationDuration]="'1000ms'">
+  <mat-step [stepControl]="whereFormGroup">
+    <form [formGroup]="whereFormGroup">
+      <ng-template matStepLabel>Where?</ng-template>
+      <app-where-to-flight-search-form></app-where-to-flight-search-form>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="originFormGroup">
+    <form [formGroup]="originFormGroup">
+      <ng-template matStepLabel>From?</ng-template>
+      <app-origin-flight-search-form></app-origin-flight-search-form>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="whenFormGroup">
+    <form [formGroup]="whenFormGroup">
+      <ng-template matStepLabel>When?</ng-template>
+      <app-which-weekend></app-which-weekend>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

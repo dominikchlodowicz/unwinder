@@ -13,5 +13,5 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Use full viewport height */
+  height: 60vh; /* Use full viewport height */
 }

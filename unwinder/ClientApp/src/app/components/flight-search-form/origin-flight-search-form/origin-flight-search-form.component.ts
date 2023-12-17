@@ -31,10 +31,10 @@ export class OriginFlightSearchFormComponent implements OnInit {
   constructor(private flightSearchCitiesService: FlightSearchCitiesService) {}
 
   filteredCities: string[] = [];
-  citiesAutocomplete = new FormControl();
+  citiesAutocompleteOrigin = new FormControl();
 
   ngOnInit(): void {
-    this.citiesAutocomplete.valueChanges
+    this.citiesAutocompleteOrigin.valueChanges
       .pipe(
         debounceTime(300),
         filter(
@@ -47,9 +47,15 @@ export class OriginFlightSearchFormComponent implements OnInit {
       )
       .subscribe((cities) => {
         this.responseCities = cities;
-        this.filteredCities = this.filterValues(this.citiesAutocomplete.value);
+        this.filteredCities = this.filterValues(
+          this.citiesAutocompleteOrigin.value,
+        );
         this.selectedFromDropdown = false;
       });
+  }
+
+  get originElementFormControl(): FormControl {
+    return this.citiesAutocompleteOrigin;
   }
 
   filterValues(search: string): string[] {
