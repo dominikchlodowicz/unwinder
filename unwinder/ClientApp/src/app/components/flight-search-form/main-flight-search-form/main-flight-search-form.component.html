@@ -1,5 +1,5 @@
 <mat-vertical-stepper [linear]="false" #stepper [animationDuration]="'1000ms'">
-  <mat-step [stepControl]="whereFormGroup">
+  <mat-step [stepControl]="whereFormGroup"  errorMessage="Destination is required!">
     <form [formGroup]="whereFormGroup">
       <ng-template matStepLabel>Where?</ng-template>
       <app-where-to-flight-search-form></app-where-to-flight-search-form>
@@ -8,7 +8,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="originFormGroup">
+  <mat-step [stepControl]="originFormGroup" errorMessage="Origin location is required!">
     <form [formGroup]="originFormGroup">
       <ng-template matStepLabel>From?</ng-template>
       <app-origin-flight-search-form></app-origin-flight-search-form>
@@ -18,7 +18,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="whenFormGroup">
+  <mat-step [stepControl]="whenFormGroup" errorMessage="Weekend is required!">
     <form [formGroup]="whenFormGroup">
       <ng-template matStepLabel>When?</ng-template>
       <app-which-weekend></app-which-weekend>

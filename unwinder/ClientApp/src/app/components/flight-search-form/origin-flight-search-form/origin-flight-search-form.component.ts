@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -31,7 +31,7 @@ export class OriginFlightSearchFormComponent implements OnInit {
   constructor(private flightSearchCitiesService: FlightSearchCitiesService) {}
 
   filteredCities: string[] = [];
-  citiesAutocompleteOrigin = new FormControl();
+  citiesAutocompleteOrigin = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
   ngOnInit(): void {
     this.citiesAutocompleteOrigin.valueChanges
@@ -42,13 +42,13 @@ export class OriginFlightSearchFormComponent implements OnInit {
             typeof newValue === 'string' && !this.selectedFromDropdown,
         ),
         switchMap((newValue) =>
-          this.flightSearchCitiesService.getCities(newValue),
+          this.flightSearchCitiesService.getCities(newValue!),
         ),
       )
       .subscribe((cities) => {
         this.responseCities = cities;
         this.filteredCities = this.filterValues(
-          this.citiesAutocompleteOrigin.value,
+          this.citiesAutocompleteOrigin.value!,
         );
         this.selectedFromDropdown = false;
       });

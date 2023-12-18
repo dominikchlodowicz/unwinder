@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FlightSearchCitiesService } from '../../../services/flight-search-form/flight-search-cities.service';
@@ -29,7 +29,7 @@ export class WhereToFlightSearchFormComponent implements OnInit {
   constructor(private flightSearchCitiesService: FlightSearchCitiesService) {}
 
   filteredCities: string[] = [];
-  citiesAutocompleteWhereTo = new FormControl();
+  citiesAutocompleteWhereTo = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
   ngOnInit(): void {
     this.citiesAutocompleteWhereTo.valueChanges
@@ -40,13 +40,13 @@ export class WhereToFlightSearchFormComponent implements OnInit {
             typeof newValue === 'string' && !this.selectedFromDropdown,
         ),
         switchMap((newValue) =>
-          this.flightSearchCitiesService.getCities(newValue),
+          this.flightSearchCitiesService.getCities(newValue!),
         ),
       )
       .subscribe((cities) => {
         this.responseCities = cities;
         this.filteredCities = this.filterValues(
-          this.citiesAutocompleteWhereTo.value,
+          this.citiesAutocompleteWhereTo.value!,
         );
         this.selectedFromDropdown = false;
       });

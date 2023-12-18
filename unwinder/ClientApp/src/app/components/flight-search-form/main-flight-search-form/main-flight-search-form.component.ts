@@ -16,6 +16,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-main-flight-search-form',
@@ -35,6 +36,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   ],
   templateUrl: './main-flight-search-form.component.html',
   styleUrl: './main-flight-search-form.component.css',
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {showError: true},
+    }
+  ]
 })
 export class MainFlightSearchFormComponent implements OnInit {
   @ViewChild(WhereToFlightSearchFormComponent)
@@ -56,7 +63,9 @@ export class MainFlightSearchFormComponent implements OnInit {
 
   constructor(private _formBuilder: FormBuilder) {}
   ngOnInit() {
-    this.whereFormGroup = this._formBuilder.group({});
+    this.whereFormGroup = this._formBuilder.group({
+
+    });
     this.originFormGroup = this._formBuilder.group({});
     this.whenFormGroup = this._formBuilder.group({});
     this.passengersFormGroup = this._formBuilder.group({});
