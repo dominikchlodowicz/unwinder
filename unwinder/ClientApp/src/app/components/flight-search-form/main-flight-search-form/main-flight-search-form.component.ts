@@ -10,6 +10,7 @@ import {
 import { WhereToFlightSearchFormComponent } from '../where-to-flight-search-form/where-to-flight-search-form.component';
 import { WhichWeekendFlightSearchComponent } from '../which-weekend-flight-search-form/which-weekend-flight-search-form.component';
 import { OriginFlightSearchFormComponent } from '../origin-flight-search-form/origin-flight-search-form.component';
+import { PassengersFlightSearchFormComponent } from '../passengers-flight-search-form/passengers-flight-search-form.component';
 
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +25,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     WhereToFlightSearchFormComponent,
     WhichWeekendFlightSearchComponent,
     OriginFlightSearchFormComponent,
+    PassengersFlightSearchFormComponent,
     MatStepperModule,
     FormsModule,
     ReactiveFormsModule,
@@ -44,20 +46,23 @@ export class MainFlightSearchFormComponent implements OnInit {
   @ViewChild(WhichWeekendFlightSearchComponent)
   wichWeekendFlightSearchComponent!: WhichWeekendFlightSearchComponent;
 
+  @ViewChild(PassengersFlightSearchFormComponent)
+  passengersFlightSearchFormComponent!: PassengersFlightSearchFormComponent;
+
   whereFormGroup!: FormGroup;
   originFormGroup!: FormGroup;
   whenFormGroup!: FormGroup;
+  passengersFormGroup!: FormGroup;
 
   constructor(private _formBuilder: FormBuilder) {}
   ngOnInit() {
-    // Initialize empty FormGroups which will be linked to child controls
     this.whereFormGroup = this._formBuilder.group({});
     this.originFormGroup = this._formBuilder.group({});
     this.whenFormGroup = this._formBuilder.group({});
+    this.passengersFormGroup = this._formBuilder.group({});
   }
 
   ngAfterViewInit() {
-    // Link child component controls to the FormGroup
     this.whereFormGroup.addControl(
       'where',
       this.citiesAutocompleteWhereTo.whereToElementFormControl,
@@ -70,5 +75,9 @@ export class MainFlightSearchFormComponent implements OnInit {
       'when',
       this.wichWeekendFlightSearchComponent.whichWeekendRangeFormControl,
     );
+    this.passengersFormGroup.addControl(
+      'slider',
+      this.passengersFlightSearchFormComponent.passengerSliderFormControl,
+    )
   }
 }

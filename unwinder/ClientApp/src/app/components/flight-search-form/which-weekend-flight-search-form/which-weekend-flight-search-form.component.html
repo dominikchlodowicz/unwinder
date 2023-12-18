@@ -1,6 +1,6 @@
 <div class="full-window-autocomplete">
-  <mat-form-field>
-    <mat-label>Enter a date range</mat-label>
+  <mat-form-field class="flight-search-input-width">
+    <mat-label>Enter which weekend</mat-label>
     <mat-date-range-input
       [formGroup]="whichWeekendRange"
       [rangePicker]="picker"
@@ -9,7 +9,6 @@
       <input matStartDate formControlName="start" placeholder="Start date" />
       <input matEndDate formControlName="end" placeholder="End date" />
     </mat-date-range-input>
-    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>

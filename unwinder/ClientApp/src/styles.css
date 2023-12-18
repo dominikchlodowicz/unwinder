@@ -15,3 +15,7 @@ body {
   align-items: center;
   height: 60vh; /* Use full viewport height */
 }
+
+.flight-search-input-width{
+  width: 40vw;
+}

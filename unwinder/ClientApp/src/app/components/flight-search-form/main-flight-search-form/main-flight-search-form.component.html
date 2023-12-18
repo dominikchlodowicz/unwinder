@@ -1,15 +1,3 @@
-<!-- <div class="example-input-wrapper">
-  <label for="duration">Animation duration:</label>
-  <input
-    id="duration"
-    value="2000"
-    type="number"
-    min="0"
-    step="100"
-    #duration
-  />
-</div> -->
-
 <mat-vertical-stepper [linear]="false" #stepper [animationDuration]="'1000ms'">
   <mat-step [stepControl]="whereFormGroup">
     <form [formGroup]="whereFormGroup">
@@ -34,6 +22,16 @@
     <form [formGroup]="whenFormGroup">
       <ng-template matStepLabel>When?</ng-template>
       <app-which-weekend></app-which-weekend>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="passengersFormGroup">
+    <form [formGroup]="passengersFormGroup">
+      <ng-template matStepLabel>How many passengers?</ng-template>
+      <app-passengers-flight-search-form></app-passengers-flight-search-form>
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
