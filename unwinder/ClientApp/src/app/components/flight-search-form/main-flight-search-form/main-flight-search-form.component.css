@@ -1,0 +1,8 @@
+:host ::ng-deep mat-vertical-stepper .mat-step-icon-state-edit {
+  background-color: green;
+  color: white;
+}
+
+:host ::ng-deep mat-vertical-stepper .custom-edit-icon mat-icon {
+  color: white;
+}

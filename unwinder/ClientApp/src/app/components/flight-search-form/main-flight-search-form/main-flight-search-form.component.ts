@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-main-flight-search-form',
@@ -33,28 +34,29 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './main-flight-search-form.component.html',
   styleUrl: './main-flight-search-form.component.css',
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: {showError: true},
-    }
-  ]
+      useValue: { showError: true },
+    },
+  ],
 })
 export class MainFlightSearchFormComponent implements OnInit {
   @ViewChild(WhereToFlightSearchFormComponent)
-  citiesAutocompleteWhereTo!: WhereToFlightSearchFormComponent;
+  public citiesAutocompleteWhereTo!: WhereToFlightSearchFormComponent;
 
   @ViewChild(OriginFlightSearchFormComponent)
-  originFlightSearchFormComponent!: OriginFlightSearchFormComponent;
+  public originFlightSearchFormComponent!: OriginFlightSearchFormComponent;
 
   @ViewChild(WhichWeekendFlightSearchComponent)
-  wichWeekendFlightSearchComponent!: WhichWeekendFlightSearchComponent;
+  public wichWeekendFlightSearchComponent!: WhichWeekendFlightSearchComponent;
 
   @ViewChild(PassengersFlightSearchFormComponent)
-  passengersFlightSearchFormComponent!: PassengersFlightSearchFormComponent;
+  public passengersFlightSearchFormComponent!: PassengersFlightSearchFormComponent;
 
   whereFormGroup!: FormGroup;
   originFormGroup!: FormGroup;
@@ -63,30 +65,30 @@ export class MainFlightSearchFormComponent implements OnInit {
 
   constructor(private _formBuilder: FormBuilder) {}
   ngOnInit() {
-    this.whereFormGroup = this._formBuilder.group({
-
-    });
+    this.whereFormGroup = this._formBuilder.group({});
     this.originFormGroup = this._formBuilder.group({});
     this.whenFormGroup = this._formBuilder.group({});
     this.passengersFormGroup = this._formBuilder.group({});
   }
 
   ngAfterViewInit() {
-    this.whereFormGroup.addControl(
-      'where',
-      this.citiesAutocompleteWhereTo.whereToElementFormControl,
-    );
-    this.originFormGroup.addControl(
-      'origin',
-      this.originFlightSearchFormComponent.originElementFormControl,
-    );
-    this.whenFormGroup.addControl(
-      'when',
-      this.wichWeekendFlightSearchComponent.whichWeekendRangeFormControl,
-    );
-    this.passengersFormGroup.addControl(
-      'slider',
-      this.passengersFlightSearchFormComponent.passengerSliderFormControl,
-    )
+    setTimeout(() => {
+      this.whereFormGroup.addControl(
+        'where',
+        this.citiesAutocompleteWhereTo.whereToElementFormControl,
+      );
+      this.originFormGroup.addControl(
+        'origin',
+        this.originFlightSearchFormComponent.originElementFormControl,
+      );
+      this.whenFormGroup.addControl(
+        'when',
+        this.wichWeekendFlightSearchComponent.whichWeekendRangeFormControl,
+      );
+      this.passengersFormGroup.addControl(
+        'slider',
+        this.passengersFlightSearchFormComponent.passengerSliderFormControl,
+      );
+    });
   }
 }
