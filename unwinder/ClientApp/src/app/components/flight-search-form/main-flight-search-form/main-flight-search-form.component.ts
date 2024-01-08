@@ -89,11 +89,6 @@ export class MainFlightSearchFormComponent implements OnInit {
         'slider',
         this.passengersFlightSearchFormComponent.passengerSliderFormControl,
       );
-      this.passengersFormGroup
-        .get('slider')
-        ?.valueChanges.subscribe((value) => {
-          console.log('Slider value:', value);
-        });
     });
   }
 }

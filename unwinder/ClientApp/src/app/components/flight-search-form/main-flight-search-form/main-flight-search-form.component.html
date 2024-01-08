@@ -49,10 +49,18 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    You are now done.
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+    <div class="full-window-autocomplete">
+      <div class="button-container">
+        <div class="search-button-box">
+          <button id="search-button" mat-raised-button color="primary">
+            Search
+          </button>
+        </div>
+        <div class="helper-buttons">
+          <button mat-flat-button matStepperPrevious>Back</button>
+          <button mat-flat-button (click)="stepper.reset()">Reset</button>
+        </div>
+      </div>
     </div>
   </mat-step>
 </mat-vertical-stepper>

@@ -25,7 +25,7 @@ export class CustomEuropeDateFormatService
       }
       // Create a new Date object using the parts of the string
       // Note: Months are 0-indexed in JavaScript Dates (0 = January, 11 = December)
-      return new Date(Number(str[2]), Number(str[1]) - 1, Number(str[0]), 12);
+      return new Date(Number(str[2]), Number(str[1]) - 1, Number(str[0]), 24);
     }
     const timestamp =
       typeof timestampInput === 'number'

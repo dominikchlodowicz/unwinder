@@ -6,3 +6,28 @@
 :host ::ng-deep mat-vertical-stepper .custom-edit-icon mat-icon {
   color: white;
 }
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.search-button-box {
+  width: 100%;
+  margin-bottom: 3vh;
+}
+
+#search-button {
+  font-size: 1.25rem;
+  width: 100%;
+}
+
+.helper-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.helper-buttons button {
+  flex: 1;
+}

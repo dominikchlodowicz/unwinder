@@ -6,7 +6,12 @@ import {
   MatDatepickerModule,
 } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
@@ -67,14 +72,9 @@ export class WhichWeekendFlightSearchComponent {
   weekendFilter = this.weekendFilterService.isWeekend;
 
   whichWeekendRange = new FormGroup({
-    start: new FormControl<Date | null>(null, [
-      Validators.required
-    ]),
-    end: new FormControl<Date | null>(null, [
-      Validators.required
-    ]),
+    start: new FormControl<Date | null>(null, [Validators.required]),
+    end: new FormControl<Date | null>(null, [Validators.required]),
   });
-  
 
   get whichWeekendRangeFormControl(): FormGroup {
     return this.whichWeekendRange;
