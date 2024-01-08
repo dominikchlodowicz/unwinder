@@ -1,3 +1,7 @@
 mat-slider {
-    width: 400px;
+  width: 400px;
+}
+
+#flight-search-number-of-passengers-text {
+  font-size: 1.25rem;
 }

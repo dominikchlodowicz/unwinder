@@ -1,23 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSliderModule } from '@angular/material/slider';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-passengers-flight-search-form',
   standalone: true,
-  imports: [CommonModule, MatSliderModule],
+  imports: [CommonModule, MatSliderModule, ReactiveFormsModule],
   templateUrl: './passengers-flight-search-form.component.html',
-  styleUrl: './passengers-flight-search-form.component.css'
+  styleUrl: './passengers-flight-search-form.component.css',
 })
 export class PassengersFlightSearchFormComponent {
-  private passengerSlider: FormControl = new FormControl();
+  passengerSlider: FormControl = new FormControl(1);
 
   formatLabel(value: number): string {
     return `${value}`;
   }
 
-  get passengerSliderFormControl(): FormControl {
+  public get passengerSliderFormControl(): FormControl {
+    console.log(this.passengerSlider.value);
     return this.passengerSlider;
   }
 }
