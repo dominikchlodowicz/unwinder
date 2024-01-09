@@ -7,6 +7,7 @@ using System.Text;
 using System.Diagnostics;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
+using unwinder.Helpers;
 using FluentAssertions;
 
 
@@ -64,13 +65,28 @@ public class FlightSearchController : ControllerBase
         return Ok(cityNames);
     }
 
-    [HttpGet("api/flight-search")]
-    public async Task<ActionResult<string>> FlightSearch()
+    [HttpPost("api/flight-search")]
+    public async Task<ActionResult<string>> FlightSearch([FromBody] FlightSearchRequest requestContent)
     {
+        var numberOfTravelers = FlightSearchHelpers.RepeatString("ADULT", requestContent.NumberOfPassengers);
+        var startDate = requestContent.Start.Date;
+        var endDate = requestContent.End.Date;
+        var where = requestContent.Where;
+        var origin = requestContent.Origin;
+
+        // working example
+        // FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
+        //     .BuildNumberOfTravelers(new List<string> { "ADULT" })
+        //     .BuildDateTimeRange("2023-11-01", "00:00:00")
+        //     .BuildOriginDestinations("NYC", "MAD")
+        //     .BuildCurrencyCode("USD")
+        //     .BuildDefaultValues()
+        //     .Build();
+
         FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
-            .BuildNumberOfTravelers(new List<string> { "ADULT" })
-            .BuildDateTimeRange("2023-11-01", "10:00:00")
-            .BuildOriginDestinations("NYC", "MAD")
+            .BuildNumberOfTravelers(numberOfTravelers)
+            .BuildDateTimeRange(startDate.ToString(), "00:00:00")
+            .BuildOriginDestinations(origin, where)
             .BuildCurrencyCode("USD")
             .BuildDefaultValues()
             .Build();
