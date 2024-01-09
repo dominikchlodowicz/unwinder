@@ -52,7 +52,12 @@
     <div class="full-window-autocomplete">
       <div class="button-container">
         <div class="search-button-box">
-          <button id="search-button" mat-raised-button color="primary">
+          <button
+            id="search-button"
+            mat-raised-button
+            color="primary"
+            (click)="submit()"
+          >
             Search
           </button>
         </div>

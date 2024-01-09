@@ -18,6 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatIconModule } from '@angular/material/icon';
+import { FlightSearchData } from '../../../interfaces/flight-search-data';
+import { FlightSearchSubmitService } from '../../../services/flight-search-form/flight-search-submit.service';
 
 @Component({
   selector: 'app-main-flight-search-form',
@@ -63,7 +65,11 @@ export class MainFlightSearchFormComponent implements OnInit {
   whenFormGroup!: FormGroup;
   passengersFormGroup!: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder) {}
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _flightSearchSubmitService: FlightSearchSubmitService,
+  ) {}
+
   ngOnInit() {
     this.whereFormGroup = this._formBuilder.group({});
     this.originFormGroup = this._formBuilder.group({});
@@ -90,5 +96,31 @@ export class MainFlightSearchFormComponent implements OnInit {
         this.passengersFlightSearchFormComponent.passengerSliderFormControl,
       );
     });
+  }
+
+  submit() {
+    if (
+      this.whereFormGroup.valid &&
+      this.originFormGroup.valid &&
+      this.whenFormGroup.valid &&
+      this.passengersFormGroup.valid
+    ) {
+      const serializedFlightSearchData: FlightSearchData =
+        this._flightSearchSubmitService.serializeFlightSearchData(
+          this.whereFormGroup.value.where,
+          this.originFormGroup.value.origin,
+          this.whenFormGroup.value.when,
+          this.passengersFormGroup.value.passengers,
+        );
+
+      this._flightSearchSubmitService
+        .submitFlightSearchDataToApi(serializedFlightSearchData)
+        .subscribe(
+          (response) => console.log('Submit Success:', response),
+          (error) => console.error('Submit Error:', error),
+        );
+    } else {
+      console.error('Some form groups on submit are invalid.');
+    }
   }
 }
