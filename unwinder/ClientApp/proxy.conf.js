@@ -11,7 +11,8 @@ const PROXY_CONFIG = [
     context: [
       "/api/flight-search/get-city",
       "/api/flight-search/get-airport/*",
-      "api/flightsearch",
+      "/api/flightsearch",
+      "/api/flight-search",
     ],
     target: target,
     secure: false,

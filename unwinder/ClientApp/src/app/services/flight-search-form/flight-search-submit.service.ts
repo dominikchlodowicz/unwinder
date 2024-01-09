@@ -15,12 +15,14 @@ export class FlightSearchSubmitService {
     whereArg: string,
     originArg: string,
     whenArg: Date,
+    backArg: Date,
     passengersArg: number,
   ): FlightSearchData {
     return {
       where: whereArg,
       origin: originArg,
       when: whenArg,
+      back: backArg,
       numberOfPassengers: passengersArg,
     };
   }

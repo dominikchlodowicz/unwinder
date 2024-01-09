@@ -109,8 +109,9 @@ export class MainFlightSearchFormComponent implements OnInit {
         this._flightSearchSubmitService.serializeFlightSearchData(
           this.whereFormGroup.value.where,
           this.originFormGroup.value.origin,
-          this.whenFormGroup.value.when,
-          this.passengersFormGroup.value.passengers,
+          this.whenFormGroup.value.when.start,
+          this.whenFormGroup.value.when.end,
+          this.passengersFormGroup.value.slider,
         );
 
       this._flightSearchSubmitService
