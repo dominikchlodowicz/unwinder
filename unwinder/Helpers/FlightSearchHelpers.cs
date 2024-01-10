@@ -1,5 +1,5 @@
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.VisualBasic;
+using Microsoft.AspNetCore.Mvc;
+using unwinder.Services.AmadeusApiService.GetLocation;
 
 namespace unwinder.Helpers;
 
@@ -13,5 +13,13 @@ public class FlightSearchHelpers
             stringList.Add(input);
         }
         return stringList;
+    }
+
+    public static string ConvertIsoDateStringToDate(string isoString)
+    {
+        DateTime parsedDate;
+        DateTime.TryParse(isoString, out parsedDate);
+
+        return parsedDate.Date.ToString("yyyy-MM-dd");
     }
 }

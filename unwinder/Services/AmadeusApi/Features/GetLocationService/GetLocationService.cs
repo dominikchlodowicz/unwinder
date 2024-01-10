@@ -67,6 +67,7 @@ public class GetLocationService : IGetLocationService
             var name = (string)a["name"];
             var iataCode = (string)a["iataCode"];
             var cityName = (string)a["address"]["cityName"];
+            var cityCode = (string)a["address"]["cityCode"];
             var countryName = (string)a["address"]["countryName"];
 
             if (name == null || iataCode == null || cityName == null)
@@ -79,6 +80,7 @@ public class GetLocationService : IGetLocationService
                 Name = name,
                 IataCode = iataCode,
                 CityName = cityName,
+                CityCode = cityCode,
                 CountryName = countryName
             });
         }

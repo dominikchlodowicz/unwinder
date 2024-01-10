@@ -4,6 +4,7 @@ using unwinder.Controllers;
 using unwinder.Services.AmadeusApiService;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
+using unwinder.Services.AmadeusApiService.GetCityIataCode;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,20 +38,12 @@ builder.Services.AddHttpClient("AmadeusApiV2", httpClient =>
 // Bearer Token
 builder.Services.AddSingleton<IGetToken, GetToken>(sp =>
 {
-    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>(); 
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
     var logger = sp.GetRequiredService<ILogger<GetToken>>();
     var clientId = flightServicekey.ServiceApiKey;
     var clientSecret = flightServicekey.ServiceSecretApiKey;
     return new GetToken(httpClientFactory, logger, clientId, clientSecret);
 });
-
-// Api Service
-// builder.Services.AddTransient<IAmadeusApiCommonService, AmadeusApiCommonService>(sp =>
-// {   
-    // var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-    // var getToken = sp.GetRequiredService<IGetToken>();
-//     return new AmadeusApiCommonService(httpClientFactory, getToken);
-// });
 
 builder.Services.AddTransient<IFlightSearchService, FlightSearchService>(sp =>
 {
@@ -59,11 +52,17 @@ builder.Services.AddTransient<IFlightSearchService, FlightSearchService>(sp =>
     return new FlightSearchService(httpClientFactory, getToken);
 });
 
-builder.Services.AddTransient<IGetLocationService, GetLocationService>(sp => 
+builder.Services.AddTransient<IGetLocationService, GetLocationService>(sp =>
 {
     var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
     var getToken = sp.GetRequiredService<IGetToken>();
     return new GetLocationService(httpClientFactory, getToken);
+});
+
+builder.Services.AddTransient<IGetCityIataCodeService, GetCityIataCodeService>(sp =>
+{
+    var getLocationService = sp.GetRequiredService<IGetLocationService>();
+    return new GetCityIataCodeService(getLocationService);
 });
 
 // AMADEUS Api Services DI - END
@@ -71,13 +70,15 @@ builder.Services.AddTransient<IGetLocationService, GetLocationService>(sp =>
 // Controllers - START
 
 // FlightSearchController
-builder.Services.AddTransient<FlightSearchController>(sp => {
+builder.Services.AddTransient<FlightSearchController>(sp =>
+{
     var flightSearchService = sp.GetRequiredService<IFlightSearchService>();
     var getLocationService = sp.GetRequiredService<IGetLocationService>();
+    var getCityIataCodeService = sp.GetRequiredService<IGetCityIataCodeService>();
     var logger = sp.GetRequiredService<ILogger<FlightSearchController>>();
     var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
     var getToken = sp.GetRequiredService<IGetToken>();
-    return new FlightSearchController(flightSearchService, getLocationService, logger, httpClientFactory, getToken);
+    return new FlightSearchController(flightSearchService, getLocationService, getCityIataCodeService, logger, httpClientFactory, getToken);
 });
 
 // Controllers - END

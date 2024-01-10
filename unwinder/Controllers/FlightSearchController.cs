@@ -7,6 +7,7 @@ using System.Text;
 using System.Diagnostics;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
+using unwinder.Services.AmadeusApiService.GetCityIataCode;
 using unwinder.Helpers;
 using FluentAssertions;
 
@@ -18,6 +19,7 @@ public class FlightSearchController : ControllerBase
 {
     private readonly IFlightSearchService _flightSearchService;
     private readonly IGetLocationService _getLocationService;
+    private readonly IGetCityIataCodeService _getCityIataCodeService;
     private readonly ILogger<FlightSearchController> _logger;
     private readonly HttpClient _httpClient;
     private readonly IGetToken _bearerToken;
@@ -26,12 +28,14 @@ public class FlightSearchController : ControllerBase
     public FlightSearchController(
         IFlightSearchService flightSearchService,
         IGetLocationService getLocationService,
+        IGetCityIataCodeService getCityIataCodeService,
         ILogger<FlightSearchController> logger,
         IHttpClientFactory httpClientFactory,
         IGetToken bearerToken)
     {
         _flightSearchService = flightSearchService;
         _getLocationService = getLocationService;
+        _getCityIataCodeService = getCityIataCodeService;
         _logger = logger;
         _httpClient = httpClientFactory.CreateClient("AmadeusApiV2");
         _bearerToken = bearerToken;
@@ -68,24 +72,20 @@ public class FlightSearchController : ControllerBase
     [HttpPost("api/flight-search")]
     public async Task<ActionResult<string>> FlightSearch([FromBody] FlightSearchRequest requestContent)
     {
-        var numberOfTravelers = FlightSearchHelpers.RepeatString("ADULT", requestContent.NumberOfPassengers);
-        var startDate = requestContent.Start.Date;
-        var endDate = requestContent.End.Date;
-        var where = requestContent.Where;
-        var origin = requestContent.Origin;
+        List<string> numberOfTravelers = FlightSearchHelpers.RepeatString("ADULT", requestContent.NumberOfPassengers);
+        string startDate = FlightSearchHelpers.ConvertIsoDateStringToDate(requestContent.When);
+        string endDate = FlightSearchHelpers.ConvertIsoDateStringToDate(requestContent.Back);
+        string destinationCity = requestContent.Where.Split(',')[0];
+        string originCity = requestContent.Origin.Split(',')[0];
+        string where = await _getCityIataCodeService.GetCityIataCode(destinationCity);
+        string origin = await _getCityIataCodeService.GetCityIataCode(originCity);
 
-        // working example
-        // FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
-        //     .BuildNumberOfTravelers(new List<string> { "ADULT" })
-        //     .BuildDateTimeRange("2023-11-01", "00:00:00")
-        //     .BuildOriginDestinations("NYC", "MAD")
-        //     .BuildCurrencyCode("USD")
-        //     .BuildDefaultValues()
-        //     .Build();
+        // Amadeus API anti DDOS protection workaround
+        System.Threading.Thread.Sleep(2000);
 
         FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
             .BuildNumberOfTravelers(numberOfTravelers)
-            .BuildDateTimeRange(startDate.ToString(), "00:00:00")
+            .BuildDateTimeRange(startDate, "00:00:00")
             .BuildOriginDestinations(origin, where)
             .BuildCurrencyCode("USD")
             .BuildDefaultValues()
