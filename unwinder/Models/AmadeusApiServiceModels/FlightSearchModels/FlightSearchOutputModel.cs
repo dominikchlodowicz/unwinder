@@ -72,4 +72,11 @@ public class FlightSearchOutputModel
 
     [JsonProperty("data")]
     public List<FlightOfferData> Data { get; set; }
+
+    public FlightBack FlightBackData { get; set; }
+}
+
+public class FlightBack
+{
+    public string FlightBackDate { get; set; }
 }

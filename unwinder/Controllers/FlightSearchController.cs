@@ -97,6 +97,15 @@ public class FlightSearchController : ControllerBase
         {
             return NotFound("Flight search did not return any results.");
         }
+        else
+        {
+            // Add flightback parameter for further
+            if (flightSearchResult.FlightBackData == null)
+            {
+                flightSearchResult.FlightBackData = new FlightBack();
+            }
+            flightSearchResult.FlightBackData.FlightBackDate = endDate;
+        }
 
         return Ok(flightSearchResult);
     }
