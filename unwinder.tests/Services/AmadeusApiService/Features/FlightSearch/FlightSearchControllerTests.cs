@@ -15,7 +15,7 @@ using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 using FluentAssertions;
 using System.Net;
 using NUnit.Framework.Constraints;
-using unwinder.Services.AmadeusApiService.GetCityIataCode;
+using System.Diagnostics;
 
 
 namespace unwinder.tests.Service.AmadeusApiService;
@@ -52,36 +52,114 @@ public class FlightSearchControllerTests
 
         _fixture = new Fixture();
     }
-    //TODO: fix FlightSearchControllerTests
 
-    [Ignore("Need to rebuild these controller tests, due to decoupling them to different methods")]
     [Test]
-    public async Task GGetAirportLocation_WithExistingLocation_ReturnsSerializedAirports()
+    public async Task GetAirportLocation_WithInvalidLocation_ReturnsNotFoundObjectResult()
     {
-        string testLocation = "New York City";
-        List<GetLocationAirportModel> expectedReturnedAirports = _fixture.Build<GetLocationAirportModel>()
-                                                            .With(x => x.Name, testLocation)
-                                                            .CreateMany(3)
-                                                            .ToList();
+        string testLocation = "Bielawa";
 
-        _mockGetLocationService.Setup(s => s.GetLocation(testLocation)).ReturnsAsync(expectedReturnedAirports);
+        _mockGetLocationService.Setup(s => s.GetLocation(testLocation))
+            .ReturnsAsync(new List<GetLocationAirportModel>());
 
         var result = await _controller.GetAirportLocation(testLocation);
 
-        Assert.IsInstanceOf<string>(result);
-        // var deserializedResult = JsonConvert.DeserializeObject<List<GetLocationAirportModel>>(result);
-        // deserializedResult.Should().BeEquivalentTo(expectedReturnedAirports);
+        Assert.IsInstanceOf<NotFoundObjectResult>(result.Result);
     }
 
-    [Ignore("Need to rebuild these controller tests, due to decoupling them to different methods")]
     [Test]
-    public void GetLocation_WithInvalidLocaton_ThrowsInvalidOperationException()
+    public async Task GetAirportLocation_WithValidLocation_ReturnsOkObjectResult()
     {
-        string testLocation = "Bielawa";
-        List<GetLocationAirportModel> expectedReturnedAirports = new List<GetLocationAirportModel> { };
+        string testLocation = "Paris";
+        List<GetLocationAirportModel> expectedReturnedAirports = _fixture.Build<GetLocationAirportModel>()
+            .With(x => x.Name, testLocation)
+            .CreateMany(3)
+            .ToList();
 
         _mockGetLocationService.Setup(s => s.GetLocation(testLocation)).ReturnsAsync(expectedReturnedAirports);
 
-        // Assert.ThrowsAsync<InvalidOperationException>(async () => await _controller.GetLocation(testLocation));
+        var actionResult = await _controller.GetAirportLocation(testLocation);
+
+        Assert.IsInstanceOf<OkObjectResult>(actionResult.Result);
+
+        var okResult = actionResult.Result as OkObjectResult;
+
+        Assert.IsNotNull(okResult);
+        var actualAirports = okResult.Value as IEnumerable<GetLocationAirportModel>;
+        actualAirports.Should().BeEquivalentTo(expectedReturnedAirports);
+    }
+
+    [Test]
+    public async Task GetCityLocation_WithInvalidCity_ReturnsNotFoundObjectResult()
+    {
+        string testLocation = "Bielawa";
+
+        _mockGetLocationService.Setup(s => s.GetLocation(testLocation))
+            .ReturnsAsync(new List<GetLocationAirportModel>());
+
+        var result = await _controller.GetCityLocation(testLocation);
+
+        Assert.IsInstanceOf<NotFoundObjectResult>(result.Result);
+    }
+
+    [Test]
+    public async Task GetCityLocation_WithValidCity_ReturnsOkObjectResult()
+    {
+        string testLocation = "Paris";
+        List<GetLocationAirportModel> expectedReturnedAirports = _fixture.Build<GetLocationAirportModel>()
+            .With(x => x.Name, testLocation)
+            .CreateMany(3)
+            .ToList();
+
+        var processedExpectedReturnedCities = expectedReturnedAirports.Select(a => a.CityName + ", " + a.CountryName).Distinct().ToList();
+
+        _mockGetLocationService.Setup(s => s.GetLocation(testLocation)).ReturnsAsync(expectedReturnedAirports);
+
+        var actionResult = await _controller.GetCityLocation(testLocation);
+
+        Assert.IsInstanceOf<OkObjectResult>(actionResult.Result);
+
+        var okResult = actionResult.Result as OkObjectResult;
+
+        Assert.IsNotNull(okResult);
+        var actualCities = okResult.Value as IEnumerable<string>;
+        actualCities.Should().BeEquivalentTo(processedExpectedReturnedCities);
+    }
+
+    [Test]
+    public async Task FlightSearch_ReturnsOk_WhenServiceReturnsValidData()
+    {
+        FlightSearchParameters testRequestParameters = new FlightSearchParametersBuilder()
+            .BuildNumberOfTravelers(new List<string> { "Adult" })
+            .BuildDateTimeRange("2024-01-24", "00:00:00")
+            .BuildOriginDestinations("Munich", "Madrid")
+            .BuildCurrencyCode("USD")
+            .BuildDefaultValues()
+            .Build();
+
+        var expectedResponse = _fixture.Create<FlightSearchOutputModel>();
+
+        _mockFlightSearchService.Setup(s => s.FlightSearch(testRequestParameters)).ReturnsAsync(expectedResponse);
+
+        var actionResult = await _controller.FlightSearch(new FlightSearchRequest());
+
+        Assert.IsInstanceOf<OkObjectResult>(actionResult.Result);
+
+        var okResult = actionResult.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+
+        var responseValue = okResult.Value;
+        Assert.That(responseValue, Is.EqualTo(expectedResponse));
+    }
+
+    [Test]
+    public async Task FlightSearch_Returns500_WhenParametersAreInvalid()
+    {
+        throw new NotImplementedException();
+    }
+
+    [Test]
+    public async Task FlightSearch_Returns500_WhenGeneralException()
+    {
+        throw new NotImplementedException();
     }
 }

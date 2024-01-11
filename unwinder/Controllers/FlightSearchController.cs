@@ -54,6 +54,11 @@ public class FlightSearchController : ControllerBase
         return Ok(airports);
     }
 
+    /// <summary>
+    /// Gets city with airport
+    /// </summary>
+    /// <param name="location"></param>
+    /// <returns></returns>
     [HttpGet("api/flight-search/get-city/{location}")]
     public async Task<ActionResult<IEnumerable<string>>> GetCityLocation(string location)
     {
@@ -91,21 +96,29 @@ public class FlightSearchController : ControllerBase
             .BuildDefaultValues()
             .Build();
 
-        var flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
+        FlightSearchOutputModel flightSearchResult = null;
 
-        if (flightSearchResult == null)
+        try
         {
-            return NotFound("Flight search did not return any results.");
+            flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
         }
-        else
+        catch (HttpRequestException ex)
         {
-            // Add flightback parameter for further
-            if (flightSearchResult.FlightBackData == null)
-            {
-                flightSearchResult.FlightBackData = new FlightBack();
-            }
-            flightSearchResult.FlightBackData.FlightBackDate = endDate;
+            _logger.LogError(ex, ErrorMessages.FlightSearchReturnedException);
+            return StatusCode(500, ErrorMessages.FlightSearchApiHttpError);
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ErrorMessages.FlightSearchReturnedException);
+            return StatusCode(500, ErrorMessages.FlightSearchNotFound);
+        }
+
+        // Add flightback parameter for further steps
+        if (flightSearchResult.FlightBackData == null)
+        {
+            flightSearchResult.FlightBackData = new FlightBack();
+        }
+        flightSearchResult.FlightBackData.FlightBackDate = endDate;
 
         return Ok(flightSearchResult);
     }

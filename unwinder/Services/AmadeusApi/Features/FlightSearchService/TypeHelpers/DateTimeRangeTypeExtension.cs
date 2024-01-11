@@ -6,7 +6,8 @@ namespace unwinder.Services.AmadeusApiService.FlightSearch.Helpers;
 public static class DateTimeRangeTypeExtension
 {
     /// <summary>
-    /// Validate if format of the departureDate and departureTime is in correct format.
+    /// Validate if format of the departureDate and departureTime are in correct format, 
+    /// and if the departureDate is not in the past.
     /// </summary>
     /// <param name="departureDate">In ISO 8601 YYYY-MM-DD format.</param>
     /// <param name="departureTime">Local time. hh:mm:ss format, e.g 10:30:00</param>
@@ -22,6 +23,18 @@ public static class DateTimeRangeTypeExtension
         if (!TimeSpan.TryParseExact(departureTime, @"hh\:mm\:ss", CultureInfo.InvariantCulture, out var parsedTime))
         {
             throw new ArgumentException("Departure time is not in the correct ISO format (HH:MM:SS).");
+        }
+
+        //Past check
+        var fullDateTimeString = $"{departureDate}T{departureTime}";
+        if (!DateTime.TryParseExact(fullDateTimeString, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var fullDateTime))
+        {
+            throw new ArgumentException("Combined Departure DateTime is not in the correct format.");
+        }
+
+        if (fullDateTime < DateTime.Now)
+        {
+            throw new ArgumentException("Departure DateTime is in the past.");
         }
     }
 }
