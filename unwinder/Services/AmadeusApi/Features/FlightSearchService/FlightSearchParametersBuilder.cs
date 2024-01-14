@@ -1,8 +1,6 @@
-using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic;
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
-using unwinder.Services.AmadeusApiService.FlightSearch.Helpers;
+using unwinder.Services.AmadeusApiService.FlightSearch.TypeHelpers;
 
 namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
@@ -30,23 +28,24 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
     private List<string> OriginDestinationIds = new List<string> { "1" };
     private int defaultNumberOfFlightOffers = 5;
 
-    private List<string> defaultDataSource = new List<string> {"GDS"};
+    private List<string> defaultDataSource = new List<string> { "GDS" };
 
     private DepartureDateTimeRange _departureDateTimeRange;
 
     public FlightSearchParametersBuilder BuildNumberOfTravelers(List<string> numberOfTravelers)
     {
-        if(numberOfTravelers.Count == 0 || numberOfTravelers == null)
+        if (numberOfTravelers.Count == 0 || numberOfTravelers == null)
         {
             throw new ArgumentNullException("numberOfTravelers cannot be empty");
         }
-        
+
         List<string> typeVerifiedNumberOfTravelers = numberOfTravelers.Select(t => t.ToTravelerType()).ToList();
 
-        for(int traveler_id = 0; traveler_id < typeVerifiedNumberOfTravelers.Count; traveler_id++)
+        for (int traveler_id = 0; traveler_id < typeVerifiedNumberOfTravelers.Count; traveler_id++)
         {
             _parameters.Travelers.Add(
-                new Traveler{
+                new Traveler
+                {
                     Id = traveler_id.ToString(),
                     TravelerType = typeVerifiedNumberOfTravelers[traveler_id]
                 }
@@ -66,7 +65,8 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
     {
         DateTimeRangeTypeExtension.DateTimeToCorrectIsoFormat(departureDate, departureTime);
 
-        _departureDateTimeRange = new DepartureDateTimeRange{
+        _departureDateTimeRange = new DepartureDateTimeRange
+        {
             Date = departureDate,
             Time = departureTime,
         };
@@ -87,7 +87,8 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
             throw new InvalidOperationException("The departure date and time must be set before setting origin and destination.");
         }
 
-        _parameters.OriginDestinations.Add(new OriginDestination{
+        _parameters.OriginDestinations.Add(new OriginDestination
+        {
             // only one origin destination
             Id = "1",
             OriginLocationCode = originLocationCode,
@@ -113,7 +114,8 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
 
     public FlightSearchParametersBuilder BuildDefaultValues()
     {
-        _parameters.SearchCriteria.FlightFilters.CabinRestrictions.Add(new CabinRestriction{
+        _parameters.SearchCriteria.FlightFilters.CabinRestrictions.Add(new CabinRestriction
+        {
             Cabin = defaultCabin,
             Coverage = defaultCoverage,
             OriginDestinationIds = OriginDestinationIds

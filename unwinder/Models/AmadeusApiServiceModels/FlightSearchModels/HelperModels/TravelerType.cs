@@ -1,6 +1,6 @@
-namespace unwinder.Models.AmadeusApiServiceModels.FlightSearchModels.HelperModels;
+namespace unwinder.Models.AmadeusApiServiceModels.FlightSearchModels.TypeHelperModels;
 
-public enum TravelerType 
+public enum TravelerType
 {
     ADULT,
     CHILD,

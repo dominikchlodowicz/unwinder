@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using unwinder.Services.AmadeusApiService.GetLocation;
-
 namespace unwinder.Helpers;
 
-public class FlightSearchHelpers
+public static class FlightSearchHelpers
 {
     public static List<string> RepeatString(string input, int count)
     {

@@ -88,19 +88,21 @@ public class FlightSearchController : ControllerBase
         // Amadeus API anti DDOS protection workaround
         System.Threading.Thread.Sleep(2000);
 
-        FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
-            .BuildNumberOfTravelers(numberOfTravelers)
-            .BuildDateTimeRange(startDate, "00:00:00")
-            .BuildOriginDestinations(origin, where)
-            .BuildCurrencyCode("USD")
-            .BuildDefaultValues()
-            .Build();
-
-        FlightSearchOutputModel flightSearchResult = null;
-
         try
         {
-            flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
+            FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
+                .BuildNumberOfTravelers(numberOfTravelers)
+                .BuildDateTimeRange(startDate, "00:00:00")
+                .BuildOriginDestinations(origin, where)
+                .BuildCurrencyCode("USD")
+                .BuildDefaultValues()
+                .Build();
+
+            FlightSearchOutputModel flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
+            flightSearchResult.FlightBackData ??= new FlightBack();
+            flightSearchResult.FlightBackData.FlightBackDate = endDate;
+
+            return Ok(flightSearchResult);
         }
         catch (HttpRequestException ex)
         {
@@ -112,14 +114,5 @@ public class FlightSearchController : ControllerBase
             _logger.LogError(ex, ErrorMessages.FlightSearchReturnedException);
             return StatusCode(500, ErrorMessages.FlightSearchNotFound);
         }
-
-        // Add flightback parameter for further steps
-        if (flightSearchResult.FlightBackData == null)
-        {
-            flightSearchResult.FlightBackData = new FlightBack();
-        }
-        flightSearchResult.FlightBackData.FlightBackDate = endDate;
-
-        return Ok(flightSearchResult);
     }
 }

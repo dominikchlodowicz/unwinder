@@ -1,21 +1,14 @@
-using NUnit.Framework;
-using Moq;
 using Microsoft.Extensions.Logging;
 using unwinder.Services;
-using System.Threading.Tasks;
 using unwinder.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
-using System.Collections.Generic;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
 using unwinder.Services.AmadeusApiService.GetCityIataCode;
-using Newtonsoft.Json;
 using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 using FluentAssertions;
-using System.Net;
-using NUnit.Framework.Constraints;
-using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 
 namespace unwinder.tests.Service.AmadeusApiService;
@@ -128,38 +121,54 @@ public class FlightSearchControllerTests
     [Test]
     public async Task FlightSearch_ReturnsOk_WhenServiceReturnsValidData()
     {
-        FlightSearchParameters testRequestParameters = new FlightSearchParametersBuilder()
-            .BuildNumberOfTravelers(new List<string> { "Adult" })
-            .BuildDateTimeRange("2024-01-24", "00:00:00")
-            .BuildOriginDestinations("Munich", "Madrid")
-            .BuildCurrencyCode("USD")
-            .BuildDefaultValues()
-            .Build();
-
         var expectedResponse = _fixture.Create<FlightSearchOutputModel>();
 
-        _mockFlightSearchService.Setup(s => s.FlightSearch(testRequestParameters)).ReturnsAsync(expectedResponse);
+        var flightSearchRequest = new FlightSearchRequest
+        {
+            NumberOfPassengers = 2,
+            When = DateTime.Now.Date.AddDays(1).ToString("yyyy-MM-dd"),
+            Back = DateTime.Now.Date.AddDays(2).ToString("yyyy-MM-dd"),
+            Where = "Madrid",
+            Origin = "Munich"
+        };
 
-        var actionResult = await _controller.FlightSearch(new FlightSearchRequest());
+        _mockFlightSearchService.Setup(s => s.FlightSearch(It.IsAny<FlightSearchParameters>()))
+                                .ReturnsAsync(expectedResponse);
 
-        Assert.IsInstanceOf<OkObjectResult>(actionResult.Result);
+        var actionResult = await _controller.FlightSearch(flightSearchRequest);
 
-        var okResult = actionResult.Result as OkObjectResult;
-        Assert.IsNotNull(okResult);
+        Assert.IsInstanceOf<ObjectResult>(actionResult.Result);
+        var result = actionResult.Result as ObjectResult;
+        Assert.IsNotNull(result);
+        Assert.That(result.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
 
-        var responseValue = okResult.Value;
+        var responseValue = result.Value;
         Assert.That(responseValue, Is.EqualTo(expectedResponse));
     }
 
     [Test]
     public async Task FlightSearch_Returns500_WhenParametersAreInvalid()
     {
-        throw new NotImplementedException();
-    }
+        var expectedResponse = _fixture.Create<FlightSearchOutputModel>();
 
-    [Test]
-    public async Task FlightSearch_Returns500_WhenGeneralException()
-    {
-        throw new NotImplementedException();
+        var flightSearchRequest = new FlightSearchRequest
+        {
+            NumberOfPassengers = 2,
+            When = "11-01-2021", // bad format and past
+            Back = DateTime.Now.Date.AddDays(2).ToString("yyyy-MM-dd"),
+            Where = "Madrid",
+            Origin = "Munich"
+        };
+
+        _mockFlightSearchService.Setup(s => s.FlightSearch(It.IsAny<FlightSearchParameters>()))
+                        .ReturnsAsync(expectedResponse);
+
+        var actionResult = await _controller.FlightSearch(flightSearchRequest);
+
+        Assert.IsInstanceOf<ObjectResult>(actionResult.Result);
+        var result = actionResult.Result as ObjectResult;
+
+        Assert.IsNotNull(result);
+        Assert.That(result.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
     }
 }

@@ -1,7 +1,6 @@
 using System.Globalization;
-using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
 
-namespace unwinder.Services.AmadeusApiService.FlightSearch.Helpers;
+namespace unwinder.Services.AmadeusApiService.FlightSearch.TypeHelpers;
 
 public static class DateTimeRangeTypeExtension
 {

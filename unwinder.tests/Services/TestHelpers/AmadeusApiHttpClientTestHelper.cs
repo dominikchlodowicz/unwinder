@@ -20,7 +20,7 @@ public static class AmadeusApiHttpClientTestHelper
     public static Mock<HttpMessageHandler> SetupHttpMessageHandlerMock(HttpStatusCode statusCode, string content = "")
     {
         var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
-        
+
         httpMessageHandlerMock.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
@@ -47,12 +47,14 @@ public static class AmadeusApiHttpClientTestHelper
 
     public static FlightSearchParametersBuilder CreateDefaultFlightSearchParametersBuilder()
     {
+        string currentDate = DateTime.Now.Date.AddDays(1).ToString("yyyy-MM-dd");
+
         return new FlightSearchParametersBuilder()
             .BuildNumberOfTravelers(new List<string> { "ADULT" })
-            .BuildDateTimeRange("2023-11-22", "10:30:00")
+            .BuildDateTimeRange(currentDate, "10:30:00")
             .BuildOriginDestinations("WAW", "LAX")
             .BuildCurrencyCode("PLN")
             .BuildDefaultValues();
-    }    
+    }
 
 }

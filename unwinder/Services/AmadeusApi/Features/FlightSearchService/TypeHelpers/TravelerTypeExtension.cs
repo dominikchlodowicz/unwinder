@@ -1,6 +1,6 @@
-using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels.HelperModels;
+using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels.TypeHelperModels;
 
-namespace unwinder.Services.AmadeusApiService.FlightSearch.Helpers;
+namespace unwinder.Services.AmadeusApiService.FlightSearch.TypeHelpers;
 
 public static class TravelerTypeExtension
 {

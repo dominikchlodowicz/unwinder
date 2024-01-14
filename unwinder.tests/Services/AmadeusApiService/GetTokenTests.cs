@@ -1,11 +1,4 @@
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System;
-using Moq;
-using Moq.Protected;
-using NUnit.Framework;
 using Microsoft.Extensions.Logging;
 using unwinder.Services;
 using Newtonsoft.Json;
