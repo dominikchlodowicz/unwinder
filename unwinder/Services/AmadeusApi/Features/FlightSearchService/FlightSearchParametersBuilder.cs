@@ -21,7 +21,6 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
         Sources = new List<string>()
     };
 
-    private string defaultTimeWindow = "12H";
     private string defaultCabin = "ECONOMY";
     private string defaultCoverage = "MOST_SEGMENTS";
     // number of destinations and their id's

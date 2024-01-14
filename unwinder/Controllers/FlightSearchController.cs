@@ -44,34 +44,65 @@ public class FlightSearchController : ControllerBase
     [HttpGet("api/flight-search/get-airport/{location}")]
     public async Task<ActionResult<IEnumerable<string>>> GetAirportLocation(string location)
     {
-        var airports = await _getLocationService.GetLocation(location);
-
-        if (airports == null || !airports.Any())
+        try
         {
+            var airports = await _getLocationService.GetLocation(location);
+
+            if (!airports.Any())
+            {
+                return NotFound("No airports found for the given location.");
+            }
+
+            return Ok(airports);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex, "No data returned for location: {Location}", location);
             return NotFound("No airports found for the given location.");
         }
-
-        return Ok(airports);
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "Error retrieving airport data for location: {Location}", location);
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, "Service unavailable.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while getting airport data for location: {Location}", location);
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+        }
     }
 
-    /// <summary>
-    /// Gets city with airport
-    /// </summary>
-    /// <param name="location"></param>
-    /// <returns></returns>
     [HttpGet("api/flight-search/get-city/{location}")]
     public async Task<ActionResult<IEnumerable<string>>> GetCityLocation(string location)
     {
-        var airports = await _getLocationService.GetLocation(location);
-
-        if (airports == null || !airports.Any())
+        try
         {
-            return NotFound("No airports found for the given location.");
+            var airports = await _getLocationService.GetLocation(location);
+
+            if (!airports.Any())
+            {
+                return NotFound("No airports found for the given location.");
+            }
+
+            var cityNames = airports.Select(a => a.CityName + ", " + a.CountryName).Distinct().ToList();
+
+            return Ok(cityNames);
         }
-
-        var cityNames = airports.Select(a => a.CityName + ", " + a.CountryName).Distinct().ToList();
-
-        return Ok(cityNames);
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex, "No data returned for location: {Location}", location);
+            return NotFound("No cities found for the given location.");
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "Error retrieving city data for location: {Location}", location);
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, "Service unavailable.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while getting city data for location: {Location}", location);
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+        }
     }
 
     [HttpPost("api/flight-search")]
@@ -86,7 +117,7 @@ public class FlightSearchController : ControllerBase
         string origin = await _getCityIataCodeService.GetCityIataCode(originCity);
 
         // Amadeus API anti DDOS protection workaround
-        System.Threading.Thread.Sleep(2000);
+        // System.Threading.Thread.Sleep(2000);
 
         try
         {
