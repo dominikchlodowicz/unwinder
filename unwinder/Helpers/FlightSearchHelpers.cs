@@ -15,7 +15,12 @@ public static class FlightSearchHelpers
     public static string ConvertIsoDateStringToDate(string isoString)
     {
         DateTime parsedDate;
-        DateTime.TryParse(isoString, out parsedDate);
+        bool success = DateTime.TryParse(isoString, out parsedDate);
+
+        if (!success)
+        {
+            throw new ArgumentException("Passed string argument is not a valid ISO date.");
+        }
 
         return parsedDate.Date.ToString("yyyy-MM-dd");
     }

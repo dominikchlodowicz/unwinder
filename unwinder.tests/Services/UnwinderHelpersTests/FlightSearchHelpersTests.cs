@@ -15,7 +15,6 @@ public class FlightSearchHelpersTests
         Assert.That(ex, Is.EqualTo(expectedResult));
     }
 
-    // TODO: fix that test because it's not what the TryParse does
     [Test]
     public void ConvertIsoDateStringToDate_WithInValidIsoStringArgument_ThrowsArgumentException()
     {
@@ -30,6 +29,12 @@ public class FlightSearchHelpersTests
     [Test]
     public void ConvertIsoDateStringToDate_WithValidIsoStringArgument_ReturnsParsedDate()
     {
-        throw new NotImplementedException();
+        var validArgument = DateTime.Now.Date.ToString();
+
+        var expectedResult = DateTime.Now.Date.ToString("yyyy-MM-dd");
+
+        var ex = FlightSearchHelpers.ConvertIsoDateStringToDate(validArgument);
+
+        Assert.That(ex, Is.EqualTo(expectedResult));
     }
 }

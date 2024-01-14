@@ -56,7 +56,7 @@ public class GetLocationServiceTests
     public void GetLocationService_ThrowsException_WhenResponseIsEmpty(string expectedToken)
     {
         var expectedLocations = _fixture.Create<GetLocationAirportResponseModel>();
-        expectedLocations.data = null; 
+        expectedLocations.data = null;
         var httpResponseJson = JsonConvert.SerializeObject(expectedLocations);
         var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
         var sut = new GetLocationService(httpClientMock, _getTokenMock.Object);
