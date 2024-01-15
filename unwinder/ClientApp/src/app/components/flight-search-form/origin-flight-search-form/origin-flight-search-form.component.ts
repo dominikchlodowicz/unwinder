@@ -31,7 +31,10 @@ export class OriginFlightSearchFormComponent implements OnInit {
   constructor(private flightSearchCitiesService: FlightSearchCitiesService) {}
 
   filteredCities: string[] = [];
-  citiesAutocompleteOrigin = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  citiesAutocompleteOrigin = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3),
+  ]);
 
   ngOnInit(): void {
     this.citiesAutocompleteOrigin.valueChanges
