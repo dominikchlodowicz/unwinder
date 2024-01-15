@@ -20,3 +20,11 @@ body {
 .flight-search-input-width {
   width: 40vw;
 }
+
+.mat-mdc-snack-bar-container {
+  &.blue-snackbar {
+    --mdc-snackbar-container-color: #ffffff;
+    --mat-mdc-snack-bar-button-color: #010000;
+    --mdc-snackbar-supporting-text-color: #ff0000;
+  }
+}

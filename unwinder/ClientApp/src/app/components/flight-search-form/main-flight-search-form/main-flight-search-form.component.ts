@@ -16,6 +16,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { FlightSearchData } from '../../../interfaces/flight-search-data';
@@ -68,6 +69,7 @@ export class MainFlightSearchFormComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _flightSearchSubmitService: FlightSearchSubmitService,
+    private _snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
@@ -122,6 +124,14 @@ export class MainFlightSearchFormComponent implements OnInit {
         );
     } else {
       console.error('Some form groups on submit are invalid.');
+      this._snackBar.open(
+        'Please correct the errors in the form before submitting.',
+        'Close',
+        {
+          duration: 5000,
+          panelClass: ['blue-snackbar'],
+        },
+      );
     }
   }
 }
