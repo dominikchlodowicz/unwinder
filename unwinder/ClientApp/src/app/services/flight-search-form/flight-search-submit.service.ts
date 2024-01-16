@@ -34,3 +34,23 @@ export class FlightSearchSubmitService {
     return this.httpClient.post<FlightSearchData>(this.apiUrl, data);
   }
 }
+
+//  // it('should submit when all forms are valid', () => {
+//   component.ngOnInit();
+//   spyOn(
+//     component._flightSearchSubmitService,
+//     'submitFlightSearchDataToApi',
+//   ).and.returnValue(of({}));
+//   component.whereFormGroup.setControl('where', new FormControl('test'));
+//   component.originFormGroup.setControl('origin', new FormControl('test'));
+//   component.whenFormGroup.setControl(
+//     'when',
+//     new FormControl({ start: new Date(), end: new Date() }),
+//   );
+//   component.passengersFormGroup.setControl('slider', new FormControl(1));
+
+//   component.submit();
+//   expect(
+//     component._flightSearchSubmitService.submitFlightSearchDataToApi,
+//   ).toHaveBeenCalled();
+// });
