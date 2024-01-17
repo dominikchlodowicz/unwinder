@@ -12,6 +12,7 @@ import {
   FormControl,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 
 import { WhereToFlightSearchFormComponent } from '../where-to-flight-search-form/where-to-flight-search-form.component';
@@ -161,28 +162,38 @@ describe('MainFlightSearchFormComponent', () => {
   });
 
   it('should open snackbar with error message when form is invalid', async () => {
+    component.ngOnInit();
     component.ngAfterViewInit();
 
-    component.whereFormGroup.setControl('where', new FormControl(null));
-    component.originFormGroup.setControl('origin', new FormControl(null));
-    component.whenFormGroup.setControl(
+    component.whereFormGroup.addControl(
+      'where',
+      new FormControl(null, Validators.required),
+    );
+    component.originFormGroup.addControl(
+      'origin',
+      new FormControl(null, Validators.required),
+    );
+    component.whenFormGroup.addControl(
       'when',
       new FormControl({ start: new Date(), end: new Date() }),
     );
-    component.passengersFormGroup.setControl('slider', new FormControl(1));
+    component.passengersFormGroup.addControl('slider', new FormControl(1));
 
     component['_flightSearchSubmitService'].serializeFlightSearchData = jest
       .fn()
       .mockImplementation(() => ({}));
+
     component['_flightSearchSubmitService'].submitFlightSearchDataToApi = jest
       .fn()
       .mockReturnValue(of({}));
 
+    fixture.detectChanges();
+
     component.submit();
 
-    const snackBarOpenSpy = jest.spyOn(component['_snackBar'], 'open');
+    expect(mockSnackBar.open).toHaveBeenCalledTimes(1);
 
-    expect(snackBarOpenSpy).toHaveBeenCalledWith(
+    expect(mockSnackBar.open).toHaveBeenCalledWith(
       'Please correct the errors in the form before submitting.',
       'Close',
       expect.any(Object),
