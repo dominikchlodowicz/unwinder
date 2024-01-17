@@ -7,7 +7,9 @@
       "jest" // 1
     ],
     "esModuleInterop": true, // 2
-    "emitDecoratorMetadata": true // 3
+    "emitDecoratorMetadata": true, // 3
+    // This solves ProxyZone error !!!! that's introduced with jest-preset-angular
+    "target": "ES2016"
   },
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

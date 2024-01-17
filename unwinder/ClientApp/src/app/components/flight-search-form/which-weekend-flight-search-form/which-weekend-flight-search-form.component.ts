@@ -18,7 +18,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { WeekendRangeSelectionStategyService } from '../../../services/material-customs/weekend-range-selection-strategy.service';
 import { MondayCustomDateAdapterService } from '../../../services/material-customs/date-format/monday-custom-date-adapter.service';
 import { CustomEuropeDateFormatService } from '../../../services/material-customs/date-format/custom-europe-date-format.service';
-import { CustomDateAdapterService } from '../../../services/material-customs/date-format/custom-date-adapter-service';
+import { CustomDateAdapterService } from '../../../services/material-customs/date-format/custom-date-adapter.service';
 import {
   CUSTOM_EUROPE_DATE_FORMAT_SERVICE,
   MONDAY_CUSTOM_DATE_ADAPTER_SERVICE,

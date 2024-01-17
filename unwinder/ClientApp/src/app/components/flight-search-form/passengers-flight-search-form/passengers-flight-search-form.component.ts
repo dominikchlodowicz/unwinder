@@ -18,7 +18,6 @@ export class PassengersFlightSearchFormComponent {
   }
 
   public get passengerSliderFormControl(): FormControl {
-    console.log(this.passengerSlider.value);
     return this.passengerSlider;
   }
 }
