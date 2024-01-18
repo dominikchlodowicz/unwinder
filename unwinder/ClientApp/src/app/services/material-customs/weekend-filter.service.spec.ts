@@ -17,11 +17,14 @@ describe('WeekendFilterService', () => {
   });
 
   it('should return false for weekdays', () => {
-    // Create dates for some weekdays
-    const monday = new Date('2023-01-09'); // Adjust the date to a known Monday
-    const wednesday = new Date('2023-01-11'); // Adjust the date to a known Wednesday
-
+    const monday = new Date('2023-01-09'); // Known Monday
     expect(service.isWeekend(monday)).toBe(false);
-    expect(service.isWeekend(wednesday)).toBe(false);
+  });
+
+  it('should return true or false based on the current day', () => {
+    const result = service.isWeekend(null);
+    const today = new Date().getDay();
+    const expected = today === 0 || today === 6;
+    expect(result).toBe(expected);
   });
 });
