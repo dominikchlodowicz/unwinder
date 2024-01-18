@@ -5,8 +5,17 @@ import { Injectable } from '@angular/core';
 })
 export class WeekendFilterService {
   public isWeekend(d: Date | null): boolean {
-    const day = (d || new Date()).getDay();
-    // Allow only Saturday (6) and Sunday (0)
-    return day === 0 || day === 6;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const dateToCheck = d ? new Date(d) : today;
+    dateToCheck.setHours(0, 0, 0, 0);
+
+    const dayOfWeek = dateToCheck.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+    const isTodayOrFuture = dateToCheck >= today;
+
+    return isWeekend && isTodayOrFuture;
   }
 }

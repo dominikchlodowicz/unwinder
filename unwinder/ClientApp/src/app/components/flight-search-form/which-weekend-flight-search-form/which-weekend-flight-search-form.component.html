@@ -1,4 +1,14 @@
 <div class="full-window-autocomplete">
+  <div id="weekend_variation_buttons">
+    <mat-button-toggle-group
+      #group="matButtonToggleGroup"
+      [value]="defaultToggleValue"
+      (change)="switchProvider(group.value)"
+    >
+      <mat-button-toggle value="short">Short weekend</mat-button-toggle>
+      <mat-button-toggle value="long">Long weekend</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
   <mat-form-field class="flight-search-input-width">
     <mat-label>Enter which weekend</mat-label>
     <mat-date-range-input

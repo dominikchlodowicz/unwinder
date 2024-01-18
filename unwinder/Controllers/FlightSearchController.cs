@@ -117,7 +117,7 @@ public class FlightSearchController : ControllerBase
         string origin = await _getCityIataCodeService.GetCityIataCode(originCity);
 
         // Amadeus API anti DDOS protection workaround
-        // System.Threading.Thread.Sleep(2000);
+        System.Threading.Thread.Sleep(2000);
 
         try
         {

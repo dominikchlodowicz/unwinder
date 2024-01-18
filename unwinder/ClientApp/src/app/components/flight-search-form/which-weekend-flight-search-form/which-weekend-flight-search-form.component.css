@@ -1,0 +1,12 @@
+.mat-button-toggle-checked {
+  background-color: #ec2c4c;
+  color: #3f51b5 !important;
+}
+
+.mat-button-toggle-spacing .mat-button-toggle {
+  margin-right: 8px; /* Adjust the value as needed */
+}
+
+.flight-search-input-width {
+  margin-top: 3vh;
+}

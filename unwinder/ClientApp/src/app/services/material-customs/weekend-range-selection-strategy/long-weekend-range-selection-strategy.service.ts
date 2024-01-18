@@ -10,7 +10,7 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 @Injectable({
   providedIn: 'root',
 })
-export class WeekendRangeSelectionStategyService<D>
+export class LongWeekendRangeSelectionStategyService<D>
   implements MatDateRangeSelectionStrategy<D>
 {
   constructor(private _dateAdapter: DateAdapter<D>) {}
