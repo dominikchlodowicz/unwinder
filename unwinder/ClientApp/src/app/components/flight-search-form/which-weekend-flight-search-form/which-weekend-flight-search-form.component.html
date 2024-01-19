@@ -2,8 +2,8 @@
   <div id="weekend_variation_buttons">
     <mat-button-toggle-group
       #group="matButtonToggleGroup"
+      (change)="changeWeekendType(group.value)"
       [value]="defaultToggleValue"
-      (change)="switchProvider(group.value)"
     >
       <mat-button-toggle value="short">Short weekend</mat-button-toggle>
       <mat-button-toggle value="long">Long weekend</mat-button-toggle>
@@ -14,8 +14,8 @@
     <mat-date-range-input
       [formGroup]="whichWeekendRange"
       [rangePicker]="picker"
-      [dateFilter]="weekendFilter"
     >
+      <!-- [dateFilter]="weekendFilter" -->
       <input matStartDate formControlName="start" placeholder="Start date" />
       <input matEndDate formControlName="end" placeholder="End date" />
     </mat-date-range-input>

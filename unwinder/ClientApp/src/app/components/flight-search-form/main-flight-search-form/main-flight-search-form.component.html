@@ -30,7 +30,8 @@
   <mat-step [stepControl]="whenFormGroup" errorMessage="Weekend is required!">
     <form [formGroup]="whenFormGroup">
       <ng-template matStepLabel>When?</ng-template>
-      <app-which-weekend></app-which-weekend>
+      <ng-template #weekendComponentContainer></ng-template>
+      <!-- <app-which-weekend></app-which-weekend> -->
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>

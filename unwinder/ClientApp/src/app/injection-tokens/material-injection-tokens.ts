@@ -11,7 +11,3 @@ export const CUSTOM_EUROPE_DATE_FORMAT_SERVICE =
   new InjectionToken<ICustomEuropeDateFormatService>(
     'CustomEuropeDateFormatService',
   );
-
-export const PROVIDERS_MAP = new InjectionToken<{ [key: string]: any }>(
-  'providersMap',
-);

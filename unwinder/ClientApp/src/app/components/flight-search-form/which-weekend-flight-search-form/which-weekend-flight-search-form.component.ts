@@ -1,4 +1,11 @@
-import { Component, InjectionToken, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  InjectionToken,
+  Injector,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MAT_DATE_RANGE_SELECTION_STRATEGY,
@@ -17,14 +24,12 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 import { WeekendRangeSelectionStategyService } from '../../../services/material-customs/weekend-range-selection-strategy/weekend-range-selection-strategy.service';
-import { LongWeekendRangeSelectionStategyService } from '../../../services/material-customs/weekend-range-selection-strategy/long-weekend-range-selection-strategy.service';
 import { MondayCustomDateAdapterService } from '../../../services/material-customs/date-format/monday-custom-date-adapter.service';
 import { CustomEuropeDateFormatService } from '../../../services/material-customs/date-format/custom-europe-date-format.service';
 import { CustomDateAdapterService } from '../../../services/material-customs/date-format/custom-date-adapter.service';
 import {
   CUSTOM_EUROPE_DATE_FORMAT_SERVICE,
   MONDAY_CUSTOM_DATE_ADAPTER_SERVICE,
-  PROVIDERS_MAP,
 } from '../../../injection-tokens/material-injection-tokens';
 import { WeekendFilterService } from '../../../services/material-customs/weekend-filter.service';
 import {
@@ -44,21 +49,9 @@ import {
     MatButtonToggleModule,
   ],
   providers: [
-    // {
-    //   provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
-    //   useClass: WeekendRangeSelectionStategyService,
-    // },
-    {
-      provide: PROVIDERS_MAP,
-      useValue: {
-        short: WeekendRangeSelectionStategyService,
-        long: LongWeekendRangeSelectionStategyService,
-      },
-    },
     {
       provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
-      useFactory: dynamicProviderFactory,
-      deps: [DynamicProviderSwitchService, PROVIDERS_MAP],
+      useClass: WeekendRangeSelectionStategyService,
     },
     {
       provide: MAT_DATE_LOCALE,
@@ -87,24 +80,11 @@ import {
 })
 export class WhichWeekendFlightSearchComponent {
   @ViewChild(MatDateRangePicker) picker!: MatDateRangePicker<Date>;
-  constructor(
-    private weekendFilterService: WeekendFilterService,
-    private providerSwitchService: DynamicProviderSwitchService,
-  ) {}
+  @Output() weekendTypeChange = new EventEmitter<string>();
+  constructor(private weekendFilterService: WeekendFilterService) {}
 
-  switchProvider(toggleValue: string) {
-    switch (toggleValue) {
-      case 'long':
-        console.log('long');
-        this.providerSwitchService.setProviderKey('long');
-        break;
-      case 'short':
-        console.log('short');
-        this.providerSwitchService.setProviderKey('short');
-        break;
-      default:
-        break;
-    }
+  ngOnInit() {
+    console.log(MAT_DATE_RANGE_SELECTION_STRATEGY);
   }
 
   defaultToggleValue = 'short';
@@ -118,5 +98,10 @@ export class WhichWeekendFlightSearchComponent {
 
   get whichWeekendRangeFormControl(): FormGroup {
     return this.whichWeekendRange;
+  }
+
+  changeWeekendType(weekendType: string): void {
+    console.log(weekendType);
+    this.weekendTypeChange.emit(weekendType);
   }
 }
