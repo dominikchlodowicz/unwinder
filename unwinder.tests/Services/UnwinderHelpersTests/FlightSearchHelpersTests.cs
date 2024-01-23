@@ -37,4 +37,27 @@ public class FlightSearchHelpersTests
 
         Assert.That(ex, Is.EqualTo(expectedResult));
     }
+
+    [Test]
+    public void ConvertIsoDateStringToTime_WithInValidIsoStringArgument_ThrowsArgumentException()
+    {
+        var invalidArgument = "test";
+
+        var ex = Assert.Throws<ArgumentException>(() =>
+        FlightSearchHelpers.ConvertIsoDateStringToDate(invalidArgument));
+
+        Assert.That(ex.Message, Is.EqualTo("Passed string argument is not a valid ISO date."));
+    }
+
+    [Test]
+    public void ConvertIsoDateStringToTimee_WithValidIsoStringArgument_ReturnsParsedTime()
+    {
+        var validArgument = DateTime.Now.Date.ToString();
+
+        var expectedResult = DateTime.Now.Date.ToString("HH:mm:ss");
+
+        var ex = FlightSearchHelpers.ConvertIsoDateStringToDate(validArgument);
+
+        Assert.That(ex, Is.EqualTo(expectedResult));
+    }
 }

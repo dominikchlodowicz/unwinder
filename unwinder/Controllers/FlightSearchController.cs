@@ -110,7 +110,9 @@ public class FlightSearchController : ControllerBase
     {
         List<string> numberOfTravelers = FlightSearchHelpers.RepeatString("ADULT", requestContent.NumberOfPassengers);
         string startDate = FlightSearchHelpers.ConvertIsoDateStringToDate(requestContent.When);
+        string startTime = FlightSearchHelpers.ConvertIsoDateStringToTime(requestContent.When);
         string endDate = FlightSearchHelpers.ConvertIsoDateStringToDate(requestContent.Back);
+        string endTime = FlightSearchHelpers.ConvertIsoDateStringToTime(requestContent.Back);
         string destinationCity = requestContent.Where.Split(',')[0];
         string originCity = requestContent.Origin.Split(',')[0];
         string where = await _getCityIataCodeService.GetCityIataCode(destinationCity);
@@ -123,7 +125,7 @@ public class FlightSearchController : ControllerBase
         {
             FlightSearchParameters requestParameters = new FlightSearchParametersBuilder()
                 .BuildNumberOfTravelers(numberOfTravelers)
-                .BuildDateTimeRange(startDate, "00:00:00")
+                .BuildDateTimeRange(startDate, startTime)
                 .BuildOriginDestinations(origin, where)
                 .BuildCurrencyCode("USD")
                 .BuildDefaultValues()

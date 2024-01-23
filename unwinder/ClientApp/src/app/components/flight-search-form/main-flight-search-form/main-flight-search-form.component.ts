@@ -164,7 +164,7 @@ export class MainFlightSearchFormComponent implements OnInit {
           this.whereFormGroup.value.where,
           this.originFormGroup.value.origin,
           this.whenFormGroup.value.when.start,
-          this.whenFormGroup.value.when.end,
+          this.whenFormGroup.value.this.whenFormGroup.value.when.end,
           this.passengersFormGroup.value.slider,
         );
 
