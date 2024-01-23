@@ -50,13 +50,13 @@ public class FlightSearchHelpersTests
     }
 
     [Test]
-    public void ConvertIsoDateStringToTimee_WithValidIsoStringArgument_ReturnsParsedTime()
+    public void ConvertIsoDateStringToTime_WithValidIsoStringArgument_ReturnsParsedTime()
     {
         var validArgument = DateTime.Now.Date.ToString();
 
         var expectedResult = DateTime.Now.Date.ToString("HH:mm:ss");
 
-        var ex = FlightSearchHelpers.ConvertIsoDateStringToDate(validArgument);
+        var ex = FlightSearchHelpers.ConvertIsoDateStringToTime(validArgument);
 
         Assert.That(ex, Is.EqualTo(expectedResult));
     }
