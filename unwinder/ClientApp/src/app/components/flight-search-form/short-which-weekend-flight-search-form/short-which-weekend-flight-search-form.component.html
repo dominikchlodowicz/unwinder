@@ -14,8 +14,8 @@
     <mat-date-range-input
       [formGroup]="whichWeekendRange"
       [rangePicker]="picker"
+      [dateFilter]="weekendFilter"
     >
-      <!-- [dateFilter]="weekendFilter" -->
       <input matStartDate formControlName="start" placeholder="Start date" />
       <input matEndDate formControlName="end" placeholder="End date" />
     </mat-date-range-input>

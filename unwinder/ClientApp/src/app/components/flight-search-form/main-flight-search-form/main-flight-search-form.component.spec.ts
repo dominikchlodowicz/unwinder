@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 
 import { WhereToFlightSearchFormComponent } from '../where-to-flight-search-form/where-to-flight-search-form.component';
-import { WhichWeekendFlightSearchComponent } from '../which-weekend-flight-search-form/which-weekend-flight-search-form.component';
+import { ShortWhichWeekendFlightSearchComponent } from '../short-which-weekend-flight-search-form/short-which-weekend-flight-search-form.component';
 import { OriginFlightSearchFormComponent } from '../origin-flight-search-form/origin-flight-search-form.component';
 import { PassengersFlightSearchFormComponent } from '../passengers-flight-search-form/passengers-flight-search-form.component';
 
@@ -28,6 +28,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { FlightSearchSubmitService } from '../../../services/flight-search-form/flight-search-submit.service';
 import { of, throwError } from 'rxjs';
+import { LongWhichWeekendFlightSearchFormComponent } from '../long-which-weekend-flight-search-form/long-which-weekend-flight-search-form.component';
+import { BaseWhichWeekendFlightSearchFormComponent } from '../base-which-weekend-flight-search-form/base-which-weekend-flight-search-form.component';
+import { ComponentRef } from '@angular/core';
 
 describe('MainFlightSearchFormComponent', () => {
   let component: MainFlightSearchFormComponent;
@@ -46,7 +49,9 @@ describe('MainFlightSearchFormComponent', () => {
       imports: [
         CommonModule,
         WhereToFlightSearchFormComponent,
-        WhichWeekendFlightSearchComponent,
+        ShortWhichWeekendFlightSearchComponent,
+        LongWhichWeekendFlightSearchFormComponent,
+        // BaseWhichWeekendFlightSearchFormComponent,
         OriginFlightSearchFormComponent,
         PassengersFlightSearchFormComponent,
         MatStepperModule,
@@ -91,7 +96,6 @@ describe('MainFlightSearchFormComponent', () => {
     component.ngAfterViewInit();
     expect(component.citiesAutocompleteWhereTo).toBeDefined();
     expect(component.originFlightSearchFormComponent).toBeDefined();
-    expect(component.wichWeekendFlightSearchComponent).toBeDefined();
     expect(component.passengersFlightSearchFormComponent).toBeDefined();
   });
 
@@ -198,5 +202,45 @@ describe('MainFlightSearchFormComponent', () => {
       'Close',
       expect.any(Object),
     );
+  });
+
+  it('should load ShortWhichWeekendFlightSearchComponent for "short" weekend type', () => {
+    const componentRef = component.loadWeekendComponent(
+      'short',
+    ) as ComponentRef<ShortWhichWeekendFlightSearchComponent>;
+    fixture.detectChanges();
+    expect(componentRef.instance).toBeInstanceOf(
+      ShortWhichWeekendFlightSearchComponent,
+    );
+  });
+
+  it('should load LongWhichWeekendFlightSearchFormComponent for "long" weekend type', () => {
+    const componentRef = component.loadWeekendComponent(
+      'long',
+    ) as ComponentRef<LongWhichWeekendFlightSearchFormComponent>;
+    fixture.detectChanges();
+    expect(componentRef.instance).toBeInstanceOf(
+      LongWhichWeekendFlightSearchFormComponent,
+    );
+  });
+
+  it('should integrate weekend component form group into whenFormGroup', () => {
+    const componentRef = component.loadWeekendComponent(
+      'short',
+    ) as ComponentRef<ShortWhichWeekendFlightSearchComponent>;
+    fixture.detectChanges();
+    expect(component.whenFormGroup.get('when')).toBe(
+      componentRef.instance.whichWeekendRangeFormControl,
+    );
+  });
+
+  it('should handle weekendTypeChange event', () => {
+    const componentRef = component.loadWeekendComponent(
+      'short',
+    ) as ComponentRef<ShortWhichWeekendFlightSearchComponent>;
+    fixture.detectChanges();
+    jest.spyOn(component, 'onWeekendTypeChange');
+    componentRef.instance.weekendTypeChange.emit('long');
+    expect(component.onWeekendTypeChange).toHaveBeenCalledWith('long');
   });
 });

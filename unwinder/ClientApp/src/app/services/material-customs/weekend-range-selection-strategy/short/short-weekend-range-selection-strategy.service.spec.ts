@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { WeekendRangeSelectionStategyService } from './weekend-range-selection-strategy.service';
+import { ShortWeekendRangeSelectionStategyService } from './short-weekend-range-selection-strategy.service';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 
 describe('WeekendRangeSelectionStategyService', () => {
-  let service: WeekendRangeSelectionStategyService<Date>;
+  let service: ShortWeekendRangeSelectionStategyService<Date>;
   let dateAdapter: DateAdapter<Date>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [MatNativeDateModule],
-      providers: [WeekendRangeSelectionStategyService],
+      providers: [ShortWeekendRangeSelectionStategyService],
     });
 
-    service = TestBed.inject(WeekendRangeSelectionStategyService);
+    service = TestBed.inject(ShortWeekendRangeSelectionStategyService);
     dateAdapter = TestBed.inject(DateAdapter);
   });
 
