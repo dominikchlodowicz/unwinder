@@ -1,0 +1,17 @@
+<div class="full-window-autocomplete">
+  <p id="flight-search-number-of-passengers-text">
+    Number of passengers:<span id="number-of-passengers">
+      {{ passengerSlider.value }}</span
+    >
+  </p>
+  <mat-slider
+    min="1"
+    max="10"
+    step="1"
+    showTickMarks
+    discrete
+    [displayWith]="formatLabel"
+  >
+    <input [formControl]="passengerSlider" matSliderThumb class="slider" />
+  </mat-slider>
+</div>

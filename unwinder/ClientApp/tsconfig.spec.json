@@ -4,16 +4,12 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-      "jasmine",
-      "node"
-    ]
+      "jest" // 1
+    ],
+    "esModuleInterop": true, // 2
+    "emitDecoratorMetadata": true, // 3
+    // This solves ProxyZone error !!!! that's introduced with jest-preset-angular
+    "target": "ES2016"
   },
-  "files": [
-    "src/test.ts",
-    "src/polyfills.ts"
-  ],
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

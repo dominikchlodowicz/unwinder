@@ -1,2 +1,5 @@
 .DS_Store
 .test.json
+coverage.info
+ci_commands.txt
+node_modules

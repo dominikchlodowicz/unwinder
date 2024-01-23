@@ -1,0 +1,72 @@
+<mat-vertical-stepper [linear]="false" #stepper [animationDuration]="'1000ms'">
+  <ng-template matStepperIcon="edit">
+    <mat-icon class="custom-edit-icon">check</mat-icon>
+  </ng-template>
+  <mat-step
+    [stepControl]="whereFormGroup"
+    errorMessage="Destination is required!"
+  >
+    <form [formGroup]="whereFormGroup">
+      <ng-template matStepLabel>Where?</ng-template>
+      <app-where-to-flight-search-form></app-where-to-flight-search-form>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step
+    [stepControl]="originFormGroup"
+    errorMessage="Origin location is required!"
+  >
+    <form [formGroup]="originFormGroup">
+      <ng-template matStepLabel>From?</ng-template>
+      <app-origin-flight-search-form></app-origin-flight-search-form>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="whenFormGroup" errorMessage="Weekend is required!">
+    <form [formGroup]="whenFormGroup">
+      <ng-template matStepLabel>When?</ng-template>
+      <ng-template #weekendComponentContainer></ng-template>
+      <!-- <app-which-weekend></app-which-weekend> -->
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="passengersFormGroup">
+    <form [formGroup]="passengersFormGroup">
+      <ng-template matStepLabel>How many passengers?</ng-template>
+      <app-passengers-flight-search-form></app-passengers-flight-search-form>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <div class="full-window-autocomplete">
+      <div class="button-container">
+        <div class="search-button-box">
+          <button
+            id="search-button"
+            mat-raised-button
+            color="primary"
+            (click)="submit()"
+          >
+            Search
+          </button>
+        </div>
+        <div class="helper-buttons">
+          <button mat-flat-button matStepperPrevious>Back</button>
+          <button mat-flat-button (click)="stepper.reset()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

@@ -1,0 +1,18 @@
+<div class="full-window-autocomplete">
+  <mat-form-field class="flight-search-input-width">
+    <mat-label>Enter destination city name</mat-label>
+    <input
+      matInput
+      [matAutocomplete]="auto"
+      [formControl]="citiesAutocompleteWhereTo"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="onOptionSelected()"
+    >
+      <mat-option *ngFor="let city of this.filteredCities" [value]="city">
+        {{ city }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
