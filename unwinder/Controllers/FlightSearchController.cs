@@ -132,8 +132,6 @@ public class FlightSearchController : ControllerBase
                 .Build();
 
             FlightSearchOutputModel flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
-            flightSearchResult.FlightBackData ??= new FlightBack();
-            flightSearchResult.FlightBackData.FlightBackDate = endDate;
 
             return Ok(flightSearchResult);
         }

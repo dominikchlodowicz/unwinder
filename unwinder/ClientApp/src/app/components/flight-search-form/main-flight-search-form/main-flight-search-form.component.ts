@@ -29,8 +29,8 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { FlightSearchData } from '../../../interfaces/flight-search-data';
 import { FlightSearchSubmitService } from '../../../services/flight-search-form/flight-search-submit.service';
-import { MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { BaseWhichWeekendFlightSearchFormComponent } from '../base-which-weekend-flight-search-form/base-which-weekend-flight-search-form.component';
+import { UnwinderSessionService } from '../../../services/unwinder-search-state/unwinder-session.service';
 
 @Component({
   selector: 'app-main-flight-search-form',
@@ -80,7 +80,8 @@ export class MainFlightSearchFormComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _flightSearchSubmitService: FlightSearchSubmitService,
     private _snackBar: MatSnackBar,
-    private changeDetectorRef: ChangeDetectorRef,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _flightSearchSessionService: UnwinderSessionService,
   ) {}
 
   ngOnInit() {
@@ -109,14 +110,12 @@ export class MainFlightSearchFormComponent implements OnInit {
   }
 
   onWeekendTypeChange(newType: string): void {
-    console.log(`type in main: ${newType}`);
     this.loadWeekendComponent(newType);
   }
 
   loadWeekendComponent(
     weekendType: string,
   ): ComponentRef<BaseWhichWeekendFlightSearchFormComponent> {
-    console.log('format change!!');
     this.weekendComponentContainer.clear();
 
     const componentToLoad: Type<BaseWhichWeekendFlightSearchFormComponent> =
@@ -127,16 +126,9 @@ export class MainFlightSearchFormComponent implements OnInit {
     const componentRef =
       this.weekendComponentContainer.createComponent(componentToLoad);
 
-    console.log(
-      'Current provider:',
-      componentRef.injector.get(MAT_DATE_RANGE_SELECTION_STRATEGY).constructor
-        .name,
-    );
-
     componentRef.instance.defaultToggleValue = weekendType;
 
     componentRef.instance.weekendTypeChange.subscribe((newType: string) => {
-      console.log('new type yesss');
       this.onWeekendTypeChange(newType);
     });
 
@@ -147,7 +139,7 @@ export class MainFlightSearchFormComponent implements OnInit {
     // Update your form group here
     this.whenFormGroup.setControl('when', whichWeekendRange);
 
-    this.changeDetectorRef.detectChanges();
+    this._changeDetectorRef.detectChanges();
 
     return componentRef;
   }
@@ -164,16 +156,29 @@ export class MainFlightSearchFormComponent implements OnInit {
           this.whereFormGroup.value.where,
           this.originFormGroup.value.origin,
           this.whenFormGroup.value.when.start,
-          this.whenFormGroup.value.this.whenFormGroup.value.when.end,
           this.passengersFormGroup.value.slider,
         );
 
+      this._flightSearchSessionService.setData(
+        'flightBackData',
+        this._flightSearchSubmitService.serializeFlightBackData(
+          this.whenFormGroup.value.when.end,
+        ),
+      );
+
       this._flightSearchSubmitService
         .submitFlightSearchDataToApi(serializedFlightSearchData)
-        .subscribe(
-          (response) => console.log('Submit Success:', response),
-          (error) => console.error('Submit Error:', error),
-        );
+        .subscribe({
+          next: (response) => {
+            this._flightSearchSessionService.setData(
+              'chosenFirstFlightData',
+              response,
+            );
+
+            console.log('Submit Success:', response);
+          },
+          error: (error) => console.error('Submit Error:', error),
+        });
     } else {
       console.error('Some form groups on submit are invalid.');
       this._snackBar.open(

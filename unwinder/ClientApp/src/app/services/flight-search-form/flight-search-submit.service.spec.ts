@@ -29,7 +29,6 @@ describe('FlightSearchSubmitService', () => {
       where: 'New York',
       origin: 'London',
       when: new Date('2022-01-01'),
-      back: new Date('2022-01-07'),
       numberOfPassengers: 2,
     };
 
@@ -48,7 +47,6 @@ describe('FlightSearchSubmitService', () => {
       where: 'New York',
       origin: 'London',
       when: new Date('2022-01-01'),
-      back: new Date('2022-01-07'),
       numberOfPassengers: 2,
     };
 
