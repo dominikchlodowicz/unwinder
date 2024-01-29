@@ -6,7 +6,7 @@ Unwinder is an application designed to help you plan quick, stress-free weekend 
 
 - **API**: Amadeus API for real-time flight information.
 - **Backend**: Developed with .NET Core Web API, tested with NUnit.
-- **Frontend**: Built using Angular, with Jest for testing.
+- **Frontend**: Built using Angular and Angular Material, with Jest for testing.
 - **Tooling**: Version control with Git-Flow, containerization with Docker, and continuous integration/deployment via Azure CI/CD.
 
 ## Development Roadmap
