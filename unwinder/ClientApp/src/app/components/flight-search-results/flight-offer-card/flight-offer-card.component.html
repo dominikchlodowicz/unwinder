@@ -1,2 +1,27 @@
-<p>flight-offer-card works!</p>
-<div>{{ flightBackData.flightDate }}</div>
+<mat-card class="flight-card">
+  <mat-card-header> </mat-card-header>
+  <mat-card-content>
+    <div class="flight-info">
+      <span class="flight-route"
+        >{{ departureIataCode }} → {{ arrivalIataCode }}</span
+      >
+      <span class="layovers">Layovers: {{ layovers }}</span>
+    </div>
+    <div class="flight-details">
+      <div>
+        <div>Depart: {{ departureTime }}</div>
+        <div>Arrive: {{ arrivalTime }}</div>
+      </div>
+      <div class="details-right">
+        <div>Duration: {{ duration }}</div>
+        <div class="operator-name">Operator: {{ operatorNames }}</div>
+      </div>
+    </div>
+    <div class="flight-selection">
+      <div class="price">{{ totalPrice }}</div>
+      <button (click)="selectFlight()" mat-raised-button color="primary">
+        Select
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

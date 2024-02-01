@@ -1,0 +1,49 @@
+.flight-card {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: auto;
+}
+
+.flight-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.flight-route {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.layovers {
+  font-size: 14px;
+  color: gray;
+}
+
+.flight-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.details-right {
+  text-align: right;
+}
+
+.operator-name {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.flight-selection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: bold;
+}

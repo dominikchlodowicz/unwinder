@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
-import { FlightDate } from '../../interfaces/flight-date';
-import { FlightSearchData } from '../../interfaces/flight-search-data';
-import { FlightSearchResponse } from '../../interfaces/flight-search-response';
+import { FlightDate } from '../../interfaces/flight-data-exchange/flight-date';
+import { FlightSearchData } from '../../interfaces/flight-data-exchange/flight-search-data';
+import { FlightSearchResponse } from '../../interfaces/flight-data-exchange/flight-search-response';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +30,8 @@ export class FlightSearchSubmitService {
   public splitIsoDateString(dateString: string) {
     const date = new Date(dateString);
 
+    console.log(`Date before split ${dateString}`);
+
     // Check if the date is valid
     if (isNaN(date.getTime())) {
       throw new Error('Invalid date string');
@@ -46,6 +48,9 @@ export class FlightSearchSubmitService {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
     const splittedTime = `${hours}:${minutes}:${seconds}`;
+
+    console.log(`Date after split: ${splittedDate}`);
+    console.log(`Time after split: ${splittedTime}`);
 
     return { splittedDate, splittedTime };
   }

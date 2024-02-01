@@ -4,7 +4,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { FlightSearchSubmitService } from './flight-search-submit.service';
-import { FlightSearchData } from '../../interfaces/flight-search-data';
+import { FlightSearchData } from '../../interfaces/flight-data-exchange/flight-search-data';
 
 describe('FlightSearchSubmitService', () => {
   let service: FlightSearchSubmitService;

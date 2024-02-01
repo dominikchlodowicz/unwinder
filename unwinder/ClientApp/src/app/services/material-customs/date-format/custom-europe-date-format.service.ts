@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ICustomEuropeDateFormatService } from '../../../interfaces/date-adapter';
+import { ICustomEuropeDateFormatService } from '../../../interfaces/material-customs/date-adapter';
 
 @Injectable({
   providedIn: 'root',

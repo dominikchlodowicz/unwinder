@@ -4,7 +4,7 @@ import { Injectable, Inject } from '@angular/core';
 import {
   IMondayCustomDateAdapterService,
   ICustomEuropeDateFormatService,
-} from '../../../interfaces/date-adapter';
+} from '../../../interfaces/material-customs/date-adapter';
 import {
   CUSTOM_EUROPE_DATE_FORMAT_SERVICE,
   MONDAY_CUSTOM_DATE_ADAPTER_SERVICE,
