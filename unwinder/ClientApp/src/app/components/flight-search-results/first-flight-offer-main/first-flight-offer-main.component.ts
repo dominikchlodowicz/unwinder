@@ -4,7 +4,6 @@ import { UnwinderSessionService } from '../../../services/unwinder-search-state/
 import { FlightOfferCardComponent } from '../flight-offer-card/flight-offer-card.component';
 import { FlightSearchSubmitService } from '../../../services/flight-search-form/flight-search-submit.service';
 import { FlightSearchData } from '../../../interfaces/flight-data-exchange/flight-search-data';
-import { FlightDate } from '../../../interfaces/flight-data-exchange/flight-date';
 import { FlightSearchResponse } from '../../../interfaces/flight-data-exchange/flight-search-response';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { forkJoin } from 'rxjs';
@@ -14,10 +13,10 @@ import { Router } from '@angular/router';
   selector: 'app-flight-offer-main',
   standalone: true,
   imports: [CommonModule, FlightOfferCardComponent],
-  templateUrl: './flight-offer-main.component.html',
-  styleUrl: './flight-offer-main.component.css',
+  templateUrl: './first-flight-offer-main.component.html',
+  styleUrl: './first-flight-offer-main.component.css',
 })
-export class FlightOfferMainComponent {
+export class FirstFlightOfferMainComponent {
   flightBackData!: Date;
   firstFlightResponse!: FlightSearchResponse;
   flightParameters!: FlightSearchData;
@@ -36,16 +35,9 @@ export class FlightOfferMainComponent {
         this.firstFlightResponse = data!.firstFlightResponse!;
         this.flightParameters = data!.flightParameters!;
       });
-
-    console.log('flightBackData');
-    console.log(this.flightBackData);
-    console.log('chosenFlightData');
-    console.log(this.firstFlightResponse);
   }
 
   submitSelectedFlight(indexOfSelectedFlight: number) {
-    console.log(`Index of selected flight: ${indexOfSelectedFlight}`);
-
     const selctedData = this.firstFlightResponse.data[indexOfSelectedFlight];
 
     const serializedFlightSearchData: FlightSearchData =
@@ -78,7 +70,5 @@ export class FlightOfferMainComponent {
       },
       error: (error) => console.error('Error updating data:', error),
     });
-
-    console.log(selctedData);
   }
 }

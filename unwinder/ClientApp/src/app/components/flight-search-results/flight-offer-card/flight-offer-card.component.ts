@@ -26,7 +26,6 @@ export class FlightOfferCardComponent {
   totalPrice?: string;
 
   ngOnInit() {
-    console.log(this.flightData);
     const itineraries = this.flightData.itineraries;
     const segments = itineraries[0].segments;
     const lastItinerary = itineraries[itineraries.length - 1];
@@ -53,7 +52,7 @@ export class FlightOfferCardComponent {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-indexed
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
     return `${hours}:${minutes}, ${day}.${month}`;
   }
 

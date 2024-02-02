@@ -161,10 +161,6 @@ export class MainFlightSearchFormComponent implements OnInit {
           this.passengersFormGroup.value.slider,
         );
 
-      console.log(
-        `Flight back form data: ${this.whenFormGroup.value.when.end}`,
-      );
-
       const setFlightBackData$ = this._flightSearchSessionService.setData(
         'flightBackData',
         this.whenFormGroup.value.when.end,
