@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UnwinderSessionService } from '../../../services/unwinder-search-state/unwinder-session.service';
 import { FlightOfferCardComponent } from '../flight-offer-card/flight-offer-card.component';
 import { FlightSearchResponse } from '../../../interfaces/flight-data-exchange/flight-search-response';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-second-flight-offer-main',
@@ -15,10 +14,7 @@ import { Router } from '@angular/router';
 export class SecondFlightOfferMainComponent {
   secondFlightResponse!: FlightSearchResponse;
 
-  constructor(
-    public _unwinderSessionService: UnwinderSessionService,
-    private router: Router,
-  ) {}
+  constructor(public _unwinderSessionService: UnwinderSessionService) {}
 
   ngOnInit() {
     this._unwinderSessionService

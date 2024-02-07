@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UnwinderSessionService } from '../../../services/unwinder-search-state/unwinder-session.service';
 import { FlightOfferCardComponent } from '../flight-offer-card/flight-offer-card.component';

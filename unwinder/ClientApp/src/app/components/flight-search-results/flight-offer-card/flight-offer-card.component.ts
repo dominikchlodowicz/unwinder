@@ -56,7 +56,7 @@ export class FlightOfferCardComponent {
     return `${hours}:${minutes}, ${day}.${month}`;
   }
 
-  private formatDuration(durationString: string): string {
+  public formatDuration(durationString: string): string {
     const hoursMatch = durationString.match(/(\d+)H/);
     const minutesMatch = durationString.match(/(\d+)M/);
     const hours = hoursMatch ? `${hoursMatch[1]}h ` : '';
