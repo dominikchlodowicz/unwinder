@@ -1,45 +1,63 @@
 trigger:
-- main
-- develop
+  - main
+  - develop
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: "windows-latest"
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  solution: "**/*.sln"
+  buildPlatform: "Any CPU"
+  buildConfiguration: "Release"
 
 steps:
-- task: UseDotNet@2
-  inputs:
-    version: '7.x'
-    includePreviewVersions: true
-- task: NuGetToolInstaller@1
+  - task: UseDotNet@2
+    inputs:
+      version: "7.x"
+      includePreviewVersions: true
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+  - task: NuGetToolInstaller@1
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: "$(solution)"
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: "restore"
+      projects: "**/*.csproj"
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: '**/*Tests.csproj'
-    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
-    publishTestResults: true
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: "build"
+      projects: "**/*.csproj"
+      arguments: "--configuration $(buildConfiguration)"
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.cobertura.xml'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: "test"
+      projects: "**/*Tests.csproj"
+      arguments: "--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura"
+      publishTestResults: true
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: "Cobertura"
+      summaryFileLocation: "$(System.DefaultWorkingDirectory)/**/coverage.cobertura.xml"
+
+  - script: |
+      cd unwinder/ClientApp
+      npm install
+      npm run test
+    displayName: "Run Jest Tests"
+    continueOnError: false
+
+  - script: |
+      if [ $? -ne 0 ]; then
+        echo "Tests failed"
+        exit 1
+      else
+        echo "Tests passed"
+      fi
+    displayName: "Check Jest Exit Code"
+    condition: always()
