@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using unwinder.Services;
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
-using System.Net.Http.Headers;
-using Newtonsoft.Json;
-using System.Text;
-using System.Diagnostics;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
 using unwinder.Services.AmadeusApiService.GetCityIataCode;
 using unwinder.Helpers;
-using FluentAssertions;
-
 
 namespace unwinder.Controllers;
 
@@ -111,8 +105,6 @@ public class FlightSearchController : ControllerBase
         List<string> numberOfTravelers = FlightSearchHelpers.RepeatString("ADULT", requestContent.NumberOfPassengers);
         string startDate = FlightSearchHelpers.ConvertIsoDateStringToDate(requestContent.When);
         string startTime = FlightSearchHelpers.ConvertIsoDateStringToTime(requestContent.When);
-        string endDate = FlightSearchHelpers.ConvertIsoDateStringToDate(requestContent.Back);
-        string endTime = FlightSearchHelpers.ConvertIsoDateStringToTime(requestContent.Back);
         string destinationCity = requestContent.Where.Split(',')[0];
         string originCity = requestContent.Origin.Split(',')[0];
         string where = await _getCityIataCodeService.GetCityIataCode(destinationCity);
@@ -132,8 +124,6 @@ public class FlightSearchController : ControllerBase
                 .Build();
 
             FlightSearchOutputModel flightSearchResult = await _flightSearchService.FlightSearch(requestParameters);
-            flightSearchResult.FlightBackData ??= new FlightBack();
-            flightSearchResult.FlightBackData.FlightBackDate = endDate;
 
             return Ok(flightSearchResult);
         }

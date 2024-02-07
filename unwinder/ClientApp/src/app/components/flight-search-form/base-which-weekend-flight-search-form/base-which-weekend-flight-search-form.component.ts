@@ -18,7 +18,6 @@ export abstract class BaseWhichWeekendFlightSearchFormComponent {
 
   // inform main component about type change
   changeWeekendType(weekendType: string): void {
-    console.log(weekendType);
     this.weekendTypeChange.emit(weekendType);
   }
 

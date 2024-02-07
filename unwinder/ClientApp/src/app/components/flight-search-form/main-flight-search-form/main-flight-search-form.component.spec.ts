@@ -160,7 +160,7 @@ describe('MainFlightSearchFormComponent', () => {
     component.submit();
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Submit Error:',
+      'Error updating data:',
       new Error('API error'),
     );
   });

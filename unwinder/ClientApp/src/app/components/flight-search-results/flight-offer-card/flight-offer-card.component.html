@@ -1,0 +1,27 @@
+<mat-card class="bg-white shadow-2xl max-w-md mx-auto">
+  <mat-card-header> </mat-card-header>
+  <mat-card-content>
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-lg font-bold"
+        >{{ departureIataCode }} → {{ arrivalIataCode }}</span
+      >
+      <span class="text-sm text-gray-500">Layovers: {{ layovers }}</span>
+    </div>
+    <div class="flex justify-between mb-4">
+      <div>
+        <div>Depart: {{ departureTime }}</div>
+        <div>Arrive: {{ arrivalTime }}</div>
+      </div>
+      <div class="text-right">
+        <div>Duration: {{ duration }}</div>
+        <div class="text-sm mt-1">Operator: {{ operatorNames }}</div>
+      </div>
+    </div>
+    <div class="flex justify-between items-center">
+      <div class="text-lg font-bold">{{ totalPrice }}</div>
+      <button (click)="selectFlight()" mat-raised-button color="primary">
+        Select
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

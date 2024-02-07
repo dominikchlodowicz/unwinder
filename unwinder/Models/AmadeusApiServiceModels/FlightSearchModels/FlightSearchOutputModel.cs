@@ -12,12 +12,18 @@ public class DepartureOutput
 {
     [JsonProperty("iataCode")]
     public string IataCode { get; set; }
+
+    [JsonProperty("at")]
+    public DateTime At { get; set; }
 }
 
 public class ArrivalOutput
 {
     [JsonProperty("iataCode")]
     public string IataCode { get; set; }
+
+    [JsonProperty("at")]
+    public DateTime At { get; set; }
 }
 
 public class SegmentObject1
@@ -73,10 +79,4 @@ public class FlightSearchOutputModel
     [JsonProperty("data")]
     public List<FlightOfferData> Data { get; set; }
 
-    public FlightBack FlightBackData { get; set; }
-}
-
-public class FlightBack
-{
-    public string FlightBackDate { get; set; }
 }

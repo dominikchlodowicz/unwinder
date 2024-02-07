@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IMondayCustomDateAdapterService } from '../../../interfaces/date-adapter';
+import { IMondayCustomDateAdapterService } from '../../../interfaces/material-customs/date-adapter';
 
 @Injectable({
   providedIn: 'root',

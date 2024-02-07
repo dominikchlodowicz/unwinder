@@ -1,7 +1,7 @@
 // injection-tokens.ts
 import { InjectionToken } from '@angular/core';
-import { IMondayCustomDateAdapterService } from '../interfaces/date-adapter';
-import { ICustomEuropeDateFormatService } from '../interfaces/date-adapter';
+import { IMondayCustomDateAdapterService } from '../interfaces/material-customs/date-adapter';
+import { ICustomEuropeDateFormatService } from '../interfaces/material-customs/date-adapter';
 
 export const MONDAY_CUSTOM_DATE_ADAPTER_SERVICE =
   new InjectionToken<IMondayCustomDateAdapterService>(

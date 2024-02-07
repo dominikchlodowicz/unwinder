@@ -1,0 +1,9 @@
+<ul class="space-y-8">
+  <li *ngFor="let flight of this.secondFlightResponse.data; index as i">
+    <app-flight-offer-card
+      [flightData]="flight"
+      [indexOfRecievedData]="i"
+      (selectedFlight)="submitSelectedFlight($event)"
+    ></app-flight-offer-card>
+  </li>
+</ul>

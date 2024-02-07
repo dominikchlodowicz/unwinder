@@ -27,10 +27,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatIconModule } from '@angular/material/icon';
-import { FlightSearchData } from '../../../interfaces/flight-search-data';
+import { FlightSearchData } from '../../../interfaces/flight-data-exchange/flight-search-data';
 import { FlightSearchSubmitService } from '../../../services/flight-search-form/flight-search-submit.service';
-import { MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { BaseWhichWeekendFlightSearchFormComponent } from '../base-which-weekend-flight-search-form/base-which-weekend-flight-search-form.component';
+import { UnwinderSessionService } from '../../../services/unwinder-search-state/unwinder-session.service';
+import { Router } from '@angular/router';
+import { switchMap } from 'rxjs/internal/operators/switchMap';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-main-flight-search-form',
@@ -80,7 +83,9 @@ export class MainFlightSearchFormComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _flightSearchSubmitService: FlightSearchSubmitService,
     private _snackBar: MatSnackBar,
-    private changeDetectorRef: ChangeDetectorRef,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private router: Router,
+    public _flightSearchSessionService: UnwinderSessionService,
   ) {}
 
   ngOnInit() {
@@ -109,14 +114,12 @@ export class MainFlightSearchFormComponent implements OnInit {
   }
 
   onWeekendTypeChange(newType: string): void {
-    console.log(`type in main: ${newType}`);
     this.loadWeekendComponent(newType);
   }
 
   loadWeekendComponent(
     weekendType: string,
   ): ComponentRef<BaseWhichWeekendFlightSearchFormComponent> {
-    console.log('format change!!');
     this.weekendComponentContainer.clear();
 
     const componentToLoad: Type<BaseWhichWeekendFlightSearchFormComponent> =
@@ -127,27 +130,18 @@ export class MainFlightSearchFormComponent implements OnInit {
     const componentRef =
       this.weekendComponentContainer.createComponent(componentToLoad);
 
-    console.log(
-      'Current provider:',
-      componentRef.injector.get(MAT_DATE_RANGE_SELECTION_STRATEGY).constructor
-        .name,
-    );
-
     componentRef.instance.defaultToggleValue = weekendType;
 
     componentRef.instance.weekendTypeChange.subscribe((newType: string) => {
-      console.log('new type yesss');
       this.onWeekendTypeChange(newType);
     });
 
-    // Access the whichWeekendRange form group from the component instance
     const whichWeekendRange =
       componentRef.instance.whichWeekendRangeFormControl;
 
-    // Update your form group here
     this.whenFormGroup.setControl('when', whichWeekendRange);
 
-    this.changeDetectorRef.detectChanges();
+    this._changeDetectorRef.detectChanges();
 
     return componentRef;
   }
@@ -164,16 +158,40 @@ export class MainFlightSearchFormComponent implements OnInit {
           this.whereFormGroup.value.where,
           this.originFormGroup.value.origin,
           this.whenFormGroup.value.when.start,
-          this.whenFormGroup.value.this.whenFormGroup.value.when.end,
           this.passengersFormGroup.value.slider,
         );
 
-      this._flightSearchSubmitService
+      const setFlightBackData$ = this._flightSearchSessionService.setData(
+        'flightBackData',
+        this.whenFormGroup.value.when.end,
+      );
+
+      const setFlightParameters$ = this._flightSearchSessionService.setData(
+        'flightParameters',
+        serializedFlightSearchData,
+      );
+
+      const setFirstFlightResponse$ = this._flightSearchSubmitService
         .submitFlightSearchDataToApi(serializedFlightSearchData)
-        .subscribe(
-          (response) => console.log('Submit Success:', response),
-          (error) => console.error('Submit Error:', error),
+        .pipe(
+          switchMap((response) =>
+            this._flightSearchSessionService.setData(
+              'firstFlightResponse',
+              response,
+            ),
+          ),
         );
+
+      forkJoin([
+        setFlightBackData$,
+        setFlightParameters$,
+        setFirstFlightResponse$,
+      ]).subscribe({
+        next: () => {
+          this.router.navigate(['/unwind/first-flight']);
+        },
+        error: (error) => console.error('Error updating data:', error),
+      });
     } else {
       console.error('Some form groups on submit are invalid.');
       this._snackBar.open(

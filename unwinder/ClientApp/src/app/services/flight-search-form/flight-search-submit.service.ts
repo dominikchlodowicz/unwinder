@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FlightSearchData } from '../../interfaces/flight-search-data';
 import { Observable, catchError } from 'rxjs';
+import { FlightDate } from '../../interfaces/flight-data-exchange/flight-date';
+import { FlightSearchData } from '../../interfaces/flight-data-exchange/flight-search-data';
+import { FlightSearchResponse } from '../../interfaces/flight-data-exchange/flight-search-response';
 
 @Injectable({
   providedIn: 'root',
@@ -15,22 +17,19 @@ export class FlightSearchSubmitService {
     whereArg: string,
     originArg: string,
     whenArg: Date,
-    backArg: Date,
     passengersArg: number,
   ): FlightSearchData {
     return {
       where: whereArg,
       origin: originArg,
       when: whenArg,
-      back: backArg,
       numberOfPassengers: passengersArg,
     };
   }
 
   public submitFlightSearchDataToApi(
     data: FlightSearchData,
-  ): Observable<FlightSearchData> {
-    console.log('submit');
-    return this.httpClient.post<FlightSearchData>(this.apiUrl, data);
+  ): Observable<FlightSearchResponse> {
+    return this.httpClient.post<FlightSearchResponse>(this.apiUrl, data);
   }
 }

@@ -38,12 +38,10 @@ export class ShortWeekendRangeSelectionStategyService<D>
         // Sunday
         start = this._dateAdapter.addCalendarDays(date, -1);
         end = this._dateAdapter.addCalendarDays(date, 0);
-        console.log(`start: ${start}, end: ${end}`);
       } else if (dayOfWeek === 6) {
         // Saturday
         start = this._dateAdapter.addCalendarDays(date, 0);
         end = this._dateAdapter.addCalendarDays(date, 1);
-        console.log(`start: ${start}, end: ${end}`);
       }
 
       return new DateRange<D>(start, end);
