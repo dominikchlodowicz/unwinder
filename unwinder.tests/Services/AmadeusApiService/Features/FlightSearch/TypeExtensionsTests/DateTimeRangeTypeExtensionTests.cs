@@ -6,7 +6,11 @@ public class DateTimeRangeTypeExtensionTests
     [Test]
     public void DateTimeToCorrectIsoFormat_ValidDateTime_NoException()
     {
-        Assert.DoesNotThrow(() => DateTimeRangeTypeExtension.DateTimeToCorrectIsoFormat("2024-01-24", "10:30:00"));
+        string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+        string currentTimePlusOneHour = DateTime.Now.AddHours(1).ToString("HH:mm:ss");
+
+        Assert.DoesNotThrow(() => DateTimeRangeTypeExtension.DateTimeToCorrectIsoFormat(currentDate, currentTimePlusOneHour));
     }
 
     [Test]
