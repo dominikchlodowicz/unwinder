@@ -33,6 +33,12 @@ steps:
       projects: "**/*.csproj"
       arguments: "--configuration $(buildConfiguration)"
 
+  - task: PowerShell@2
+    inputs:
+      targetType: "inline"
+      script: 'Set-TimeZone "Central European Standard Time"'
+    displayName: "Set Central European Standard Time Zone"
+
   - task: DotNetCoreCLI@2
     inputs:
       command: "test"
@@ -47,17 +53,19 @@ steps:
 
   - script: |
       cd unwinder/ClientApp
-      npm install
-      npm run test
-    displayName: "Run Jest Tests"
-    continueOnError: false
+      npm install --force
+      npm run test -- --ci --runInBand --reporters=default --reporters=jest-junit
+    displayName: "Install Jest"
 
   - script: |
-      if [ $? -ne 0 ]; then
-        echo "Tests failed"
-        exit 1
-      else
-        echo "Tests passed"
-      fi
-    displayName: "Check Jest Exit Code"
-    condition: always()
+      cd unwinder/ClientApp
+      npm run test -- --ci --runInBand --reporters=default --reporters=jest-junit
+    displayName: "Run Jest Tests"
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: "JUnit"
+      testResultsFiles: "junit.xml"
+      searchFolder: "$(System.DefaultWorkingDirectory)/unwinder/ClientApp"
+    displayName: "Publish Jest Test Results"
+    condition: succeededOrFailed()

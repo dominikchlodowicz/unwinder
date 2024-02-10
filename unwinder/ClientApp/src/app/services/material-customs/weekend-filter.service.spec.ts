@@ -52,7 +52,7 @@ describe('WeekendFilterService', () => {
     it('should return true for future long weekends (Friday, Saturday, and Sunday)', () => {
       const futureFriday = new Date();
       futureFriday.setDate(
-        futureFriday.getDate() + ((5 - futureFriday.getDay()) % 7),
+        futureFriday.getDate() + ((5 - futureFriday.getDay() + 7) % 7 || 7),
       ); // Next Friday
       futureFriday.setHours(0, 0, 0, 0);
 

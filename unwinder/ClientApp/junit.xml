@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="101" failures="0" errors="0" time="3.564">
+  <testsuite name="src/app/components/flight-search-results/flight-offer-card/flight-offer-card.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:29" time="1.131" tests="6">
+    <testcase classname="FlightOfferCardComponent should correctly initialize based on flightData input" name="FlightOfferCardComponent should correctly initialize based on flightData input" time="0.097">
+    </testcase>
+    <testcase classname="FlightOfferCardComponent should emit indexOfRecievedData when selectFlight is called" name="FlightOfferCardComponent should emit indexOfRecievedData when selectFlight is called" time="0.016">
+    </testcase>
+    <testcase classname="FlightOfferCardComponent formats duration correctly with both hours and minutes" name="FlightOfferCardComponent formats duration correctly with both hours and minutes" time="0.011">
+    </testcase>
+    <testcase classname="FlightOfferCardComponent formats duration correctly with only hours" name="FlightOfferCardComponent formats duration correctly with only hours" time="0.006">
+    </testcase>
+    <testcase classname="FlightOfferCardComponent formats duration correctly with only minutes" name="FlightOfferCardComponent formats duration correctly with only minutes" time="0.004">
+    </testcase>
+    <testcase classname="FlightOfferCardComponent should format departure and arrival times correctly" name="FlightOfferCardComponent should format departure and arrival times correctly" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-form/origin-flight-search-form/origin-flight-search-from.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:29" time="1.329" tests="5">
+    <testcase classname="OriginFlightSearchFormComponent should create and initialize form control" name="OriginFlightSearchFormComponent should create and initialize form control" time="0.168">
+    </testcase>
+    <testcase classname="OriginFlightSearchFormComponent should filter cities based on service response" name="OriginFlightSearchFormComponent should filter cities based on service response" time="0.041">
+    </testcase>
+    <testcase classname="OriginFlightSearchFormComponent should return the citiesAutocompleteOrigin form control" name="OriginFlightSearchFormComponent should return the citiesAutocompleteOrigin form control" time="0.016">
+    </testcase>
+    <testcase classname="OriginFlightSearchFormComponent should filter response cities based on search string" name="OriginFlightSearchFormComponent should filter response cities based on search string" time="0.018">
+    </testcase>
+    <testcase classname="OriginFlightSearchFormComponent should set selectedFromDropdown to true when onOptionSelected is called" name="OriginFlightSearchFormComponent should set selectedFromDropdown to true when onOptionSelected is called" time="0.019">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-form/where-to-flight-search-form/where-to-flight-search-form.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:29" time="1.357" tests="5">
+    <testcase classname="WhereToFlightSearchComponent should create and initialize form control" name="WhereToFlightSearchComponent should create and initialize form control" time="0.164">
+    </testcase>
+    <testcase classname="WhereToFlightSearchComponent should filter cities based on service response" name="WhereToFlightSearchComponent should filter cities based on service response" time="0.031">
+    </testcase>
+    <testcase classname="WhereToFlightSearchComponent should return the citiesAutocompleteWhereTo form control" name="WhereToFlightSearchComponent should return the citiesAutocompleteWhereTo form control" time="0.022">
+    </testcase>
+    <testcase classname="WhereToFlightSearchComponent should filter response cities based on search string" name="WhereToFlightSearchComponent should filter response cities based on search string" time="0.038">
+    </testcase>
+    <testcase classname="WhereToFlightSearchComponent should set selectedFromDropdown to true when onOptionSelected is called" name="WhereToFlightSearchComponent should set selectedFromDropdown to true when onOptionSelected is called" time="0.024">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-form/long-which-weekend-flight-search-form/long-which-weekend-flight-search-form.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:29" time="1.508" tests="6">
+    <testcase classname="LongWhichWeekendFlightSearchFormComponent should create" name="LongWhichWeekendFlightSearchFormComponent should create" time="0.157">
+    </testcase>
+    <testcase classname="LongWhichWeekendFlightSearchFormComponent should initialize form controls" name="LongWhichWeekendFlightSearchFormComponent should initialize form controls" time="0.044">
+    </testcase>
+    <testcase classname="LongWhichWeekendFlightSearchFormComponent should set correct default values for form controls" name="LongWhichWeekendFlightSearchFormComponent should set correct default values for form controls" time="0.04">
+    </testcase>
+    <testcase classname="LongWhichWeekendFlightSearchFormComponent should emit weekendTypeChange when changeWeekendType is called" name="LongWhichWeekendFlightSearchFormComponent should emit weekendTypeChange when changeWeekendType is called" time="0.053">
+    </testcase>
+    <testcase classname="LongWhichWeekendFlightSearchFormComponent should set hours for date range correctly" name="LongWhichWeekendFlightSearchFormComponent should set hours for date range correctly" time="0.082">
+    </testcase>
+    <testcase classname="LongWhichWeekendFlightSearchFormComponent should update form values on valueChanges" name="LongWhichWeekendFlightSearchFormComponent should update form values on valueChanges" time="0.025">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-results/first-flight-offer-main/first-flight-offer-main.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:29" time="1.523" tests="4">
+    <testcase classname="FirstFlightOfferMainComponent should create" name="FirstFlightOfferMainComponent should create" time="0.063">
+    </testcase>
+    <testcase classname="FirstFlightOfferMainComponent should navigate to &quot;/unwind/second-flight&quot; on successful flight selection" name="FirstFlightOfferMainComponent should navigate to &quot;/unwind/second-flight&quot; on successful flight selection" time="0.355">
+    </testcase>
+    <testcase classname="FirstFlightOfferMainComponent should handle errors during flight selection submission" name="FirstFlightOfferMainComponent should handle errors during flight selection submission" time="0.007">
+    </testcase>
+    <testcase classname="FirstFlightOfferMainComponent should navigate correctly for different flight selections" name="FirstFlightOfferMainComponent should navigate correctly for different flight selections" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-form/short-which-weekend-flight-search-form/short-which-weekend-flight-search-form.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:29" time="1.657" tests="6">
+    <testcase classname="ShortWhichWeekendFlightSearchFormComponent should create" name="ShortWhichWeekendFlightSearchFormComponent should create" time="0.178">
+    </testcase>
+    <testcase classname="ShortWhichWeekendFlightSearchFormComponent should initialize form controls" name="ShortWhichWeekendFlightSearchFormComponent should initialize form controls" time="0.077">
+    </testcase>
+    <testcase classname="ShortWhichWeekendFlightSearchFormComponent should set correct default values for form controls" name="ShortWhichWeekendFlightSearchFormComponent should set correct default values for form controls" time="0.035">
+    </testcase>
+    <testcase classname="ShortWhichWeekendFlightSearchFormComponent should emit weekendTypeChange when changeWeekendType is called" name="ShortWhichWeekendFlightSearchFormComponent should emit weekendTypeChange when changeWeekendType is called" time="0.051">
+    </testcase>
+    <testcase classname="ShortWhichWeekendFlightSearchFormComponent should set hours for date range correctly" name="ShortWhichWeekendFlightSearchFormComponent should set hours for date range correctly" time="0.046">
+    </testcase>
+    <testcase classname="ShortWhichWeekendFlightSearchFormComponent should update form values on valueChanges" name="ShortWhichWeekendFlightSearchFormComponent should update form values on valueChanges" time="0.047">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-results/second-flight-offer-main/second-flight-offer-main.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:30" time="0.5" tests="2">
+    <testcase classname="SecondFlightOfferMainComponent should initialize secondFlightResponse from session data on ngOnInit" name="SecondFlightOfferMainComponent should initialize secondFlightResponse from session data on ngOnInit" time="0.046">
+    </testcase>
+    <testcase classname="SecondFlightOfferMainComponent should correctly set chosen flight data on submit" name="SecondFlightOfferMainComponent should correctly set chosen flight data on submit" time="0.008">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/material-customs/weekend-range-selection-strategy/short/short-weekend-range-selection-strategy.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:30" time="0.771" tests="8">
+    <testcase classname="WeekendRangeSelectionStategyService should create correct range for Saturday" name="WeekendRangeSelectionStategyService should create correct range for Saturday" time="0.019">
+    </testcase>
+    <testcase classname="WeekendRangeSelectionStategyService should create correct range for Sunday" name="WeekendRangeSelectionStategyService should create correct range for Sunday" time="0.002">
+    </testcase>
+    <testcase classname="WeekendRangeSelectionStategyService should return null range for a weekday" name="WeekendRangeSelectionStategyService should return null range for a weekday" time="0.001">
+    </testcase>
+    <testcase classname="WeekendRangeSelectionStategyService should return null range for a null date" name="WeekendRangeSelectionStategyService should return null range for a null date" time="0.005">
+    </testcase>
+    <testcase classname="WeekendRangeSelectionStategyService should create correct preview range for Saturday" name="WeekendRangeSelectionStategyService should create correct preview range for Saturday" time="0.006">
+    </testcase>
+    <testcase classname="WeekendRangeSelectionStategyService should create correct preview range for Sunday" name="WeekendRangeSelectionStategyService should create correct preview range for Sunday" time="0.001">
+    </testcase>
+    <testcase classname="WeekendRangeSelectionStategyService should return null preview range for a weekday" name="WeekendRangeSelectionStategyService should return null preview range for a weekday" time="0.001">
+    </testcase>
+    <testcase classname="WeekendRangeSelectionStategyService should return null preview range for a null date" name="WeekendRangeSelectionStategyService should return null preview range for a null date" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-form/passengers-flight-search-form/passengers-flight-search-form.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:30" time="0.445" tests="1">
+    <testcase classname="PassengersFlightSearchFormComponent should return the passengerSliderFormControl" name="PassengersFlightSearchFormComponent should return the passengerSliderFormControl" time="0.043">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/material-customs/date-format/custom-date-adapter.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:30" time="0.364" tests="2">
+    <testcase classname="CustomDateAdapterService getFirstDayOfWeek should delegate to mondayAdapter" name="CustomDateAdapterService getFirstDayOfWeek should delegate to mondayAdapter" time="0.004">
+    </testcase>
+    <testcase classname="CustomDateAdapterService parse should delegate to europeAdapter" name="CustomDateAdapterService parse should delegate to europeAdapter" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/material-customs/weekend-range-selection-strategy/long/long-weekend-range-selection-strategy.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:30" time="0.658" tests="5">
+    <testcase classname="LongWeekendRangeSelectionStategyService should create correct range for Friday" name="LongWeekendRangeSelectionStategyService should create correct range for Friday" time="0.01">
+    </testcase>
+    <testcase classname="LongWeekendRangeSelectionStategyService should create correct range for Saturday" name="LongWeekendRangeSelectionStategyService should create correct range for Saturday" time="0.001">
+    </testcase>
+    <testcase classname="LongWeekendRangeSelectionStategyService should create correct range for Sunday" name="LongWeekendRangeSelectionStategyService should create correct range for Sunday" time="0.001">
+    </testcase>
+    <testcase classname="LongWeekendRangeSelectionStategyService should return null preview range for a weekday" name="LongWeekendRangeSelectionStategyService should return null preview range for a weekday" time="0.001">
+    </testcase>
+    <testcase classname="LongWeekendRangeSelectionStategyService should return null preview range for a null date" name="LongWeekendRangeSelectionStategyService should return null preview range for a null date" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-form/base-which-weekend-flight-search-form/base-which-weekend-flight-search-form.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:30" time="0.455" tests="16">
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent should create" name="BaseWhichWeekendFlightSearchFormComponent should create" time="0.033">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent adjustDateToLocalTimezone should correctly adjust a UTC date to the local timezone" name="BaseWhichWeekendFlightSearchFormComponent adjustDateToLocalTimezone should correctly adjust a UTC date to the local timezone" time="0.003">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent should emit weekendTypeChange when changeWeekendType is called" name="BaseWhichWeekendFlightSearchFormComponent should emit weekendTypeChange when changeWeekendType is called" time="0.001">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent setHoursForDateRange should correctly set the hours for start and end dates" name="BaseWhichWeekendFlightSearchFormComponent setHoursForDateRange should correctly set the hours for start and end dates" time="0.007">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent setHoursForDateRange should handle null start and/or end date values" name="BaseWhichWeekendFlightSearchFormComponent setHoursForDateRange should handle null start and/or end date values" time="0.004">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent should return the whichWeekendRange form group" name="BaseWhichWeekendFlightSearchFormComponent should return the whichWeekendRange form group" time="0.002">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent Form Controls Initialization and Value Changes should correctly initialize form controls" name="BaseWhichWeekendFlightSearchFormComponent Form Controls Initialization and Value Changes should correctly initialize form controls" time="0.002">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent Form Controls Initialization and Value Changes should update start and end date values on valueChanges" name="BaseWhichWeekendFlightSearchFormComponent Form Controls Initialization and Value Changes should update start and end date values on valueChanges" time="0.008">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent Form Controls Initialization and Value Changes should handle invalid or null dates provided" name="BaseWhichWeekendFlightSearchFormComponent Form Controls Initialization and Value Changes should handle invalid or null dates provided" time="0.003">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent should correctly update the form control values" name="BaseWhichWeekendFlightSearchFormComponent should correctly update the form control values" time="0.001">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent isSameDate should identify when two dates are the same" name="BaseWhichWeekendFlightSearchFormComponent isSameDate should identify when two dates are the same" time="0.002">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent isSameDate should differentiate dates that differ by hour, minute, second, millisecond" name="BaseWhichWeekendFlightSearchFormComponent isSameDate should differentiate dates that differ by hour, minute, second, millisecond" time="0.007">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent should have implemented defaultToggleValue and weekendFilter as expected" name="BaseWhichWeekendFlightSearchFormComponent should have implemented defaultToggleValue and weekendFilter as expected" time="0.008">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent should work correctly for weekendTypeChange EventEmitter" name="BaseWhichWeekendFlightSearchFormComponent should work correctly for weekendTypeChange EventEmitter" time="0.003">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent subscribeToValueChanges should update start date on value change" name="BaseWhichWeekendFlightSearchFormComponent subscribeToValueChanges should update start date on value change" time="0.001">
+    </testcase>
+    <testcase classname="BaseWhichWeekendFlightSearchFormComponent subscribeToValueChanges should update end date on value change" name="BaseWhichWeekendFlightSearchFormComponent subscribeToValueChanges should update end date on value change" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/flight-search-form/flight-search-cities.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:31" time="0.3" tests="2">
+    <testcase classname="FlightSearchCitiesService getCities should return expected cities (HttpClient called once)" name="FlightSearchCitiesService getCities should return expected cities (HttpClient called once)" time="0.01">
+    </testcase>
+    <testcase classname="FlightSearchCitiesService getCities should return expected cities (HttpClient called once)" name="FlightSearchCitiesService getCities should return expected cities (HttpClient called once)" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/material-customs/date-format/custom-europe-date-format.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:31" time="0.327" tests="3">
+    <testcase classname="CustomEuropeDateFormatService should correctly parse valid date strings" name="CustomEuropeDateFormatService should correctly parse valid date strings" time="0">
+    </testcase>
+    <testcase classname="CustomEuropeDateFormatService should return null for completely invalid date strings" name="CustomEuropeDateFormatService should return null for completely invalid date strings" time="0.001">
+    </testcase>
+    <testcase classname="CustomEuropeDateFormatService should handle non-string inputs correctly" name="CustomEuropeDateFormatService should handle non-string inputs correctly" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/flight-search-form/flight-search-submit.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:31" time="0.345" tests="4">
+    <testcase classname="FlightSearchSubmitService should serialize flight search data correctly" name="FlightSearchSubmitService should serialize flight search data correctly" time="0.003">
+    </testcase>
+    <testcase classname="FlightSearchSubmitService should submit flight search data to API and return result" name="FlightSearchSubmitService should submit flight search data to API and return result" time="0.011">
+    </testcase>
+    <testcase classname="FlightSearchSubmitService should handle errors for submitFlightSearchDataToApi" name="FlightSearchSubmitService should handle errors for submitFlightSearchDataToApi" time="0.008">
+    </testcase>
+    <testcase classname="FlightSearchSubmitService should serialize flight search data correctly" name="FlightSearchSubmitService should serialize flight search data correctly" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/app.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:31" time="0.373" tests="1">
+    <testcase classname="AppComponent should create the app" name="AppComponent should create the app" time="0.008">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/material-customs/date-format/monday-custom-date-adapter.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:31" time="0.309" tests="1">
+    <testcase classname="MondayCustomDateAdapterService getFirstDayOfWeek should return 1" name="MondayCustomDateAdapterService getFirstDayOfWeek should return 1" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/unwinder-search-state/unwinder-session.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:31" time="0.229" tests="5">
+    <testcase classname="UnwinderSessionService should set data and emit the updated value" name="UnwinderSessionService should set data and emit the updated value" time="0.001">
+    </testcase>
+    <testcase classname="UnwinderSessionService should get the correct data for a property" name="UnwinderSessionService should get the correct data for a property" time="0">
+    </testcase>
+    <testcase classname="UnwinderSessionService should emit the current session data through getSessionDataObservable" name="UnwinderSessionService should emit the current session data through getSessionDataObservable" time="0.001">
+    </testcase>
+    <testcase classname="UnwinderSessionService should clear the specified data property" name="UnwinderSessionService should clear the specified data property" time="0">
+    </testcase>
+    <testcase classname="UnwinderSessionService should throw an error if trying to clear a non-existent property" name="UnwinderSessionService should throw an error if trying to clear a non-existent property" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/material-customs/weekend-filter.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:31" time="0.257" tests="8">
+    <testcase classname="WeekendFilterService isShortWeekend should return true for future weekends (Saturday and Sunday)" name="WeekendFilterService isShortWeekend should return true for future weekends (Saturday and Sunday)" time="0.004">
+    </testcase>
+    <testcase classname="WeekendFilterService isShortWeekend should return false for weekdays" name="WeekendFilterService isShortWeekend should return false for weekdays" time="0.002">
+    </testcase>
+    <testcase classname="WeekendFilterService isShortWeekend should return false for past weekends" name="WeekendFilterService isShortWeekend should return false for past weekends" time="0.001">
+    </testcase>
+    <testcase classname="WeekendFilterService isShortWeekend should handle null dates" name="WeekendFilterService isShortWeekend should handle null dates" time="0.004">
+    </testcase>
+    <testcase classname="WeekendFilterService isLongWeekend should return true for future long weekends (Friday, Saturday, and Sunday)" name="WeekendFilterService isLongWeekend should return true for future long weekends (Friday, Saturday, and Sunday)" time="0.001">
+    </testcase>
+    <testcase classname="WeekendFilterService isLongWeekend should return false for weekdays" name="WeekendFilterService isLongWeekend should return false for weekdays" time="0">
+    </testcase>
+    <testcase classname="WeekendFilterService isLongWeekend should return false for past long weekends" name="WeekendFilterService isLongWeekend should return false for past long weekends" time="0.001">
+    </testcase>
+    <testcase classname="WeekendFilterService isLongWeekend should handle null dates" name="WeekendFilterService isLongWeekend should handle null dates" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/services/provider-switch/provider-switch.service.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:31" time="0.185" tests="0">
+    <testcase classname="ProviderSwitchService Should return ThreeDayWeekendRangeSelectionStrategyService when we pass true as a argument " name="ProviderSwitchService Should return ThreeDayWeekendRangeSelectionStrategyService when we pass true as a argument " time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/app/components/flight-search-form/main-flight-search-form/main-flight-search-form.component.spec.ts" errors="0" failures="0" skipped="0" timestamp="2024-02-08T22:01:29" time="2.753" tests="11">
+    <testcase classname="MainFlightSearchFormComponent should create" name="MainFlightSearchFormComponent should create" time="0.372">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should initialize form groups correctly" name="MainFlightSearchFormComponent should initialize form groups correctly" time="0.151">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should reference subcomponents correctly after view init" name="MainFlightSearchFormComponent should reference subcomponents correctly after view init" time="0.138">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should add form controls to form groups after view init" name="MainFlightSearchFormComponent should add form controls to form groups after view init" time="0.153">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should submit when all forms are valid" name="MainFlightSearchFormComponent should submit when all forms are valid" time="0.383">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should handle errors on submission failure" name="MainFlightSearchFormComponent should handle errors on submission failure" time="0.049">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should open snackbar with error message when form is invalid" name="MainFlightSearchFormComponent should open snackbar with error message when form is invalid" time="0.047">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should load ShortWhichWeekendFlightSearchComponent for &quot;short&quot; weekend type" name="MainFlightSearchFormComponent should load ShortWhichWeekendFlightSearchComponent for &quot;short&quot; weekend type" time="0.045">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should load LongWhichWeekendFlightSearchFormComponent for &quot;long&quot; weekend type" name="MainFlightSearchFormComponent should load LongWhichWeekendFlightSearchFormComponent for &quot;long&quot; weekend type" time="0.046">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should integrate weekend component form group into whenFormGroup" name="MainFlightSearchFormComponent should integrate weekend component form group into whenFormGroup" time="0.043">
+    </testcase>
+    <testcase classname="MainFlightSearchFormComponent should handle weekendTypeChange event" name="MainFlightSearchFormComponent should handle weekendTypeChange event" time="0.048">
+    </testcase>
+  </testsuite>
+</testsuites>
