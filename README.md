@@ -13,12 +13,11 @@ Unwinder is an application designed to help you plan quick, stress-free weekend 
 
 This roadmap outlines the key features planned for Unwinder that will be realised during ongoing development:
 
-1. **Homepage Design**: Create an engaging and informative home page.
-2. **Hotel Booking Feature**: Integrate hotel search and booking functionality.
-3. **User Accounts**: Implement account creation and management.
-4. **Trip Wishlist**: Allow users to save and manage a list of preferred flights and hotels.
-5. **Booking System**: Enable users to book flights and hotels through the app.
-6. **Error Handling Middleware**: Improve app stability and user experience by handling errors gracefully.
-7. **Azure Deployment**: Deploy the application on Azure.
+1. **Hotel Booking Feature**: Integrate hotel search and booking functionality.
+2. **User Accounts**: Implement account creation and management.
+3. **Trip Wishlist**: Allow users to save and manage a list of preferred flights and hotels.
+4. **Booking System**: Enable users to book flights and hotels through the app.
+5. **Error Handling Middleware**: Improve app stability and user experience by handling errors gracefully.
+6. **Azure Deployment**: Deploy the application on Azure.
 
 ![](./docs/gifs/flight-search.gif)
