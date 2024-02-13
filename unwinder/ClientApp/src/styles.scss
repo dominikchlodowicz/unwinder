@@ -1,15 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import "theme.scss";
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+
 html,
 body {
   height: 100%;
-}
-body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0px 60px 60px 60px;
+}
+
+app-header,
+app-footer {
+  flex-shrink: 0;
 }
 
 .full-window-autocomplete {
@@ -17,7 +32,7 @@ body {
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  height: 60vh; /* Use full viewport height */
+  height: 60vh;
 }
 
 .flight-search-input-width {

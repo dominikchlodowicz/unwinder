@@ -68,7 +68,7 @@ import { LongWeekendRangeSelectionStategyService } from '../../../services/mater
     },
   ],
   templateUrl: './long-which-weekend-flight-search-form.component.html',
-  styleUrl: './long-which-weekend-flight-search-form.component.css',
+  styleUrl: './long-which-weekend-flight-search-form.component.scss',
 })
 export class LongWhichWeekendFlightSearchFormComponent extends BaseWhichWeekendFlightSearchFormComponent {
   @ViewChild(MatDateRangePicker) picker!: MatDateRangePicker<Date>;

@@ -19,7 +19,7 @@ import { switchMap, debounceTime, filter, tap } from 'rxjs';
     HttpClientModule,
   ],
   templateUrl: './where-to-flight-search-form.component.html',
-  styleUrl: './where-to-flight-search-form.component.css',
+  styleUrl: './where-to-flight-search-form.component.scss',
 })
 export class WhereToFlightSearchFormComponent implements OnInit {
   autocompleteOptionSelected = false;

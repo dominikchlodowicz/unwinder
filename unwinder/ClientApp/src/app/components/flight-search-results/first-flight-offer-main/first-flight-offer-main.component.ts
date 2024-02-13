@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FlightOfferCardComponent],
   templateUrl: './first-flight-offer-main.component.html',
-  styleUrl: './first-flight-offer-main.component.css',
+  styleUrl: './first-flight-offer-main.component.scss',
 })
 export class FirstFlightOfferMainComponent {
   flightBackData!: Date;

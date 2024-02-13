@@ -53,7 +53,7 @@ import { forkJoin } from 'rxjs';
     MatIconModule,
   ],
   templateUrl: './main-flight-search-form.component.html',
-  styleUrl: './main-flight-search-form.component.css',
+  styleUrl: './main-flight-search-form.component.scss',
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,

@@ -9,7 +9,7 @@ import { FlightSearchResponse } from '../../../interfaces/flight-data-exchange/f
   standalone: true,
   imports: [CommonModule, FlightOfferCardComponent],
   templateUrl: './second-flight-offer-main.component.html',
-  styleUrl: './second-flight-offer-main.component.css',
+  styleUrl: './second-flight-offer-main.component.scss',
 })
 export class SecondFlightOfferMainComponent {
   secondFlightResponse!: FlightSearchResponse;

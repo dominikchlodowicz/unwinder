@@ -9,7 +9,7 @@ import { ConcreteFlight } from '../../../interfaces/flight-data-exchange/concret
   standalone: true,
   imports: [CommonModule, MatCardModule, MatButtonModule],
   templateUrl: './flight-offer-card.component.html',
-  styleUrl: './flight-offer-card.component.css',
+  styleUrl: './flight-offer-card.component.scss',
 })
 export class FlightOfferCardComponent {
   @Input() flightData!: ConcreteFlight;

@@ -21,7 +21,7 @@ import { switchMap, debounceTime, filter, tap } from 'rxjs';
     HttpClientModule,
   ],
   templateUrl: './origin-flight-search-form.component.html',
-  styleUrl: './origin-flight-search-form.component.css',
+  styleUrl: './origin-flight-search-form.component.scss',
 })
 export class OriginFlightSearchFormComponent implements OnInit {
   autocompleteOptionSelected = false;

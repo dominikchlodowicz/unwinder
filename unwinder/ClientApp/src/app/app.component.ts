@@ -9,7 +9,7 @@ import { FooterComponent } from './components/homepage/footer/footer.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'unwinder';

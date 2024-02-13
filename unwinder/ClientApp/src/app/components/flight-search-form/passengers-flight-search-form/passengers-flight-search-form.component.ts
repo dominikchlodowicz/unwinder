@@ -8,7 +8,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, MatSliderModule, ReactiveFormsModule],
   templateUrl: './passengers-flight-search-form.component.html',
-  styleUrl: './passengers-flight-search-form.component.css',
+  styleUrl: './passengers-flight-search-form.component.scss',
 })
 export class PassengersFlightSearchFormComponent {
   passengerSlider: FormControl = new FormControl(1);

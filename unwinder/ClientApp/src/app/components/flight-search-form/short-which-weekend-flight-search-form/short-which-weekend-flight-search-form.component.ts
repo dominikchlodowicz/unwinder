@@ -66,7 +66,7 @@ import { BaseWhichWeekendFlightSearchFormComponent } from '../base-which-weekend
     },
   ],
   templateUrl: './short-which-weekend-flight-search-form.component.html',
-  styleUrl: './short-which-weekend-flight-search-form.component.css',
+  styleUrl: './short-which-weekend-flight-search-form.component.scss',
 })
 export class ShortWhichWeekendFlightSearchComponent extends BaseWhichWeekendFlightSearchFormComponent {
   @ViewChild(MatDateRangePicker) picker!: MatDateRangePicker<Date>;
