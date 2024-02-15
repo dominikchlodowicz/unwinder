@@ -1,7 +1,19 @@
+/* Default styles */
 mat-slider {
   width: 400px;
 }
 
 #flight-search-number-of-passengers-text {
-  font-size: 1.25rem;
+  font-size: 1.25rem; /* Equivalent to 20px */
+}
+
+/* Mobile styles */
+@media (max-width: 480px) {
+  mat-slider {
+    width: 100%; /* Use a percentage to make it responsive */
+  }
+
+  #flight-search-number-of-passengers-text {
+    font-size: 1rem; /* Smaller font size for mobile, equivalent to 16px */
+  }
 }

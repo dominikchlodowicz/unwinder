@@ -3,6 +3,10 @@
   color: white;
 }
 
+:host ::ng-deep mat-vertical-stepper {
+  display: inline;
+}
+
 :host ::ng-deep mat-vertical-stepper .custom-edit-icon mat-icon {
   color: white;
 }
@@ -30,4 +34,11 @@
 
 .helper-buttons button {
   flex: 1;
+}
+
+@media (max-width: 480px) {
+  #search-button,
+  .helper-buttons button {
+    font-size: 0.875rem;
+  }
 }
