@@ -34,6 +34,7 @@ import { UnwinderSessionService } from '../../../services/unwinder-search-state/
 import { Router } from '@angular/router';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { forkJoin } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-main-flight-search-form',
@@ -51,6 +52,7 @@ import { forkJoin } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './main-flight-search-form.component.html',
   styleUrl: './main-flight-search-form.component.scss',
@@ -78,6 +80,9 @@ export class MainFlightSearchFormComponent implements OnInit {
   originFormGroup!: FormGroup;
   whenFormGroup!: FormGroup;
   passengersFormGroup!: FormGroup;
+
+  //for loading spinner on submit
+  isLoading = false;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -153,6 +158,8 @@ export class MainFlightSearchFormComponent implements OnInit {
       this.whenFormGroup.valid &&
       this.passengersFormGroup.valid
     ) {
+      this.isLoading = true;
+
       const serializedFlightSearchData: FlightSearchData =
         this._flightSearchSubmitService.serializeFlightSearchData(
           this.whereFormGroup.value.where,
@@ -188,12 +195,14 @@ export class MainFlightSearchFormComponent implements OnInit {
         setFirstFlightResponse$,
       ]).subscribe({
         next: () => {
+          this.isLoading = false;
           this.router.navigate(['/unwind/first-flight']);
         },
         error: (error) => console.error('Error updating data:', error),
       });
     } else {
       console.error('Some form groups on submit are invalid.');
+      this.isLoading = false;
       this._snackBar.open(
         'Please correct the errors in the form before submitting.',
         'Close',

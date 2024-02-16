@@ -8,11 +8,12 @@ import { FlightSearchResponse } from '../../../interfaces/flight-data-exchange/f
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-flight-offer-main',
   standalone: true,
-  imports: [CommonModule, FlightOfferCardComponent],
+  imports: [CommonModule, FlightOfferCardComponent, MatProgressSpinnerModule],
   templateUrl: './first-flight-offer-main.component.html',
   styleUrl: './first-flight-offer-main.component.scss',
 })
@@ -20,6 +21,9 @@ export class FirstFlightOfferMainComponent {
   flightBackData!: Date;
   firstFlightResponse!: FlightSearchResponse;
   flightParameters!: FlightSearchData;
+
+  //for loading spinner on submit
+  isLoading = false;
 
   constructor(
     public _unwinderSessionService: UnwinderSessionService,
@@ -38,6 +42,7 @@ export class FirstFlightOfferMainComponent {
   }
 
   submitSelectedFlight(indexOfSelectedFlight: number) {
+    this.isLoading = true;
     const selctedData = this.firstFlightResponse.data[indexOfSelectedFlight];
 
     const serializedFlightSearchData: FlightSearchData =
@@ -67,6 +72,7 @@ export class FirstFlightOfferMainComponent {
     forkJoin([setChosenFlight$, setChosenSecondFlightData$]).subscribe({
       next: () => {
         this.router.navigate(['/unwind/second-flight']);
+        this.isLoading = false;
       },
       error: (error) => console.error('Error updating data:', error),
     });

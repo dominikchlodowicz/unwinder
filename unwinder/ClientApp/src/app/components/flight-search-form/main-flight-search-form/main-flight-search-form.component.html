@@ -61,6 +61,12 @@
           >
             Search
           </button>
+          <div
+            *ngIf="isLoading"
+            class="absolute inset-0 flex justify-center items-center bg-white bg-opacity-75 z-50"
+          >
+            <mat-spinner></mat-spinner>
+          </div>
         </div>
         <div class="helper-buttons">
           <button mat-flat-button matStepperPrevious>Back</button>
