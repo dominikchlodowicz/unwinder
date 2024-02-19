@@ -16,8 +16,13 @@
       [rangePicker]="picker"
       [dateFilter]="weekendFilter"
     >
-      [dateFilter]="weekendFilter"
       <input matStartDate formControlName="start" placeholder="Start date" />
+      <div
+        style="color: #e91e63"
+        *ngIf="whichWeekendRange.get('start')?.errors?.['dateNotInThePast']"
+      >
+        The start date cannot be in the past.
+      </div>
       <input matEndDate formControlName="end" placeholder="End date" />
     </mat-date-range-input>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>

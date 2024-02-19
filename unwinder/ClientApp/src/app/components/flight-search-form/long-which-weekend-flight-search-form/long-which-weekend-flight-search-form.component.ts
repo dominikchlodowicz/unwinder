@@ -28,6 +28,7 @@ import { MondayCustomDateAdapterService } from '../../../services/material-custo
 import { WeekendFilterService } from '../../../services/material-customs/weekend-filter.service';
 import { BaseWhichWeekendFlightSearchFormComponent } from '../base-which-weekend-flight-search-form/base-which-weekend-flight-search-form.component';
 import { LongWeekendRangeSelectionStategyService } from '../../../services/material-customs/weekend-range-selection-strategy/long/long-weekend-range-selection-strategy.service';
+import { dateNotInThePast } from '../../../validators/date-validators';
 
 @Component({
   selector: 'app-which-weekend',
@@ -81,7 +82,10 @@ export class LongWhichWeekendFlightSearchFormComponent extends BaseWhichWeekendF
   endHour: number = 18;
 
   whichWeekendRange = new FormGroup({
-    start: new FormControl<Date | null>(null, [Validators.required]),
+    start: new FormControl<Date | null>(null, [
+      Validators.required,
+      dateNotInThePast,
+    ]),
     end: new FormControl<Date | null>(null, [Validators.required]),
   });
 
