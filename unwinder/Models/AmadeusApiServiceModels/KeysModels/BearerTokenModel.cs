@@ -1,6 +1,8 @@
+using System.Text.Json.Serialization;
+
 namespace unwinder.Models.AmadeusApiServiceModels.KeyModels;
 
- public class BearerTokenModel
+public class BearerTokenModel
 {
     public string type { get; set; }
     public string username { get; set; }
@@ -11,4 +13,7 @@ namespace unwinder.Models.AmadeusApiServiceModels.KeyModels;
     public int expires_in { get; set; }
     public string state { get; set; }
     public string scope { get; set; }
+
+    [JsonIgnore]
+    public DateTime ExpiryTime { get; set; }
 }
