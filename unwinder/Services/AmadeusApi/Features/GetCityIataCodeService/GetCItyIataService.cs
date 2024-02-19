@@ -3,15 +3,23 @@ using unwinder.Services.AmadeusApiService.GetLocation;
 
 namespace unwinder.Services.AmadeusApiService.GetCityIataCode;
 
+/// <summary>
+/// Provides the implementation for retrieving IATA code for a city based on a search keyword.
+/// </summary>
 public class GetCityIataCodeService : IGetCityIataCodeService
 {
     private readonly IGetLocationService _getLocationService;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GetCityIataCodeService"/> class.
+    /// </summary>
+    /// <param name="getLocationService">The service used to retrieve location data.</param>
     public GetCityIataCodeService(IGetLocationService getLocationService)
     {
         _getLocationService = getLocationService;
     }
 
+    /// <inheritdoc />
     public async Task<string> GetCityIataCode(string keyword)
     {
         IEnumerable<GetLocationAirportModel> airports;

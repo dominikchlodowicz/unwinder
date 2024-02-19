@@ -1,16 +1,18 @@
 using System.Globalization;
 
-namespace unwinder.Services.AmadeusApiService.FlightSearch.TypeHelpers;
-
+namespace unwinder.Services.AmadeusApiService.FlightSearch.TypeHelpers
+;
+/// <summary>
+/// Provides extension methods for validating date and time formats.
+/// </summary>
 public static class DateTimeRangeTypeExtension
 {
     /// <summary>
-    /// Validate if format of the departureDate and departureTime are in correct format, 
-    /// and if the departureDate is not in the past.
+    /// Validates if the format of the departureDate and departureTime are correct according to ISO 8601 and checks if the departureDate is not in the past.
     /// </summary>
-    /// <param name="departureDate">In ISO 8601 YYYY-MM-DD format.</param>
-    /// <param name="departureTime">Local time. hh:mm:ss format, e.g 10:30:00</param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="departureDate">The departure date in ISO 8601 format (YYYY-MM-DD).</param>
+    /// <param name="departureTime">The local departure time in 24-hour format (HH:MM:SS).</param>
+    /// <exception cref="ArgumentException">Thrown if the departure date or time are not in the correct format or if the departure DateTime is in the past.</exception>
     public static void DateTimeToCorrectIsoFormat(string departureDate, string departureTime)
     {
         if (!DateTime.TryParse(departureDate, out var parsedDate) ||

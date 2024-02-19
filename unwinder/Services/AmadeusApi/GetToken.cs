@@ -5,6 +5,9 @@ using unwinder.Helpers;
 
 namespace unwinder.Services;
 
+/// <summary>
+/// Service for obtaining and refreshing OAuth tokens for the Amadeus API.
+/// </summary>
 public class GetToken : IGetToken
 {
     private readonly HttpClient _httpClient;
@@ -14,7 +17,13 @@ public class GetToken : IGetToken
     private BearerTokenModel _currentToken;
     private readonly SemaphoreSlim _refreshLock = new SemaphoreSlim(1, 1); // Lock for token refresh
 
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GetToken"/> class.
+    /// </summary>
+    /// <param name="httpClientFactory">The HTTP client factory used to create HTTP clients.</param>
+    /// <param name="logger">The logger for logging information and errors.</param>
+    /// <param name="serviceApiKey">The API key for the service.</param>
+    /// <param name="serviceApiSecretKey">The API secret key for the service.</param>
     public GetToken(IHttpClientFactory httpClientFactory, ILogger<GetToken> logger, string serviceApiKey, string serviceApiSecretKey)
     {
         _httpClient = httpClientFactory.CreateClient("AmadeusApiV1");
@@ -23,6 +32,11 @@ public class GetToken : IGetToken
         _serviceApiSecretKey = serviceApiSecretKey;
     }
 
+    /// <summary>
+    /// Gets the authentication token. Refreshes the token if it is expired or about to expire.
+    /// </summary>
+    /// <returns>The authentication token as a string.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the API response is empty or lacks the expected access token.</exception>
     public async Task<string> GetAuthToken()
     {
         // Check if token is expired or about to expire
@@ -46,6 +60,12 @@ public class GetToken : IGetToken
         return _currentToken.access_token;
     }
 
+    /// <summary>
+    /// Refreshes the authentication token by making a request to the OAuth token endpoint.
+    /// </summary>
+    /// <remarks>
+    /// This method updates the internal token storage with a new token and its expiry time.
+    /// </remarks>
     private async Task RefreshToken()
     {
         _logger.LogInformation("Refreshing API token...");

@@ -8,6 +8,9 @@ using unwinder.Helpers;
 
 namespace unwinder.Controllers;
 
+/// <summary>
+/// Controller responsible for handling flight search operations.
+/// </summary>
 [ApiController]
 public class FlightSearchController : ControllerBase
 {
@@ -17,7 +20,6 @@ public class FlightSearchController : ControllerBase
     private readonly ILogger<FlightSearchController> _logger;
     private readonly HttpClient _httpClient;
     private readonly IGetToken _bearerToken;
-
 
     public FlightSearchController(
         IFlightSearchService flightSearchService,
@@ -35,6 +37,11 @@ public class FlightSearchController : ControllerBase
         _bearerToken = bearerToken;
     }
 
+    /// <summary>
+    /// Retrieves a list of airports matching a given location.
+    /// </summary>
+    /// <param name="location">The location used to search for airports (e.g., city name).</param>
+    /// <returns>A list of airport identifiers or a not found/error response.</returns>
     [HttpGet("api/flight-search/get-airport/{location}")]
     public async Task<ActionResult<IEnumerable<string>>> GetAirportLocation(string location)
     {
@@ -66,6 +73,11 @@ public class FlightSearchController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Retrieves a list of cities based on a given location keyword.
+    /// </summary>
+    /// <param name="location">The location used to search for cities (e.g., city name or airport code).</param>
+    /// <returns>A list of city names with country names or a not found/error response.</returns>
     [HttpGet("api/flight-search/get-city/{location}")]
     public async Task<ActionResult<IEnumerable<string>>> GetCityLocation(string location)
     {
@@ -99,6 +111,11 @@ public class FlightSearchController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Conducts a flight search based on the provided search criteria.
+    /// </summary>
+    /// <param name="requestContent">The flight search request parameters.</param>
+    /// <returns>A flight search result or an error response.</returns>
     [HttpPost("api/flight-search")]
     public async Task<ActionResult<string>> FlightSearch([FromBody] FlightSearchRequest requestContent)
     {

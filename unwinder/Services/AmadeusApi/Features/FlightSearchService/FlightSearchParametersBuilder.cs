@@ -1,9 +1,11 @@
 using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels;
-
 using unwinder.Services.AmadeusApiService.FlightSearch.TypeHelpers;
 
 namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
+/// <summary>
+/// Provides a builder pattern for constructing a <see cref="FlightSearchParameters"/> object.
+/// </summary>
 public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
 {
     private FlightSearchParameters _parameters = new FlightSearchParameters
@@ -31,6 +33,12 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
 
     private DepartureDateTimeRange _departureDateTimeRange;
 
+    /// <summary>
+    /// Builds the number of travelers for the flight search parameters.
+    /// </summary>
+    /// <param name="numberOfTravelers">A list of traveler types as strings.</param>
+    /// <returns>The <see cref="FlightSearchParametersBuilder"/> instance for chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the numberOfTravelers list is null or empty.</exception>
     public FlightSearchParametersBuilder BuildNumberOfTravelers(List<string> numberOfTravelers)
     {
         if (numberOfTravelers.Count == 0 || numberOfTravelers == null)
@@ -55,11 +63,11 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
     }
 
     /// <summary>
-    ///     Sets DepratureDateTimeRange for OriginDestinations object.
+    /// Sets the departure date and time for the flight search.
     /// </summary>
-    /// <param name="departureDate">In ISO 8601 YYYY-MM-DD format.</param>
-    /// <param name="departureTime">Local time. hh:mm:ss format, e.g 10:30:00</param>
-    /// <returns></returns>
+    /// <param name="departureDate">The departure date in ISO 8601 format (YYYY-MM-DD).</param>
+    /// <param name="departureTime">The local departure time in hh:mm:ss format (e.g., 10:30:00).</param>
+    /// <returns>The <see cref="FlightSearchParametersBuilder"/> instance for chaining.</returns>
     public FlightSearchParametersBuilder BuildDateTimeRange(string departureDate, string departureTime)
     {
         DateTimeRangeTypeExtension.DateTimeToCorrectIsoFormat(departureDate, departureTime);
@@ -74,11 +82,12 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
     }
 
     /// <summary>
-    ///    
+    /// Builds the origin and destination locations for the flight search.
     /// </summary>
-    /// <param name="originLocationCode">Locaiton aiport IATA string</param>
-    /// <param name="destinationLocationCode">Locaiton aiport IATA string</param>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <param name="originLocationCode">The IATA code for the origin airport.</param>
+    /// <param name="destinationLocationCode">The IATA code for the destination airport.</param>
+    /// <returns>The <see cref="FlightSearchParametersBuilder"/> instance for chaining.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if departure date and time are not set before calling this method.</exception>
     public FlightSearchParametersBuilder BuildOriginDestinations(string originLocationCode, string destinationLocationCode)
     {
         if (_departureDateTimeRange == null)
@@ -99,9 +108,10 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
     }
 
     /// <summary>
-    ///     Adds currency code to request
+    /// Adds a currency code to the flight search parameters.
     /// </summary>
-    /// <param name="currencyCode">Currently allowed currencies are defined in CurrencyCodeTypeExtension</param>
+    /// <param name="currencyCode">The currency code to be used for pricing information in the search results. Must be a valid ISO currency code.</param>
+    /// <returns>The <see cref="FlightSearchParametersBuilder"/> instance for chaining.</returns>
     public FlightSearchParametersBuilder BuildCurrencyCode(string currencyCode)
     {
         string typeVerifiedCurrencyCode = currencyCode.ToCurrencyCodeType();
@@ -111,6 +121,10 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
         return this;
     }
 
+    /// <summary>
+    /// Applies default values for several search parameters, including cabin type, coverage, number of flight offers, and data source.
+    /// </summary>
+    /// <returns>The <see cref="FlightSearchParametersBuilder"/> instance for chaining.</returns>
     public FlightSearchParametersBuilder BuildDefaultValues()
     {
         _parameters.SearchCriteria.FlightFilters.CabinRestrictions.Add(new CabinRestriction
@@ -127,6 +141,10 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
         return this;
     }
 
+    /// <summary>
+    /// Finalizes the construction of the <see cref="FlightSearchParameters"/> and returns it.
+    /// </summary>
+    /// <returns>The constructed <see cref="FlightSearchParameters"/> object.</returns>
     public FlightSearchParameters Build()
     {
         return _parameters;

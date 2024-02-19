@@ -6,6 +6,9 @@ using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 
 namespace unwinder.Services.AmadeusApiService.GetLocation;
 
+/// <summary>
+/// Provides the implementation for retrieving location information based on a search query.
+/// </summary>
 public class GetLocationService : IGetLocationService
 {
 
@@ -14,12 +17,18 @@ public class GetLocationService : IGetLocationService
 
     private readonly string getLocationEndpointUri = "reference-data/locations?subType=AIRPORT&keyword=";
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GetLocationService"/> class.
+    /// </summary>
+    /// <param name="httpClientFactory">The factory used to create HTTP client instances.</param>
+    /// <param name="getToken">The service used to authenticate API requests.</param>
     public GetLocationService(IHttpClientFactory httpClientFactory, IGetToken getToken)
     {
         _httpClientV1 = httpClientFactory.CreateClient("AmadeusApiV1");
         _getToken = getToken;
     }
 
+    /// <inheritdoc />
     public async Task<IEnumerable<GetLocationAirportModel>> GetLocation(string query)
     {
         var token = await _getToken.GetAuthToken();
@@ -29,6 +38,13 @@ public class GetLocationService : IGetLocationService
 
         return await ProcessGetLocationResponse(response);
     }
+
+    /// <summary>
+    /// Sends a request to the API to retrieve location data based on the specified query.
+    /// </summary>
+    /// <param name="query">The search query for finding locations, typically an airport name, city name, or an IATA code.</param>
+    /// <returns>A HttpResponseMessage containing the API response.</returns>
+    /// <exception cref="HttpRequestException">Thrown if the response from the server is not a success status code.</exception>
 
     private async Task<HttpResponseMessage> GetLocationFromApi(string query)
     {
@@ -42,6 +58,12 @@ public class GetLocationService : IGetLocationService
         return response;
     }
 
+    /// <summary>
+    /// Processes the API response, parsing the JSON content and converting it into a collection of GetLocationAirportModel objects.
+    /// </summary>
+    /// <param name="response">The HttpResponseMessage received from the API.</param>
+    /// <returns>A collection of GetLocationAirportModel objects representing the airports found in the API response.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the API response is empty or if the expected data structure is not found.</exception>
     private async Task<IEnumerable<GetLocationAirportModel>> ProcessGetLocationResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -58,6 +80,12 @@ public class GetLocationService : IGetLocationService
         return airports;
     }
 
+    /// <summary>
+    /// Deserializes the JSON object into a collection of GetLocationAirportModel objects.
+    /// </summary>
+    /// <param name="responseJson">The JObject parsed from the API response content.</param>
+    /// <returns>A collection of GetLocationAirportModel objects representing the data contained in the response JSON.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if required properties are missing in the JSON object.</exception>
     private IEnumerable<GetLocationAirportModel> DeserializeGetLocationResponse(JObject responseJson)
     {
         var results = new List<GetLocationAirportModel>();
