@@ -66,12 +66,19 @@ public class GetToken : IGetToken
         }
 
         var responseString = await response.Content.ReadAsStringAsync();
+
+        if (string.IsNullOrEmpty(responseString) || responseString == "{}")
+        {
+            throw new InvalidOperationException("Api response is empty.");
+        }
+
+
         _logger.LogInformation("Bearer response: {responseString}", responseString);
 
         var deserializedResponse = JsonConvert.DeserializeObject<BearerTokenModel>(responseString);
         if (deserializedResponse == null || deserializedResponse.access_token == null)
         {
-            throw new InvalidOperationException("Failed to deserialize API response.");
+            throw new JsonSerializationException(string.Format(ErrorMessages.UnexpectedJsonStructure, "missing access_token"));
         }
 
         // Set expiry time for the token
