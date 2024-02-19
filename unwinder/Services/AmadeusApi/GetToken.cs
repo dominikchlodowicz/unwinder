@@ -11,6 +11,8 @@ public class GetToken : IGetToken
     private readonly ILogger _logger;
     private readonly string _serviceApiKey;
     private readonly string _serviceApiSecretKey;
+    private BearerTokenModel _currentToken;
+    private readonly SemaphoreSlim _refreshLock = new SemaphoreSlim(1, 1); // Lock for token refresh
 
 
     public GetToken(IHttpClientFactory httpClientFactory, ILogger<GetToken> logger, string serviceApiKey, string serviceApiSecretKey)
@@ -23,39 +25,65 @@ public class GetToken : IGetToken
 
     public async Task<string> GetAuthToken()
     {
-        _logger.LogInformation("Api keys: {serviceApiKey}, {serviceApiSecretKey}", _serviceApiKey, _serviceApiSecretKey);
+        // Check if token is expired or about to expire
+        if (_currentToken == null || DateTime.UtcNow >= _currentToken.ExpiryTime)
+        {
+            await _refreshLock.WaitAsync(); // Wait for the lock
+            try
+            {
+                // Double-check the token state to see if it was refreshed while waiting for the lock
+                if (_currentToken == null || DateTime.UtcNow >= _currentToken.ExpiryTime)
+                {
+                    await RefreshToken();
+                }
+            }
+            finally
+            {
+                _refreshLock.Release(); // Release the lock
+            }
+        }
+
+        return _currentToken.access_token;
+    }
+
+    private async Task RefreshToken()
+    {
+        _logger.LogInformation("Refreshing API token...");
+
         var parameters = new Dictionary<string, string>
         {
             {"grant_type", "client_credentials"},
-            {"client_id", $"{_serviceApiKey}"},
-            {"client_secret", $"{_serviceApiSecretKey}"}
+            {"client_id", _serviceApiKey},
+            {"client_secret", _serviceApiSecretKey}
         };
 
         var content = new FormUrlEncodedContent(parameters);
-
         var response = await _httpClient.PostAsync("security/oauth2/token", content);
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException(string.Format(ErrorMessages.RecievedErrorCode, response.StatusCode));
+            throw new HttpRequestException($"Received error code {response.StatusCode}");
         }
 
         var responseString = await response.Content.ReadAsStringAsync();
 
-        if(string.IsNullOrEmpty(responseString) || responseString == "{}")
+        if (string.IsNullOrEmpty(responseString) || responseString == "{}")
         {
             throw new InvalidOperationException("Api response is empty.");
         }
 
+
         _logger.LogInformation("Bearer response: {responseString}", responseString);
 
         var deserializedResponse = JsonConvert.DeserializeObject<BearerTokenModel>(responseString);
-
-        if (deserializedResponse?.access_token == null)
+        if (deserializedResponse == null || deserializedResponse.access_token == null)
         {
             throw new JsonSerializationException(string.Format(ErrorMessages.UnexpectedJsonStructure, "missing access_token"));
         }
 
-        return deserializedResponse != null ? deserializedResponse.access_token : "Error";
+        // Set expiry time for the token
+        deserializedResponse.ExpiryTime = DateTime.UtcNow.AddSeconds(deserializedResponse.expires_in);
+
+        _currentToken = deserializedResponse;
     }
 }
