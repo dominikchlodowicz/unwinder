@@ -31,6 +31,12 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
 
     private DepartureDateTimeRange _departureDateTimeRange;
 
+    /// <summary>
+    /// Builds the number of travelers for the flight search parameters.
+    /// </summary>
+    /// <param name="numberOfTravelers">A list of strings where each string represents a traveler type. This list cannot be null or empty.</param>
+    /// <returns>The instance of <see cref="FlightSearchParametersBuilder"/> for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="numberOfTravelers"/> parameter is null or empty.</exception>
     public FlightSearchParametersBuilder BuildNumberOfTravelers(List<string> numberOfTravelers)
     {
         if (numberOfTravelers.Count == 0 || numberOfTravelers == null)
@@ -111,6 +117,10 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
         return this;
     }
 
+    /// <summary>
+    /// Builds the default values for the flight search parameters including cabin restrictions, maximum flight offers, and data source.
+    /// </summary>
+    /// <returns>The instance of FlightSearchParametersBuilder for method chaining.</returns>
     public FlightSearchParametersBuilder BuildDefaultValues()
     {
         _parameters.SearchCriteria.FlightFilters.CabinRestrictions.Add(new CabinRestriction
@@ -127,6 +137,10 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
         return this;
     }
 
+    /// <summary>
+    /// Finalizes the construction of the FlightSearchParameters and returns the constructed object.
+    /// </summary>
+    /// <returns>The fully constructed FlightSearchParameters object.</returns>
     public FlightSearchParameters Build()
     {
         return _parameters;

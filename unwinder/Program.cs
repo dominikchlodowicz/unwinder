@@ -32,6 +32,12 @@ builder.Services.AddHttpClient("AmadeusApiV2", httpClient =>
     httpClient.BaseAddress = new Uri("https://test.api.amadeus.com/v2/");
 });
 
+// register api url v3
+builder.Services.AddHttpClient("AmadeusApiV3", httpClient =>
+{
+    // URI - combination or URL and URN string that represents resource on the web
+    httpClient.BaseAddress = new Uri("https://test.api.amadeus.com/v3/");
+});
 
 // AMADEUS Api Services DI - START
 

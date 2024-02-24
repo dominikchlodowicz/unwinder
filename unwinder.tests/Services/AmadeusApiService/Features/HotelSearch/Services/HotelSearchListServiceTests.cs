@@ -1,5 +1,4 @@
 using System.Net;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Newtonsoft.Json;
 using unwidner.Models.AmadeusApiServiceModels.HotelSearchModels;
 using unwinder.Services;
@@ -8,7 +7,7 @@ using unwinder.tests.Services.Helpers;
 
 namespace unwinder.tests.Service.AmadeusApiService;
 
-public class HotelSearchServiceTests
+public class HotelSearchListServiceTests
 {
     private Mock<IGetToken> _getTokenMock;
 
@@ -29,16 +28,18 @@ public class HotelSearchServiceTests
         var expectedHotels = _fixture.Create<HotelSearchListOutputModel>();
         var httpResponseJson = JsonConvert.SerializeObject(expectedHotels);
         var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
-        var hotelSearchListParametersModel = new HotelSearchListParametersModel();
+        var hotelSearchListParametersModel = new HotelSearchListParametersModel
+        {
+            CityCode = "example"
+        };
 
-        var sut = new HotelSearchService();
+        var sut = new HotelSearchListService(httpClientMock, _getTokenMock.Object);
 
         var result = sut.SearchListOfHotels(hotelSearchListParametersModel);
 
         Assert.IsNotNull(result, "Result should not be null");
         Assert.IsInstanceOf<HotelSearchListOutputModel>(result, "Result should be of type HotelSearchOutputModel");
         Assert.Fail("Force fail until implementation is done");
-
     }
 
     [Test]
@@ -47,34 +48,16 @@ public class HotelSearchServiceTests
     [TestCase(HttpStatusCode.BadGateway)]
     public void SearchListOfHotels_ThrowsHttpRequestException_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
     {
-
-    }
-
-    [Test]
-    public void SearchHotel_WithValidHotelSearchParameters_ReturnsHotelSearchOutputModel()
-    {
-        var expectedHotels = _fixture.Create<HotelSearchOutputModel>();
+        var expectedHotels = _fixture.Create<HotelSearchListOutputModel>();
         var httpResponseJson = JsonConvert.SerializeObject(expectedHotels);
-        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
-        var hotelSearchParameters = new HotelSearchParametersModel();
-        var hotelSearchListParametersModel = new HotelSearchListParametersModel();
+        var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(statusCode, httpResponseJson);
 
-        var sut = new HotelSearchService();
-
-        var result = sut.SearchHotel(hotelSearchListParametersModel, hotelSearchParameters);
-
-        Assert.IsNotNull(result, "Result should not be null");
-        Assert.IsInstanceOf<HotelSearchOutputModel>(result, "Result should be of type HotelSearchOutputModel");
-        Assert.Fail("Force fail until implementation is done");
-
+        var sut = new HotelSearchListService(httpClientMock, _getTokenMock.Object);
+        var sutParameters = new HotelSearchListParametersModel
+        {
+            CityCode = "example"
+        };
+        Assert.ThrowsAsync<HttpRequestException>(async () => await sut.SearchListOfHotels(sutParameters));
     }
 
-    [Test]
-    [TestCase(HttpStatusCode.InternalServerError)]
-    [TestCase(HttpStatusCode.NotFound)]
-    [TestCase(HttpStatusCode.BadGateway)]
-    public void SearchHotel_ThrowsHttpRequestException_WhenApiResponseIsInvalid(HttpStatusCode statusCode)
-    {
-
-    }
 }
