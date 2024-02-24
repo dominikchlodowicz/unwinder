@@ -1,4 +1,8 @@
+using System.Net.Http.Headers;
+using System.Text;
+using Newtonsoft.Json;
 using unwidner.Models.AmadeusApiServiceModels.HotelSearchModels;
+using unwinder.Helpers;
 
 namespace unwinder.Services.AmadeusApiService.HotelSearch;
 
@@ -6,6 +10,7 @@ public class HotelSearchListService : IHotelSearchListService
 {
     private IGetToken _getToken;
     private HttpClient _httpClientV1;
+    private readonly string hotelListSearchEndpointUri = "reference-data/locations/hotels/by-city";
 
     public HotelSearchListService(IHttpClientFactory httpClientFactory, IGetToken getToken)
     {
@@ -13,9 +18,53 @@ public class HotelSearchListService : IHotelSearchListService
         _getToken = getToken;
     }
 
-    public Task SearchListOfHotels
+    public async Task<HotelSearchListOutputModel> SearchListOfHotels
             (HotelSearchListParametersModel hotelSearchListParametersModel)
     {
-        throw new NotImplementedException();
+        var token = await _getToken.GetAuthToken();
+        _httpClientV1.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await GetHotelListFromApi(hotelSearchListParametersModel);
+
+        return await ProcessFlightSearchResponse(response);
+    }
+
+    private async Task<HttpResponseMessage> GetHotelListFromApi(HotelSearchListParametersModel hotelSearchListParametersModel)
+    {
+        var processedParameters = ProcessHotelSearchListParameters(hotelSearchListParametersModel);
+        var response = await _httpClientV1.PostAsync(hotelListSearchEndpointUri, processedParameters);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Received {response.StatusCode} from the server.");
+        }
+
+        return response;
+    }
+
+    private StringContent ProcessHotelSearchListParameters(HotelSearchListParametersModel hotelSearchListParameters)
+    {
+        var json = JsonConvert.SerializeObject(hotelSearchListParameters);
+        var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+        return stringContent;
+    }
+
+    private async Task<HotelSearchListOutputModel> ProcessFlightSearchResponse(HttpResponseMessage response)
+    {
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var flightSearchData = await DeserializeFlightSearchResponse(responseContent);
+
+        return flightSearchData;
+    }
+
+    private Task<HotelSearchListOutputModel> DeserializeFlightSearchResponse(string hotelListResponse)
+    {
+        var data = JsonConvert.DeserializeObject<HotelSearchListOutputModel>(hotelListResponse);
+        if (data == null)
+        {
+            throw new Exception(ErrorMessages.DeserializeError);
+        }
+
+        return Task.FromResult(data);
     }
 }

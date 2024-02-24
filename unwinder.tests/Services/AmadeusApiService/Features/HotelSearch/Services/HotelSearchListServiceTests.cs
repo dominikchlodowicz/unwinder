@@ -22,25 +22,46 @@ public class HotelSearchListServiceTests
 
     }
 
+    // [Test]
+    // public void SearchListOfHotels_WithValidHotelSearchListParameters_ReturnsHotelSearchListOutputModel()
+    // {
+    //     var expectedHotels = _fixture.Create<HotelSearchListOutputModel>();
+    //     var httpResponseJson = JsonConvert.SerializeObject(expectedHotels);
+    //     var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
+    //     var hotelSearchListParametersModel = new HotelSearchListParametersModel
+    //     {
+    //         CityCode = "example"
+    //     };
+
+    //     var sut = new HotelSearchListService(httpClientMock, _getTokenMock.Object);
+
+    //     var result = sut.SearchListOfHotels(hotelSearchListParametersModel);
+
+    //     Assert.IsNotNull(result, "Result should not be null");
+    //     Assert.IsInstanceOf<HotelSearchListOutputModel>(result, "Result should be of type HotelSearchOutputModel");
+    // }
+
     [Test]
-    public void SearchListOfHotels_WithValidHotelSearchListParameters_ReturnsHotelSearchListOutputModel()
+    public async Task SearchListOfHotels_WithValidHotelSearchListParameters_ReturnsHotelSearchListOutputModel()
     {
         var expectedHotels = _fixture.Create<HotelSearchListOutputModel>();
         var httpResponseJson = JsonConvert.SerializeObject(expectedHotels);
+
         var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
+
+        var sut = new HotelSearchListService(httpClientMock, _getTokenMock.Object);
+
         var hotelSearchListParametersModel = new HotelSearchListParametersModel
         {
             CityCode = "example"
         };
 
-        var sut = new HotelSearchListService(httpClientMock, _getTokenMock.Object);
-
-        var result = sut.SearchListOfHotels(hotelSearchListParametersModel);
+        var result = await sut.SearchListOfHotels(hotelSearchListParametersModel);
 
         Assert.IsNotNull(result, "Result should not be null");
-        Assert.IsInstanceOf<HotelSearchListOutputModel>(result, "Result should be of type HotelSearchOutputModel");
-        Assert.Fail("Force fail until implementation is done");
+        Assert.IsInstanceOf<HotelSearchListOutputModel>(result, "Result should be of type HotelSearchListOutputModel");
     }
+
 
     [Test]
     [TestCase(HttpStatusCode.InternalServerError)]

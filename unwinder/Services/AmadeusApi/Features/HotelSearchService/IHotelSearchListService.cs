@@ -5,5 +5,5 @@ namespace unwinder.Services.AmadeusApiService.HotelSearch;
 
 public interface IHotelSearchListService
 {
-    public Task SearchListOfHotels(HotelSearchListParametersModel hotelSearchListParametersModel);
+    public Task<HotelSearchListOutputModel> SearchListOfHotels(HotelSearchListParametersModel hotelSearchListParametersModel);
 }

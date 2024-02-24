@@ -23,7 +23,7 @@ public class HotelSearchParametersBuilderTests
     [Test]
     public void BuildHotelIds_SetsHotelIdsProperty()
     {
-        var hotelIds = _fixture.CreateMany<HotelSearchDatum>(5).ToList(); // Creates 5 HotelSearchDatum objects
+        var hotelIds = _fixture.CreateMany<HotelSearchDatum>(5).ToList();
         var hotelSearchListOutputModel = new HotelSearchListOutputModel
         {
             Data = hotelIds
@@ -31,13 +31,12 @@ public class HotelSearchParametersBuilderTests
 
         var builder = new HotelSearchParametersBuilder();
 
-        var result = builder.BuildHotelIds(hotelSearchListOutputModel).Build(); // Ensure this method sets up a List<string> of HotelIds correctly
+        var result = builder.BuildHotelIds(hotelSearchListOutputModel).Build();
 
-        // Assuming result.HotelIds is a List<string> of HotelId values
         var expectedHotelIds = hotelIds.Select(datum => datum.HotelId).ToList();
 
         Assert.IsNotNull(result.HotelIds);
-        CollectionAssert.AreEquivalent(expectedHotelIds, result.HotelIds); // Compares two lists of strings
+        CollectionAssert.AreEquivalent(expectedHotelIds, result.HotelIds);
     }
 
 
@@ -77,7 +76,7 @@ public class HotelSearchParametersBuilderTests
     public void Build_ReturnsCompleteHotelSearchParametersModel()
     {
         var builder = new HotelSearchParametersBuilder();
-        var hotelIds = _fixture.CreateMany<HotelSearchDatum>(5).ToList(); // Creates 5 HotelSearchDatum objects
+        var hotelIds = _fixture.CreateMany<HotelSearchDatum>(5).ToList();
 
         var expectedHotelIds = hotelIds.Select(datum => datum.HotelId).ToList();
 
@@ -94,7 +93,7 @@ public class HotelSearchParametersBuilderTests
             .BuildDefaultValues()
             .Build();
 
-        CollectionAssert.AreEquivalent(expectedHotelIds, result.HotelIds); // Correctly compares lists of strings
+        CollectionAssert.AreEquivalent(expectedHotelIds, result.HotelIds);
         Assert.That(result.Adults, Is.EqualTo(numberOfAdults));
         Assert.That(result.CheckInDate, Is.EqualTo(_mockCheckInDate));
         Assert.That(result.CheckOutDate, Is.EqualTo(_mockCheckOutDate));
