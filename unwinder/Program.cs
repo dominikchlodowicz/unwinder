@@ -5,6 +5,7 @@ using unwinder.Services.AmadeusApiService;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
 using unwinder.Services.AmadeusApiService.GetCityIataCode;
+using unwinder.Services.AmadeusApiService.HotelSearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,9 +83,15 @@ builder.Services.AddTransient<FlightSearchController>(sp =>
     var getLocationService = sp.GetRequiredService<IGetLocationService>();
     var getCityIataCodeService = sp.GetRequiredService<IGetCityIataCodeService>();
     var logger = sp.GetRequiredService<ILogger<FlightSearchController>>();
-    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-    var getToken = sp.GetRequiredService<IGetToken>();
-    return new FlightSearchController(flightSearchService, getLocationService, getCityIataCodeService, logger, httpClientFactory, getToken);
+    return new FlightSearchController(flightSearchService, getLocationService, getCityIataCodeService, logger);
+});
+
+// HotelSearchController
+builder.Services.AddTransient<HotelSearchController>(sp =>
+{
+    var hotelSearchListService = sp.GetRequiredService<HotelSearchListService>();
+    var hotelSearchService = sp.GetRequiredService<HotelSearchService>();
+    return new HotelSearchController(hotelSearchListService, hotelSearchService);
 });
 
 // Controllers - END
