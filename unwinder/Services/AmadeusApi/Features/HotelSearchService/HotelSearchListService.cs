@@ -25,7 +25,7 @@ public class HotelSearchListService : IHotelSearchListService
         _httpClientV1.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await GetHotelListFromApi(hotelSearchListParametersModel);
 
-        return await ProcessFlightSearchResponse(response);
+        return await ProcessHotelListSearchResponse(response);
     }
 
     private async Task<HttpResponseMessage> GetHotelListFromApi(HotelSearchListParametersModel hotelSearchListParametersModel)
@@ -49,12 +49,12 @@ public class HotelSearchListService : IHotelSearchListService
         return stringContent;
     }
 
-    private async Task<HotelSearchListOutputModel> ProcessFlightSearchResponse(HttpResponseMessage response)
+    private async Task<HotelSearchListOutputModel> ProcessHotelListSearchResponse(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
-        var flightSearchData = await DeserializeFlightSearchResponse(responseContent);
+        var hotelListSearchData = await DeserializeFlightSearchResponse(responseContent);
 
-        return flightSearchData;
+        return hotelListSearchData;
     }
 
     private Task<HotelSearchListOutputModel> DeserializeFlightSearchResponse(string hotelListResponse)
