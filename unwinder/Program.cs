@@ -6,6 +6,7 @@ using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
 using unwinder.Services.AmadeusApiService.GetCityIataCode;
 using unwinder.Services.AmadeusApiService.HotelSearch;
+using Microsoft.VisualBasic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,7 @@ builder.Services.AddHttpClient("AmadeusApiV3", httpClient =>
     httpClient.BaseAddress = new Uri("https://test.api.amadeus.com/v3/");
 });
 
-// AMADEUS Api Services DI - START
+// AMADEUS Api Flight Services DI - START
 
 // Bearer Token
 builder.Services.AddSingleton<IGetToken, GetToken>(sp =>
@@ -72,7 +73,27 @@ builder.Services.AddTransient<IGetCityIataCodeService, GetCityIataCodeService>(s
     return new GetCityIataCodeService(getLocationService);
 });
 
-// AMADEUS Api Services DI - END
+// AMADEUS Api Flight Services DI - END
+
+// AMADEUS Api Hotel Services DI - START
+
+builder.Services.AddTransient<IHotelSearchListService, HotelSearchListService>(sp =>
+{
+    var getToken = sp.GetRequiredService<IGetToken>();
+    var httpClientV1 = sp.GetRequiredService<IHttpClientFactory>();
+
+    return new HotelSearchListService(httpClientV1, getToken);
+});
+
+builder.Services.AddTransient<IHotelSearchService, HotelSearchService>(sp =>
+{
+    var getToken = sp.GetRequiredService<IGetToken>();
+    var httpClientV1 = sp.GetRequiredService<IHttpClientFactory>();
+
+    return new HotelSearchService(httpClientV1, getToken);
+});
+
+// AMADEUS Api Hotel Services DI - END
 
 // Controllers - START
 
@@ -89,8 +110,8 @@ builder.Services.AddTransient<FlightSearchController>(sp =>
 // HotelSearchController
 builder.Services.AddTransient<HotelSearchController>(sp =>
 {
-    var hotelSearchListService = sp.GetRequiredService<HotelSearchListService>();
-    var hotelSearchService = sp.GetRequiredService<HotelSearchService>();
+    var hotelSearchListService = sp.GetRequiredService<IHotelSearchListService>();
+    var hotelSearchService = sp.GetRequiredService<IHotelSearchService>();
     return new HotelSearchController(hotelSearchListService, hotelSearchService);
 });
 
@@ -117,7 +138,4 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-
-
 app.Run();
-

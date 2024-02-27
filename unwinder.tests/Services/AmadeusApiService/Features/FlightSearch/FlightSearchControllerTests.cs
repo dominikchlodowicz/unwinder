@@ -19,8 +19,6 @@ public class FlightSearchControllerTests
     private Mock<IGetLocationService> _mockGetLocationService;
     private Mock<IGetCityIataCodeService> _mockGetCityIataService;
     private Mock<ILogger<FlightSearchController>> _mockLogger;
-    private Mock<IHttpClientFactory> _mockHttpClientFactory;
-    private Mock<IGetToken> _mockBearerToken;
     private FlightSearchController _controller;
     private Fixture _fixture;
 
@@ -31,16 +29,12 @@ public class FlightSearchControllerTests
         _mockGetLocationService = new Mock<IGetLocationService>();
         _mockGetCityIataService = new Mock<IGetCityIataCodeService>();
         _mockLogger = new Mock<ILogger<FlightSearchController>>();
-        _mockHttpClientFactory = new Mock<IHttpClientFactory>();
-        _mockBearerToken = new Mock<IGetToken>();
 
         _controller = new FlightSearchController(
             _mockFlightSearchService.Object,
             _mockGetLocationService.Object,
             _mockGetCityIataService.Object,
-            _mockLogger.Object,
-            _mockHttpClientFactory.Object,
-            _mockBearerToken.Object
+            _mockLogger.Object
         );
 
         _fixture = new Fixture();

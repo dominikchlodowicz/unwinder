@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using unwidner.Models.AmadeusApiServiceModels.HotelSearchModels;
 using unwinder.Services;
 using unwinder.Services.AmadeusApiService.HotelSearch;
 
@@ -29,7 +30,26 @@ public class HotelSearchController : ControllerBase
     [HttpGet("api/hotel-search/test")]
     public async Task<ActionResult<string>> HotelSearchTest()
     {
-        return Ok();
-    }
+        HotelSearchListParametersModel hotelSearchListParameters = new HotelSearchListParametersModel()
+        {
+            CityCode = "DEL",
+            Radius = 5
+        };
 
+        var hotelSearchListOutput = await _hotelSearchListService.SearchListOfHotels(hotelSearchListParameters);
+
+
+        HotelSearchParametersModel hotelSearchParameters = new HotelSearchParametersBuilder()
+            .BuildHotelIds(hotelSearchListOutput)
+            .BuildNumberOfAdults(2)
+            .BuildInOutDates("2024-03-15", "2024-03-19")
+            .BuildDefaultValues()
+            .Build();
+
+        HotelSearchOutputModel hotelSearchOutput = await _hotelSearchService.SearchHotel(hotelSearchParameters);
+
+        return Ok(hotelSearchOutput);
+
+        //TODO: Implement model and LINQ to combine results of these two output models
+    }
 }

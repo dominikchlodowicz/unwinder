@@ -29,10 +29,17 @@ public class HotelSearchService : IHotelSearchService
         return await ProcessHotelSearchResponse(response);
     }
 
-    private async Task<HttpResponseMessage> GetHotelListFromApi(HotelSearchParametersModel hotelSearchParametersModel)
+    private async Task<HttpResponseMessage> GetHotelListFromApi(HotelSearchParametersModel hotelSearchParameters)
     {
-        var processedParameters = ProcessHotelSearchParameters(hotelSearchParametersModel);
-        var response = await _httpClientV3.PostAsync(hotelSearchEndpointUri, processedParameters);
+        var query = System.Web.HttpUtility.ParseQueryString(string.Empty);
+        query["hotelIds"] = String.Join(",", hotelSearchParameters.HotelIds);
+        query["aduts"] = hotelSearchParameters.Adults.ToString();
+        query["checkInDate"] = hotelSearchParameters.CheckInDate;
+        query["checkOutDate"] = hotelSearchParameters.CheckOutDate;
+        query["currency"] = hotelSearchParameters.Currency;
+        string url = $"{_httpClientV3.BaseAddress}{hotelSearchEndpointUri}?{query}";
+
+        var response = await _httpClientV3.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -40,14 +47,6 @@ public class HotelSearchService : IHotelSearchService
         }
 
         return response;
-    }
-
-    private StringContent ProcessHotelSearchParameters(HotelSearchParametersModel hotelSearchParameters)
-    {
-        var json = JsonConvert.SerializeObject(hotelSearchParameters);
-        var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-        return stringContent;
     }
 
     private async Task<HotelSearchOutputModel> ProcessHotelSearchResponse(HttpResponseMessage response)
