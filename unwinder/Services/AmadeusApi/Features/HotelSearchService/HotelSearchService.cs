@@ -54,7 +54,31 @@ public class HotelSearchService : IHotelSearchService
         var responseContent = await response.Content.ReadAsStringAsync();
         var hotelSearchData = await DeserializeFlightSearchResponse(responseContent);
 
+        HotelConvertCurrrency(ref hotelSearchData);
+
         return hotelSearchData;
+    }
+
+    private void HotelConvertCurrrency(ref HotelSearchOutputModel hotelSearchOutputData)
+    {
+        string currency = hotelSearchOutputData.Data[0].Offers[0].Price.Currency;
+        int priceValue = int.Parse(hotelSearchOutputData.Data[0].Offers[0].Price.Total);
+
+        if (hotelSearchOutputData.Dictionaries != null)
+        {
+            decimal priceValueDecimal = priceValue;
+
+            decimal conversionRate = decimal.Parse(hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Rate);
+            string currencyTarget = hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Target;
+
+            hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode = currencyTarget;
+            hotelSearchOutputData.ConvertedCurrencyPrice.Value = (int)Math.Round(priceValueDecimal * conversionRate); ;
+        }
+        else
+        {
+            hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode = currency;
+            hotelSearchOutputData.ConvertedCurrencyPrice.Value = priceValue;
+        }
     }
 
     private Task<HotelSearchOutputModel> DeserializeFlightSearchResponse(string hotelResponse)

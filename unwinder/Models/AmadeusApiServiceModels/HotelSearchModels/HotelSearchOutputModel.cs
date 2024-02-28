@@ -195,6 +195,29 @@ public class HotelSearchOutputModel
 {
     [JsonProperty("data")]
     public List<Datum> Data { get; set; }
+
+    [JsonProperty("dictionaries")]
+    public Dictionaries Dictionaries { get; set; }
+
+    public ConvertedCurrencyPrice ConvertedCurrencyPrice { get; set; }
+}
+
+public class Dictionaries
+{
+    [JsonProperty("currencyConversionLookupRates")]
+    public Dictionary<string, CurrencyConversion> CurrencyConversionLookupRates { get; set; }
+}
+
+public class CurrencyConversion
+{
+    [JsonProperty("rate")]
+    public string Rate { get; set; }
+
+    [JsonProperty("target")]
+    public string Target { get; set; }
+
+    [JsonProperty("targetDecimalPlaces")]
+    public int TargetDecimalPlaces { get; set; }
 }
 
 public class Taxis
@@ -228,4 +251,10 @@ public class Variations
 
     [JsonProperty("changes")]
     public List<Change> Changes { get; set; }
+}
+
+public class ConvertedCurrencyPrice
+{
+    public string CurrencyCode { get; set; }
+    public int Value { get; set; }
 }
