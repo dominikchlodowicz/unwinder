@@ -122,15 +122,9 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
     }
 
     /// <summary>
-<<<<<<< HEAD
-    /// Applies default values for several search parameters, including cabin type, coverage, number of flight offers, and data source.
-    /// </summary>
-    /// <returns>The <see cref="FlightSearchParametersBuilder"/> instance for chaining.</returns>
-=======
     /// Builds the default values for the flight search parameters including cabin restrictions, maximum flight offers, and data source.
     /// </summary>
     /// <returns>The instance of FlightSearchParametersBuilder for method chaining.</returns>
->>>>>>> feature/hotel-search
     public FlightSearchParametersBuilder BuildDefaultValues()
     {
         _parameters.SearchCriteria.FlightFilters.CabinRestrictions.Add(new CabinRestriction
@@ -148,15 +142,9 @@ public class FlightSearchParametersBuilder : IFlightSearchParametersBuilder
     }
 
     /// <summary>
-<<<<<<< HEAD
-    /// Finalizes the construction of the <see cref="FlightSearchParameters"/> and returns it.
-    /// </summary>
-    /// <returns>The constructed <see cref="FlightSearchParameters"/> object.</returns>
-=======
     /// Finalizes the construction of the FlightSearchParameters and returns the constructed object.
     /// </summary>
     /// <returns>The fully constructed FlightSearchParameters object.</returns>
->>>>>>> feature/hotel-search
     public FlightSearchParameters Build()
     {
         return _parameters;
