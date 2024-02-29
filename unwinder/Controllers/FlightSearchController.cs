@@ -18,23 +18,18 @@ public class FlightSearchController : ControllerBase
     private readonly IGetLocationService _getLocationService;
     private readonly IGetCityIataCodeService _getCityIataCodeService;
     private readonly ILogger<FlightSearchController> _logger;
-    private readonly HttpClient _httpClient;
-    private readonly IGetToken _bearerToken;
 
     public FlightSearchController(
         IFlightSearchService flightSearchService,
         IGetLocationService getLocationService,
         IGetCityIataCodeService getCityIataCodeService,
-        ILogger<FlightSearchController> logger,
-        IHttpClientFactory httpClientFactory,
-        IGetToken bearerToken)
+        ILogger<FlightSearchController> logger
+    )
     {
         _flightSearchService = flightSearchService;
         _getLocationService = getLocationService;
         _getCityIataCodeService = getCityIataCodeService;
         _logger = logger;
-        _httpClient = httpClientFactory.CreateClient("AmadeusApiV2");
-        _bearerToken = bearerToken;
     }
 
     /// <summary>

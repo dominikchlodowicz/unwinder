@@ -10,8 +10,9 @@ using System.Reflection.Emit;
 
 namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
+
 /// <summary>
-/// Service for searching, obtaining and processing flight offers.
+/// Service responsible for executing flight searches through the Amadeus API.
 /// </summary>
 public class FlightSearchService : IFlightSearchService
 {

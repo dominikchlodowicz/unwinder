@@ -38,5 +38,24 @@ public static class DateTimeRangeTypeExtension
             throw new ArgumentException("Departure DateTime is in the past.");
         }
     }
+
+    /// <summary>
+    /// Validates that a given date string is in the correct ISO format (YYYY-MM-DD) and not in the past.
+    /// </summary>
+    /// <param name="argDate">The date string to validate.</param>
+    /// <exception cref="ArgumentException">Thrown if the date string is not in the correct ISO format or represents a date in the past.</exception>
+    public static void IsDateInCorrectIsoFormat(string argDate)
+    {
+        if (!DateTime.TryParse(argDate, out var parsedDate) ||
+            !parsedDate.ToString("yyyy-MM-dd").Equals(argDate))
+        {
+            throw new ArgumentException("Departure date is not in the correct ISO format (YYYY-MM-DD).");
+        }
+
+        if (parsedDate.Date < DateTime.Now.Date)
+        {
+            throw new ArgumentException("Departure DateTime is in the past.");
+        }
+    }
 }
 

@@ -5,6 +5,9 @@ using unwinder.Services.AmadeusApiService;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
 using unwinder.Services.AmadeusApiService.GetCityIataCode;
+using unwinder.Services.AmadeusApiService.HotelSearch;
+using Microsoft.VisualBasic;
+using unwinder.Services.HelperServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +35,14 @@ builder.Services.AddHttpClient("AmadeusApiV2", httpClient =>
     httpClient.BaseAddress = new Uri("https://test.api.amadeus.com/v2/");
 });
 
+// register api url v3
+builder.Services.AddHttpClient("AmadeusApiV3", httpClient =>
+{
+    // URI - combination or URL and URN string that represents resource on the web
+    httpClient.BaseAddress = new Uri("https://test.api.amadeus.com/v3/");
+});
 
-// AMADEUS Api Services DI - START
+// AMADEUS Api Flight Services DI - START
 
 // Bearer Token
 builder.Services.AddSingleton<IGetToken, GetToken>(sp =>
@@ -65,7 +74,33 @@ builder.Services.AddTransient<IGetCityIataCodeService, GetCityIataCodeService>(s
     return new GetCityIataCodeService(getLocationService);
 });
 
-// AMADEUS Api Services DI - END
+builder.Services.AddSingleton<ICurrencyConversionService, CurrencyConversionService>(sp =>
+{
+    return new CurrencyConversionService();
+});
+
+// AMADEUS Api Flight Services DI - END
+
+// AMADEUS Api Hotel Services DI - START
+
+builder.Services.AddTransient<IHotelSearchListService, HotelSearchListService>(sp =>
+{
+    var getToken = sp.GetRequiredService<IGetToken>();
+    var httpClientV1 = sp.GetRequiredService<IHttpClientFactory>();
+
+    return new HotelSearchListService(httpClientV1, getToken);
+});
+
+builder.Services.AddTransient<IHotelSearchService, HotelSearchService>(sp =>
+{
+    var getToken = sp.GetRequiredService<IGetToken>();
+    var httpClientV1 = sp.GetRequiredService<IHttpClientFactory>();
+    var currencyConversionService = sp.GetRequiredService<ICurrencyConversionService>();
+
+    return new HotelSearchService(httpClientV1, getToken, currencyConversionService);
+});
+
+// AMADEUS Api Hotel Services DI - END
 
 // Controllers - START
 
@@ -76,9 +111,15 @@ builder.Services.AddTransient<FlightSearchController>(sp =>
     var getLocationService = sp.GetRequiredService<IGetLocationService>();
     var getCityIataCodeService = sp.GetRequiredService<IGetCityIataCodeService>();
     var logger = sp.GetRequiredService<ILogger<FlightSearchController>>();
-    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-    var getToken = sp.GetRequiredService<IGetToken>();
-    return new FlightSearchController(flightSearchService, getLocationService, getCityIataCodeService, logger, httpClientFactory, getToken);
+    return new FlightSearchController(flightSearchService, getLocationService, getCityIataCodeService, logger);
+});
+
+// HotelSearchController
+builder.Services.AddTransient<HotelSearchController>(sp =>
+{
+    var hotelSearchListService = sp.GetRequiredService<IHotelSearchListService>();
+    var hotelSearchService = sp.GetRequiredService<IHotelSearchService>();
+    return new HotelSearchController(hotelSearchListService, hotelSearchService);
 });
 
 // Controllers - END
@@ -104,7 +145,4 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-
-
 app.Run();
-
