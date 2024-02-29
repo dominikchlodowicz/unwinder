@@ -1,22 +1,27 @@
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 using unwidner.Models.AmadeusApiServiceModels.HotelSearchModels;
 using unwinder.Helpers;
+using unwinder.Models.AmadeusApiServiceModels.FlightSearchModels.TypeHelperModels;
+using unwinder.Services.HelperServices;
 
 namespace unwinder.Services.AmadeusApiService.HotelSearch;
 
 public class HotelSearchService : IHotelSearchService
 {
-    private IGetToken _getToken;
-    private HttpClient _httpClientV3;
+    private readonly IGetToken _getToken;
+    private readonly HttpClient _httpClientV3;
+    private readonly ICurrencyConversionService _currencyConversionService;
 
     private readonly string hotelSearchEndpointUri = "shopping/hotel-offers";
 
-    public HotelSearchService(IHttpClientFactory httpClientFactory, IGetToken getToken)
+    public HotelSearchService(IHttpClientFactory httpClientFactory, IGetToken getToken, ICurrencyConversionService currencyConversionService)
     {
         _httpClientV3 = httpClientFactory.CreateClient("AmadeusApiV3");
         _getToken = getToken;
+        _currencyConversionService = currencyConversionService;
     }
 
     public async Task<HotelSearchOutputModel> SearchHotel
@@ -54,21 +59,25 @@ public class HotelSearchService : IHotelSearchService
         var responseContent = await response.Content.ReadAsStringAsync();
         var hotelSearchData = await DeserializeFlightSearchResponse(responseContent);
 
-        HotelConvertCurrrency(ref hotelSearchData);
+        _currencyConversionService.HotelConvertCurrrency(ref hotelSearchData);
 
         return hotelSearchData;
     }
 
     private void HotelConvertCurrrency(ref HotelSearchOutputModel hotelSearchOutputData)
     {
+        hotelSearchOutputData.ConvertedCurrencyPrice = new ConvertedCurrencyPrice()
+        {
+        };
+
         string currency = hotelSearchOutputData.Data[0].Offers[0].Price.Currency;
-        int priceValue = int.Parse(hotelSearchOutputData.Data[0].Offers[0].Price.Total);
+        int priceValue = (int)Math.Round(decimal.Parse(hotelSearchOutputData.Data[0].Offers[0].Price.Total, CultureInfo.InvariantCulture));
 
         if (hotelSearchOutputData.Dictionaries != null)
         {
             decimal priceValueDecimal = priceValue;
 
-            decimal conversionRate = decimal.Parse(hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Rate);
+            decimal conversionRate = decimal.Parse(hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Rate, CultureInfo.InvariantCulture);
             string currencyTarget = hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Target;
 
             hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode = currencyTarget;

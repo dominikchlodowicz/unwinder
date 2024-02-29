@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using unwidner.Models.AmadeusApiServiceModels.HotelSearchModels;
 using unwinder.Services;
 using unwinder.Services.AmadeusApiService.HotelSearch;
+using unwinder.Services.HelperServices;
 using unwinder.tests.Services.Helpers;
 
 namespace unwinder.tests.Service.AmadeusApiService;
@@ -14,13 +15,15 @@ public class HotelSearchServiceTests
 
     private Fixture _fixture;
 
+    private Mock<ICurrencyConversionService> _currencyConversionServiceMock;
+
     [SetUp]
     public void Setup()
     {
         _getTokenMock = new Mock<IGetToken>();
         _getTokenMock.Setup(_ => _.GetAuthToken()).ReturnsAsync("test_token");
         _fixture = new Fixture();
-
+        _currencyConversionServiceMock = new Mock<ICurrencyConversionService>();
     }
 
     [Test]
@@ -29,9 +32,12 @@ public class HotelSearchServiceTests
         var expectedHotels = _fixture.Create<HotelSearchOutputModel>();
         var httpResponseJson = JsonConvert.SerializeObject(expectedHotels);
         var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(HttpStatusCode.OK, httpResponseJson);
-        var hotelSearchParameters = new HotelSearchParametersModel();
+        var hotelSearchParameters = new HotelSearchParametersModel
+        {
+            HotelIds = new List<string> { "1", "2", "3" }
+        };
 
-        var sut = new HotelSearchService(httpClientMock, _getTokenMock.Object);
+        var sut = new HotelSearchService(httpClientMock, _getTokenMock.Object, _currencyConversionServiceMock.Object);
 
         var result = await sut.SearchHotel(hotelSearchParameters);
 
@@ -49,9 +55,13 @@ public class HotelSearchServiceTests
         var httpResponseJson = JsonConvert.SerializeObject(expectedHotels);
         var httpClientMock = AmadeusApiHttpClientTestHelper.SetupHttpClient(statusCode, httpResponseJson);
 
-        var sut = new HotelSearchService(httpClientMock, _getTokenMock.Object);
+        var sutParameters = new HotelSearchParametersModel
+        {
+            HotelIds = new List<string> { "1", "2", "3" }
+        };
 
-        var sutParameters = new HotelSearchParametersModel();
+        var sut = new HotelSearchService(httpClientMock, _getTokenMock.Object, _currencyConversionServiceMock.Object);
+
         Assert.ThrowsAsync<HttpRequestException>(async () => await sut.SearchHotel(sutParameters));
     }
 }

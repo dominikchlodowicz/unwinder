@@ -49,7 +49,5 @@ public class HotelSearchController : ControllerBase
         HotelSearchOutputModel hotelSearchOutput = await _hotelSearchService.SearchHotel(hotelSearchParameters);
 
         return Ok(hotelSearchOutput);
-
-        //TODO: Implement model and LINQ to combine results of these two output models
     }
 }

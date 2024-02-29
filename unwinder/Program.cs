@@ -7,6 +7,7 @@ using unwinder.Services.AmadeusApiService.GetLocation;
 using unwinder.Services.AmadeusApiService.GetCityIataCode;
 using unwinder.Services.AmadeusApiService.HotelSearch;
 using Microsoft.VisualBasic;
+using unwinder.Services.HelperServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +74,11 @@ builder.Services.AddTransient<IGetCityIataCodeService, GetCityIataCodeService>(s
     return new GetCityIataCodeService(getLocationService);
 });
 
+builder.Services.AddSingleton<ICurrencyConversionService, CurrencyConversionService>(sp =>
+{
+    return new CurrencyConversionService();
+});
+
 // AMADEUS Api Flight Services DI - END
 
 // AMADEUS Api Hotel Services DI - START
@@ -89,8 +95,9 @@ builder.Services.AddTransient<IHotelSearchService, HotelSearchService>(sp =>
 {
     var getToken = sp.GetRequiredService<IGetToken>();
     var httpClientV1 = sp.GetRequiredService<IHttpClientFactory>();
+    var currencyConversionService = sp.GetRequiredService<ICurrencyConversionService>();
 
-    return new HotelSearchService(httpClientV1, getToken);
+    return new HotelSearchService(httpClientV1, getToken, currencyConversionService);
 });
 
 // AMADEUS Api Hotel Services DI - END

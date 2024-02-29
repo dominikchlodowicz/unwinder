@@ -6,6 +6,9 @@ using unwinder.Helpers;
 
 namespace unwinder.Services.AmadeusApiService.HotelSearch;
 
+/// <summary>
+/// Provides functionality for searching a list of hotels using the Amadeus API.
+/// </summary>
 public class HotelSearchListService : IHotelSearchListService
 {
     private IGetToken _getToken;
@@ -18,6 +21,12 @@ public class HotelSearchListService : IHotelSearchListService
         _getToken = getToken;
     }
 
+    /// <summary>
+    /// Searches for hotels based on specified search parameters.
+    /// </summary>
+    /// <param name="hotelSearchListParametersModel">The search parameters for the hotel list.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the list of searched hotels.</returns>
+    /// <exception cref="HttpRequestException">Thrown when the API response is not successful.</exception>
     public async Task<HotelSearchListOutputModel> SearchListOfHotels
             (HotelSearchListParametersModel hotelSearchListParametersModel)
     {
@@ -30,7 +39,6 @@ public class HotelSearchListService : IHotelSearchListService
 
     private async Task<HttpResponseMessage> GetHotelListFromApi(HotelSearchListParametersModel hotelSearchListParametersModel)
     {
-        // var processedParameters = ProcessHotelSearchListParameters(hotelSearchListParametersModel);
         var query = System.Web.HttpUtility.ParseQueryString(string.Empty);
         query["cityCode"] = hotelSearchListParametersModel.CityCode;
         query["radius"] = hotelSearchListParametersModel.Radius.ToString();

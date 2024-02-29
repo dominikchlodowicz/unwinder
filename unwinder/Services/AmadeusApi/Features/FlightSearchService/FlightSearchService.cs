@@ -10,6 +10,10 @@ using System.Reflection.Emit;
 
 namespace unwinder.Services.AmadeusApiService.FlightSearch;
 
+
+/// <summary>
+/// Service responsible for executing flight searches through the Amadeus API.
+/// </summary>
 public class FlightSearchService : IFlightSearchService
 {
     private readonly HttpClient _httpClientV2;
@@ -23,6 +27,11 @@ public class FlightSearchService : IFlightSearchService
 
     private readonly string flightSearchEndpointUri = "shopping/flight-offers";
 
+    /// <summary>
+    /// Searches for flights based on provided search parameters.
+    /// </summary>
+    /// <param name="flightSearchParameters">The parameters to use for the flight search.</param>
+    /// <returns>A Task that represents the asynchronous operation and contains the search results.</returns>
     public async Task<FlightSearchOutputModel> FlightSearch(FlightSearchParameters flightSearchParameters)
     {
         var token = await _getToken.GetAuthToken();
@@ -38,7 +47,7 @@ public class FlightSearchService : IFlightSearchService
         var processedParameters = ProcessFlightSearchParameters(flightSearchParameters);
         var response = await _httpClientV2.PostAsync(flightSearchEndpointUri, processedParameters);
 
-        if(!response.IsSuccessStatusCode)
+        if (!response.IsSuccessStatusCode)
         {
             throw new HttpRequestException($"Received {response.StatusCode} from the server.");
         }

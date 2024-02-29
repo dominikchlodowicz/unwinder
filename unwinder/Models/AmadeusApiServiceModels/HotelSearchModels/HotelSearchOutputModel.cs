@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using unwinder.Services.AmadeusApiService.HotelSearch;
+using unwinder.Services.HelperServices;
 
 namespace unwidner.Models.AmadeusApiServiceModels.HotelSearchModels;
 
@@ -253,6 +255,9 @@ public class Variations
     public List<Change> Changes { get; set; }
 }
 
+/// <summary>
+///    Custom class representing converted price in <see cref="HotelSearchService"/> using <see cref="CurrencyConversionService"/>.
+/// </summary>
 public class ConvertedCurrencyPrice
 {
     public string CurrencyCode { get; set; }
