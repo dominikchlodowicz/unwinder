@@ -42,7 +42,7 @@ public class HotelSearchController : ControllerBase
         HotelSearchParametersModel hotelSearchParameters = new HotelSearchParametersBuilder()
             .BuildHotelIds(hotelSearchListOutput)
             .BuildNumberOfAdults(2)
-            .BuildInOutDates("2024-03-15", "2024-03-19")
+            .BuildInOutDates("2024-04-15", "2024-04-19")
             .BuildDefaultValues()
             .Build();
 

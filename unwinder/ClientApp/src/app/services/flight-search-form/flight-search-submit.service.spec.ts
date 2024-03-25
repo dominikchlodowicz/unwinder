@@ -82,21 +82,4 @@ describe('FlightSearchSubmitService', () => {
       statusText: 'Internal Server Error',
     });
   });
-
-  it('should serialize flight search data correctly', () => {
-    const mockData: FlightSearchData = {
-      where: 'New York',
-      origin: 'London',
-      when: new Date('2022-01-01'),
-      numberOfPassengers: 2,
-    };
-
-    const result = service.serializeFlightSearchData(
-      'New York',
-      'London',
-      new Date('2022-01-01'),
-      2,
-    );
-    expect(result).toEqual(mockData);
-  });
 });

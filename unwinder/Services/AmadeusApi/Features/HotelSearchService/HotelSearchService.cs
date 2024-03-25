@@ -64,32 +64,6 @@ public class HotelSearchService : IHotelSearchService
         return hotelSearchData;
     }
 
-    private void HotelConvertCurrrency(ref HotelSearchOutputModel hotelSearchOutputData)
-    {
-        hotelSearchOutputData.ConvertedCurrencyPrice = new ConvertedCurrencyPrice()
-        {
-        };
-
-        string currency = hotelSearchOutputData.Data[0].Offers[0].Price.Currency;
-        int priceValue = (int)Math.Round(decimal.Parse(hotelSearchOutputData.Data[0].Offers[0].Price.Total, CultureInfo.InvariantCulture));
-
-        if (hotelSearchOutputData.Dictionaries != null)
-        {
-            decimal priceValueDecimal = priceValue;
-
-            decimal conversionRate = decimal.Parse(hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Rate, CultureInfo.InvariantCulture);
-            string currencyTarget = hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Target;
-
-            hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode = currencyTarget;
-            hotelSearchOutputData.ConvertedCurrencyPrice.Value = (int)Math.Round(priceValueDecimal * conversionRate); ;
-        }
-        else
-        {
-            hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode = currency;
-            hotelSearchOutputData.ConvertedCurrencyPrice.Value = priceValue;
-        }
-    }
-
     private Task<HotelSearchOutputModel> DeserializeFlightSearchResponse(string hotelResponse)
     {
         var data = JsonConvert.DeserializeObject<HotelSearchOutputModel>(hotelResponse);
