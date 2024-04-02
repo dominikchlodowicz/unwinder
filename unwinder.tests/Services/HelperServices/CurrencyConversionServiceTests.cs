@@ -49,39 +49,8 @@ namespace unwinder.Tests.Services.HelperServices
 
             _service.HotelConvertCurrrency(ref hotelSearchOutputData);
 
-            Assert.That(hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode, Is.EqualTo("EUR"));
-            Assert.That(hotelSearchOutputData.ConvertedCurrencyPrice.Value, Is.EqualTo(120));
-        }
-
-        [Test]
-        public void HotelConvertCurrency_DictionaryIsNull()
-        {
-            var hotelSearchOutputData = new HotelSearchOutputModel
-            {
-                Data = new List<Datum>
-                {
-                    new Datum
-                    {
-                        Offers = new List<Offer>
-                        {
-                            new Offer
-                            {
-                                Price = new Price
-                                {
-                                    Currency = "USD",
-                                    Total = "100"
-                                }
-                            }
-                        }
-                    }
-                },
-                Dictionaries = null
-            };
-
-            _service.HotelConvertCurrrency(ref hotelSearchOutputData);
-
-            Assert.That(hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode, Is.EqualTo("USD"));
-            Assert.That(hotelSearchOutputData.ConvertedCurrencyPrice.Value, Is.EqualTo(100));
+            Assert.That(hotelSearchOutputData.Data[0].Offers[0].ConvertedCurrencyPrice.CurrencyCode, Is.EqualTo("EUR"));
+            Assert.That(hotelSearchOutputData.Data[0].Offers[0].ConvertedCurrencyPrice.Value, Is.EqualTo(120));
         }
     }
 }

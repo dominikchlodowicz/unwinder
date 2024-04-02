@@ -18,7 +18,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './first-flight-offer-main.component.scss',
 })
 export class FirstFlightOfferMainComponent {
-  flightBackData!: Date;
+  flightBackDate!: Date;
   firstFlightResponse!: FlightSearchResponse;
   flightParameters!: FlightSearchData;
 
@@ -35,7 +35,7 @@ export class FirstFlightOfferMainComponent {
     this._unwinderSessionService
       .getSessionDataObservable()
       .subscribe((data) => {
-        this.flightBackData = data!.flightBackData!;
+        this.flightBackDate = data!.flightBackDate!;
         this.firstFlightResponse = data!.firstFlightResponse!;
         this.flightParameters = data!.flightParameters!;
       });
@@ -49,7 +49,7 @@ export class FirstFlightOfferMainComponent {
       this._flightSearchSubmitService.serializeFlightSearchData(
         this.flightParameters.origin,
         this.flightParameters.where,
-        this.flightBackData,
+        this.flightBackDate,
         this.flightParameters.numberOfPassengers,
       );
 
@@ -58,7 +58,7 @@ export class FirstFlightOfferMainComponent {
       selctedData,
     );
 
-    const setChosenSecondFlightData$ = this._flightSearchSubmitService
+    const setSecondFlightResponse$ = this._flightSearchSubmitService
       .submitFlightSearchDataToApi(serializedFlightSearchData)
       .pipe(
         switchMap((response) =>
@@ -69,7 +69,7 @@ export class FirstFlightOfferMainComponent {
         ),
       );
 
-    forkJoin([setChosenFlight$, setChosenSecondFlightData$]).subscribe({
+    forkJoin([setChosenFlight$, setSecondFlightResponse$]).subscribe({
       next: () => {
         this.router.navigate(['/unwind/second-flight']);
         this.isLoading = false;

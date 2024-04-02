@@ -1,14 +1,15 @@
 import { FlightSearchData } from './flight-search-data';
 import { FlightSearchResponse } from './flight-search-response';
+import { HotelResponseData } from '../hotel-data-exchange/hotel-response-data';
 
 export interface UnwinderSessionProperty {
   flightParameters?: FlightSearchData;
-  flightBackData?: Date;
+  flightBackDate?: Date;
   firstFlightResponse?: FlightSearchResponse;
   chosenFirstFlightData?: string;
   secondFlightResponse?: FlightSearchResponse;
   chosenSecondFlightData?: string;
-  hotelResponse?: string;
+  hotelResponse?: HotelResponseData;
   chosenHotelData?: string;
 }
 

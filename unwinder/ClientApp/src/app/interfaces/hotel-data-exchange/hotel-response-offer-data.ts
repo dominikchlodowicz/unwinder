@@ -1,4 +1,4 @@
-interface Datum {
+export interface HotelResponseOfferData {
   type: string;
   hotel: Hotel;
   available: boolean;
@@ -31,25 +31,11 @@ interface Room {
   typeEstimated: TypeEstimated;
 }
 
-export interface HotelResponseData {
-  data: Datum[];
-  dictionaries: Dictionaries;
-}
-
-interface Dictionaries {
-  currencyConversionLookupRates: { [key: string]: CurrencyConversion };
-}
-
-interface CurrencyConversion {
-  rate: string;
-  target: string;
-  targetDecimalPlaces: number;
-}
-
 interface TypeEstimated {
   category: string;
   beds: number;
 }
+
 interface ConvertedCurrencyPrice {
   currencyCode: string;
   value: number;

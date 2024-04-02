@@ -18,29 +18,36 @@ public class CurrencyConversionService : ICurrencyConversionService
     /// The conversion uses rates found in the <paramref name="hotelSearchOutputData"/>'s dictionaries.
     /// If dictionaries are null or do not contain the necessary conversion rates, the original currency and price are retained.
     /// </remarks>
+    /// 
+    //TODO: here we only change price in the first hotel offer this shouldn't be!!! I get the vibe that this is not finished work
     public void HotelConvertCurrrency(ref HotelSearchOutputModel hotelSearchOutputData)
     {
-        hotelSearchOutputData.ConvertedCurrencyPrice = new ConvertedCurrencyPrice()
+        for (int hotelOfferIndex = 0; hotelOfferIndex < hotelSearchOutputData.Data.Count; hotelOfferIndex++)
         {
-        };
+            hotelSearchOutputData.Data[hotelOfferIndex].Offers[0].ConvertedCurrencyPrice = new ConvertedCurrencyPrice()
+            {
+            };
 
-        string currency = hotelSearchOutputData.Data[0].Offers[0].Price.Currency;
-        int priceValue = (int)Math.Round(decimal.Parse(hotelSearchOutputData.Data[0].Offers[0].Price.Total, CultureInfo.InvariantCulture));
+            string currency = hotelSearchOutputData.Data[hotelOfferIndex].Offers[0].Price.Currency;
+            int priceValue = (int)Math.Round(decimal.Parse(hotelSearchOutputData.Data[hotelOfferIndex].Offers[0].Price.Total, CultureInfo.InvariantCulture));
 
-        if (hotelSearchOutputData.Dictionaries != null)
-        {
-            decimal priceValueDecimal = priceValue;
+            if (hotelSearchOutputData.Dictionaries != null)
+            {
+                decimal priceValueDecimal = priceValue;
 
-            decimal conversionRate = decimal.Parse(hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Rate, CultureInfo.InvariantCulture);
-            string currencyTarget = hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Target;
+                decimal conversionRate = decimal.Parse(hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Rate, CultureInfo.InvariantCulture);
+                string currencyTarget = hotelSearchOutputData.Dictionaries.CurrencyConversionLookupRates[currency].Target;
 
-            hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode = currencyTarget;
-            hotelSearchOutputData.ConvertedCurrencyPrice.Value = (int)Math.Round(priceValueDecimal * conversionRate); ;
+                hotelSearchOutputData.Data[hotelOfferIndex].Offers[0].ConvertedCurrencyPrice.CurrencyCode = currencyTarget;
+                hotelSearchOutputData.Data[hotelOfferIndex].Offers[0].ConvertedCurrencyPrice.Value = (int)Math.Round(priceValueDecimal * conversionRate); ;
+            }
+            else
+            {
+                hotelSearchOutputData.Data[hotelOfferIndex].Offers[0].ConvertedCurrencyPrice.CurrencyCode = currency;
+                hotelSearchOutputData.Data[hotelOfferIndex].Offers[0].ConvertedCurrencyPrice.Value = priceValue;
+            }
         }
-        else
-        {
-            hotelSearchOutputData.ConvertedCurrencyPrice.CurrencyCode = currency;
-            hotelSearchOutputData.ConvertedCurrencyPrice.Value = priceValue;
-        }
+
+
     }
 }

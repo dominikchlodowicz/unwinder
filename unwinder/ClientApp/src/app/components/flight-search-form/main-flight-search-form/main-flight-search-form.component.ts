@@ -169,7 +169,7 @@ export class MainFlightSearchFormComponent implements OnInit {
         );
 
       const setFlightBackData$ = this._flightSearchSessionService.setData(
-        'flightBackData',
+        'flightBackDate',
         this.whenFormGroup.value.when.end,
       );
 

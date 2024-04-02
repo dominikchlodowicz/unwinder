@@ -4,23 +4,6 @@ using unwinder.Services.HelperServices;
 
 namespace unwidner.Models.AmadeusApiServiceModels.HotelSearchModels;
 
-public class Average
-{
-    [JsonProperty("base")]
-    public string Base { get; set; }
-}
-
-public class Change
-{
-    [JsonProperty("startDate")]
-    public string StartDate { get; set; }
-
-    [JsonProperty("endDate")]
-    public string EndDate { get; set; }
-
-    [JsonProperty("base")]
-    public string Base { get; set; }
-}
 
 public class Datum
 {
@@ -71,6 +54,8 @@ public class Offer
 
     [JsonProperty("price")]
     public Price Price { get; set; }
+
+    public ConvertedCurrencyPrice ConvertedCurrencyPrice { get; set; }
 }
 
 public class Price
@@ -95,8 +80,6 @@ public class HotelSearchOutputModel
 
     [JsonProperty("dictionaries")]
     public Dictionaries Dictionaries { get; set; }
-
-    public ConvertedCurrencyPrice ConvertedCurrencyPrice { get; set; }
 }
 
 public class Dictionaries
@@ -121,6 +104,9 @@ public class TypeEstimated
 {
     [JsonProperty("category")]
     public string Category { get; set; }
+
+    [JsonProperty("beds")]
+    public int Beds { get; set; }
 }
 
 /// <summary>

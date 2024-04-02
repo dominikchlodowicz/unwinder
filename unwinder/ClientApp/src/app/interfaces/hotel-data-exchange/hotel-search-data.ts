@@ -1,6 +1,6 @@
 export interface HotelSearchData {
   adults: number;
-  checkIn: Date;
-  checkOut: Date;
+  checkIn: string;
+  checkOut: string;
   cityCode: string;
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { HotelSearchData } from '../../interfaces/hotel-data-exchange/hotel-search-data';
 import { HotelResponseData } from '../../interfaces/hotel-data-exchange/hotel-response-data';
@@ -20,8 +20,8 @@ export class HotelSearchSubmitService {
   ): HotelSearchData {
     return {
       adults: adultsArg,
-      checkIn: checkInArg,
-      checkOut: checkOutArg,
+      checkIn: checkInArg.toISOString().split('T')[0],
+      checkOut: checkOutArg.toISOString().split('T')[0],
       cityCode: cityCodeArg,
     };
   }
@@ -29,6 +29,14 @@ export class HotelSearchSubmitService {
   public submitHotelSearchDataToApi(
     data: HotelSearchData,
   ): Observable<HotelResponseData> {
-    return this.httpClient.post<HotelResponseData>(this.apiUrl, data);
+    let params = new HttpParams()
+      .set('adults', data.adults.toString())
+      .set('checkIn', data.checkIn.toString())
+      .set('checkOut', data.checkOut.toString())
+      .set('cityCode', data.cityCode);
+
+    return this.httpClient.get<HotelResponseData>(this.apiUrl, {
+      params: params,
+    });
   }
 }
