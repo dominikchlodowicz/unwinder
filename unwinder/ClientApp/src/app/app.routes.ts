@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { MainHomepageContentComponent } from './components/homepage/main-homepage-content/main-homepage-content.component';
 import { HotelCardComponent } from './components/hotel-search-results/hotel-card/hotel-card.component';
 import { HotelSearchResultsComponent } from './components/hotel-search-results/hotel-search-results/hotel-search-results.component';
+import { HotelCardTestComponent } from './components/hotel-search-results/hotel-card-test/hotel-card-test.component';
 
 export const routes: Routes = [
   { path: '', component: MainHomepageContentComponent },
@@ -15,6 +16,6 @@ export const routes: Routes = [
     component: FirstFlightOfferMainComponent,
   },
   { path: 'unwind/second-flight', component: SecondFlightOfferMainComponent },
-  { path: 'test/hotelcard', component: HotelCardComponent },
+  { path: 'test/hotelcard', component: HotelCardTestComponent },
   { path: 'unwind/hotel', component: HotelSearchResultsComponent },
 ];

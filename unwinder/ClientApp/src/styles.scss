@@ -15,14 +15,14 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 105vh;
   margin: 0;
 }
 
 main {
-  // height: 105vh;
   flex: 1;
-  margin: 0 10vw;
+  height: 110vh;
+  // padding-bottom: 200px;
 }
 
 @media (max-height: 900px) {

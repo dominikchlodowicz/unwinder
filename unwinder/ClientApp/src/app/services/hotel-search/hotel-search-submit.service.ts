@@ -10,7 +10,7 @@ import { HotelResponseData } from '../../interfaces/hotel-data-exchange/hotel-re
 export class HotelSearchSubmitService {
   constructor(private httpClient: HttpClient) {}
 
-  apiUrl = 'api/hotel-search';
+  apiUrl = 'api/hotel-search/test';
 
   public serializeHotelSearchData(
     adultsArg: number,
