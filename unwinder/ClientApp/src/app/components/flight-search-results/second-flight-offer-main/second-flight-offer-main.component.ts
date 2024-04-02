@@ -35,6 +35,7 @@ export class SecondFlightOfferMainComponent {
   }
 
   submitSelectedFlight(indexOfSelectedFlight: number) {
+    this.isLoading = true;
     const selctedData = this.secondFlightResponse.data[indexOfSelectedFlight];
 
     const setChosenFlight$ = this._unwinderSessionService.setData(
