@@ -9,6 +9,8 @@ public class HotelSearchParametersBuilder : IHotelSearchParametersBuilder
 
     private string defaultCurrency = "EUR";
 
+    private int hotelIdCountLimit = 30;
+
     public HotelSearchParametersBuilder BuildHotelIds(HotelSearchListOutputModel hotelSearchListOutput)
     {
         if (hotelSearchListOutput.Data.Count == 0)
@@ -17,10 +19,14 @@ public class HotelSearchParametersBuilder : IHotelSearchParametersBuilder
         }
 
         List<string> hotelIds = new List<string>();
+        int counter = 0;
 
         foreach (HotelSearchDatum data in hotelSearchListOutput.Data)
         {
+            if (counter >= hotelIdCountLimit) break; // Stop after adding five IDs
+
             hotelIds.Add(data.HotelId);
+            counter++;
         }
 
         _model.HotelIds = hotelIds;

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using unwidner.Models.AmadeusApiServiceModels.HotelSearchModels;
 using unwinder.Services;
+using unwinder.Services.AmadeusApiService.GetCityIataCode;
 using unwinder.Services.AmadeusApiService.HotelSearch;
 
 namespace unwinder.Controllers;
@@ -10,30 +11,30 @@ public class HotelSearchController : ControllerBase
 {
     private readonly IHotelSearchListService _hotelSearchListService;
     private readonly IHotelSearchService _hotelSearchService;
+    private readonly IGetCityIataCodeService _getCityIataCodeService;
 
     public HotelSearchController(
         IHotelSearchListService hotelSearchListService,
-        IHotelSearchService hotelSearchService
+        IHotelSearchService hotelSearchService,
+        IGetCityIataCodeService getCityIataCodeService
     )
     {
         _hotelSearchListService = hotelSearchListService;
         _hotelSearchService = hotelSearchService;
-    }
-
-    //TODO: Complete this controller
-    [HttpPost("api/hotel-search")]
-    public async Task<ActionResult<string>> HotelSearch([FromBody] HotelSearchRequest requestContent)
-    {
-        return Ok();
+        _getCityIataCodeService = getCityIataCodeService;
     }
 
     // Test controller method
     [HttpGet("api/hotel-search/test")]
-    public async Task<ActionResult<string>> HotelSearchTest()
+    public async Task<ActionResult<string>> HotelSearch(int adults, string checkIn, string checkOut, string cityCode)
     {
+        string cityName = cityCode.Split(',')[0];
+
+        var cityIataCode = await _getCityIataCodeService.GetCityIataCode(cityName);
+
         HotelSearchListParametersModel hotelSearchListParameters = new HotelSearchListParametersModel()
         {
-            CityCode = "DEL",
+            CityCode = cityIataCode,
             Radius = 5
         };
 
@@ -42,8 +43,8 @@ public class HotelSearchController : ControllerBase
 
         HotelSearchParametersModel hotelSearchParameters = new HotelSearchParametersBuilder()
             .BuildHotelIds(hotelSearchListOutput)
-            .BuildNumberOfAdults(2)
-            .BuildInOutDates("2024-04-15", "2024-04-19")
+            .BuildNumberOfAdults(adults)
+            .BuildInOutDates(checkIn, checkOut)
             .BuildDefaultValues()
             .Build();
 

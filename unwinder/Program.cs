@@ -1,11 +1,13 @@
-using unwinder.Services;
 using unwinder.Models.AmadeusApiServiceModels.KeyModels;
 using unwinder.Controllers;
+using unwinder.Services;
 using unwinder.Services.AmadeusApiService;
 using unwinder.Services.AmadeusApiService.FlightSearch;
 using unwinder.Services.AmadeusApiService.GetLocation;
 using unwinder.Services.AmadeusApiService.GetCityIataCode;
 using unwinder.Services.AmadeusApiService.HotelSearch;
+using unwinder.Services.AmadeusApiService.GetCityIataCode;
+using unwinder.Services.HelperServices;
 using Microsoft.VisualBasic;
 using unwinder.Services.HelperServices;
 
@@ -119,7 +121,8 @@ builder.Services.AddTransient<HotelSearchController>(sp =>
 {
     var hotelSearchListService = sp.GetRequiredService<IHotelSearchListService>();
     var hotelSearchService = sp.GetRequiredService<IHotelSearchService>();
-    return new HotelSearchController(hotelSearchListService, hotelSearchService);
+    var getCityIataCodeService = sp.GetRequiredService<IGetCityIataCodeService>();
+    return new HotelSearchController(hotelSearchListService, hotelSearchService, getCityIataCodeService);
 });
 
 // Controllers - END

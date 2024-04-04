@@ -14,7 +14,6 @@ public class HotelSearchListService : IHotelSearchListService
     private IGetToken _getToken;
     private HttpClient _httpClientV1;
     private readonly string hotelListSearchEndpointUri = "reference-data/locations/hotels/by-city";
-
     public HotelSearchListService(IHttpClientFactory httpClientFactory, IGetToken getToken)
     {
         _httpClientV1 = httpClientFactory.CreateClient("AmadeusApiV1");

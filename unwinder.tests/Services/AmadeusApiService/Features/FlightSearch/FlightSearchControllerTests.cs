@@ -10,7 +10,6 @@ using unwinder.Models.AmadeusApiServiceModels.GetLocationModels;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 
-
 namespace unwinder.tests.Service.AmadeusApiService;
 
 public class FlightSearchControllerTests

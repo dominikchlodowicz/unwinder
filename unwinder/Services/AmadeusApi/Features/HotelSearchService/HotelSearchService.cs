@@ -61,6 +61,13 @@ public class HotelSearchService : IHotelSearchService
 
         _currencyConversionService.HotelConvertCurrrency(ref hotelSearchData);
 
+        if (hotelSearchData.Data != null)
+        {
+            hotelSearchData.Data = hotelSearchData.Data
+                                    .Where(datum => datum.Available)
+                                    .ToList();
+        }
+
         return hotelSearchData;
     }
 

@@ -11,7 +11,7 @@ const PROXY_CONFIG = [
     context: [
       "/api/flight-search/get-city",
       "/api/flight-search/get-airport/*",
-      "api/",
+      // "api/",
       // test endpoint
       "/api/hotel-search/test",
       "/api/flight-search",
