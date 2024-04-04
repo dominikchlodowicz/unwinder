@@ -5,13 +5,13 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 describe('HotelSearchSubmitService', () => {
   const mockData: HotelSearchData = {
     adults: 2,
-    checkIn: new Date('2024-04-04'),
-    checkOut: new Date('2024-04-06'),
+    checkIn: '2024-04-04',
+    checkOut: '2024-04-06',
     cityCode: 'NYC',
   };
 
@@ -48,23 +48,44 @@ describe('HotelSearchSubmitService', () => {
       done();
     });
 
-    const req = httpTestingController.expectOne(service.apiUrl);
-    expect(req.request.method).toBe('POST');
+    const req = httpTestingController.expectOne((request) =>
+      request.url.includes(service.apiUrl),
+    );
+    expect(req.request.method).toBe('GET');
     req.flush(mockData);
   });
 
   it('should handle errors for submitHotelSearchDataToApi', () => {
-    const mockError = new Error('An error occurred');
+    const mockErrorMsg = 'An error occurred';
+    const mockData: HotelSearchData = {
+      adults: 2,
+      checkIn: new Date('2024-04-04').toISOString().split('T')[0],
+      checkOut: new Date('2024-04-06').toISOString().split('T')[0],
+      cityCode: 'NYC',
+    };
 
     service.submitHotelSearchDataToApi(mockData).subscribe({
       next: () => fail('Should have failed with the 500 status'),
       error: (error: HttpErrorResponse) => {
+        expect(error.error).toBe(mockErrorMsg);
         expect(error.status).toBe(500);
       },
     });
 
-    const req = httpTestingController.expectOne(service.apiUrl);
-    req.flush('An error occurred', {
+    const params = new HttpParams()
+      .set('adults', mockData.adults.toString())
+      .set('checkIn', mockData.checkIn)
+      .set('checkOut', mockData.checkOut)
+      .set('cityCode', mockData.cityCode);
+
+    const req = httpTestingController.expectOne(
+      (req) =>
+        req.method === 'GET' &&
+        req.url === service.apiUrl &&
+        req.params.toString() === params.toString(),
+    );
+
+    req.flush(mockErrorMsg, {
       status: 500,
       statusText: 'Internal Server Error',
     });

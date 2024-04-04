@@ -4,6 +4,8 @@ import { UnwinderSessionService } from '../../../services/unwinder-search-state/
 import { of } from 'rxjs';
 import { FlightSearchData } from '../../../interfaces/flight-data-exchange/flight-search-data';
 import { FlightSearchResponse } from '../../../interfaces/flight-data-exchange/flight-search-response';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('SecondFlightOfferMainComponent', () => {
   let component: SecondFlightOfferMainComponent;
@@ -11,6 +13,7 @@ describe('SecondFlightOfferMainComponent', () => {
   let mockUnwinderSessionService = {
     getSessionDataObservable: jest.fn(),
     setData: jest.fn(),
+    getData: jest.fn(),
   };
 
   const mockFlightSearchData: FlightSearchData = {
@@ -59,8 +62,27 @@ describe('SecondFlightOfferMainComponent', () => {
       }),
     );
 
+    mockUnwinderSessionService.getData.mockImplementation((key) => {
+      if (key === 'flightParameters') {
+        return {
+          numberOfPassengers: 2,
+          when: new Date('2024-02-05'),
+          where: 'JFK',
+        };
+      }
+      if (key === 'flightBackDate') {
+        return new Date('2024-02-07');
+      }
+
+      return null;
+    });
+
     await TestBed.configureTestingModule({
-      imports: [SecondFlightOfferMainComponent],
+      imports: [
+        SecondFlightOfferMainComponent,
+        HttpClientTestingModule,
+        RouterTestingModule,
+      ],
       providers: [
         {
           provide: UnwinderSessionService,
@@ -87,12 +109,11 @@ describe('SecondFlightOfferMainComponent', () => {
   });
 
   it('should correctly set chosen flight data on submit', () => {
-    const mockIndex = 0; // Assuming you want to select the first flight
-    component.secondFlightResponse = mockFlightSearchResponse; // Set mock response directly
+    const mockIndex = 0;
+    component.secondFlightResponse = mockFlightSearchResponse;
 
     component.submitSelectedFlight(mockIndex);
 
-    // Verify setData was called with correct parameters
     expect(mockUnwinderSessionService.setData).toHaveBeenCalledWith(
       'chosenSecondFlightData',
       mockFlightSearchResponse.data[mockIndex],
