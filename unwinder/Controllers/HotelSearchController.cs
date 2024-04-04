@@ -28,28 +28,43 @@ public class HotelSearchController : ControllerBase
     [HttpGet("api/hotel-search/test")]
     public async Task<ActionResult<string>> HotelSearch(int adults, string checkIn, string checkOut, string cityCode)
     {
-        string cityName = cityCode.Split(',')[0];
-
-        var cityIataCode = await _getCityIataCodeService.GetCityIataCode(cityName);
-
-        HotelSearchListParametersModel hotelSearchListParameters = new HotelSearchListParametersModel()
+        try
         {
-            CityCode = cityIataCode,
-            Radius = 5
-        };
-
-        var hotelSearchListOutput = await _hotelSearchListService.SearchListOfHotels(hotelSearchListParameters);
+            string cityName = cityCode.Split(',')[0];
+            var cityIataCode = await _getCityIataCodeService.GetCityIataCode(cityName);
 
 
-        HotelSearchParametersModel hotelSearchParameters = new HotelSearchParametersBuilder()
-            .BuildHotelIds(hotelSearchListOutput)
-            .BuildNumberOfAdults(adults)
-            .BuildInOutDates(checkIn, checkOut)
-            .BuildDefaultValues()
-            .Build();
+            HotelSearchListParametersModel hotelSearchListParameters = new HotelSearchListParametersModel()
+            {
+                CityCode = cityIataCode,
+                Radius = 5
+            };
 
-        HotelSearchOutputModel hotelSearchOutput = await _hotelSearchService.SearchHotel(hotelSearchParameters);
+            var hotelSearchListOutput = await _hotelSearchListService.SearchListOfHotels(hotelSearchListParameters);
 
-        return Ok(hotelSearchOutput);
+            HotelSearchParametersModel hotelSearchParameters = new HotelSearchParametersBuilder()
+                .BuildHotelIds(hotelSearchListOutput)
+                .BuildNumberOfAdults(adults)
+                .BuildInOutDates(checkIn, checkOut)
+                .BuildDefaultValues()
+                .Build();
+
+            HotelSearchOutputModel hotelSearchOutput = await _hotelSearchService.SearchHotel(hotelSearchParameters);
+
+            if (hotelSearchOutput == null || hotelSearchOutput.Data.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(hotelSearchOutput);
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is FormatException)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "An internal error occurred");
+        }
     }
 }
