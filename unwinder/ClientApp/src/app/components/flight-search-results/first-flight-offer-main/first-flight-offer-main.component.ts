@@ -74,7 +74,11 @@ export class FirstFlightOfferMainComponent {
         this.router.navigate(['/unwind/second-flight']);
         this.isLoading = false;
       },
-      error: (error) => console.error('Error updating data:', error),
+      error: (error) => {
+        console.error('Error updating data:', error);
+        this.isLoading = false;
+        this.router.navigate(['/unwind/flighterror']);
+      },
     });
   }
 }

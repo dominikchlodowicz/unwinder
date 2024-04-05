@@ -198,7 +198,11 @@ export class MainFlightSearchFormComponent implements OnInit {
           this.isLoading = false;
           this.router.navigate(['/unwind/first-flight']);
         },
-        error: (error) => console.error('Error updating data:', error),
+        error: (error) => {
+          console.error('Error updating data:', error);
+          this.isLoading = false;
+          this.router.navigate(['/unwind/flighterror']);
+        },
       });
     } else {
       console.error('Some form groups on submit are invalid.');
