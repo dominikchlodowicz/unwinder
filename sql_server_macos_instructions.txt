@@ -1,0 +1,17 @@
+source: https://sqlblog.org/2023/03/03/sql-server-apple-silicon
+
+General > Docker desktop setting Use Virtualization Framework: On
+Features in Development > Use Rosetta: On
+
+command for docker sql server linux/amd64/v8 is for macos
+
+docker run --platform=linux/amd64/v8 --name UnwinderDb \
+  -e ACCEPT_EULA=1                               \
+  -e MSSQL_SA_PASSWORD=[your_password]           \
+  -p 2022:1433 -d                                \
+  mcr.microsoft.com/mssql/server:2022-latest
+
+  sa - is username
+  password - is sa_password from above
+  host - is 127.0.0.1 / localhost
+  db name - is master
