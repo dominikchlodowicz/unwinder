@@ -57,7 +57,7 @@ public class FlightSearchParametersBuilderTests
     public void BuildDateTimeRange_WithValidFormat_CreatesCorrectDateTimeRange()
     {
         var builder = new FlightSearchParametersBuilder();
-        var date = "2024-12-31";
+        var date = DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
         var time = "14:25:22";
 
         builder.BuildDateTimeRange(date, time);
@@ -82,7 +82,7 @@ public class FlightSearchParametersBuilderTests
     public void BuildOriginDestinations_WithValidArguments_CreatesCorrectOriginDestinations()
     {
         var builder = new FlightSearchParametersBuilder();
-        var date = "2024-12-31";
+        var date = DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
         var time = "14:25:22";
         var originLocationCode = "WAW";
         var destinationLocationCode = "NYC";
@@ -147,4 +147,3 @@ public class FlightSearchParametersBuilderTests
         Assert.That(expectedSources, Is.EqualTo(parameters.Sources));
     }
 }
-

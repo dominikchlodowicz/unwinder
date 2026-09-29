@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Headers;
 using Moq.Protected;
 using unwinder.Services;
 using unwinder.Services.AmadeusApiService;
@@ -79,5 +80,39 @@ public class FlightSearchServiceTests
         var sutParameters = _defaultParametersBuilder.Build();
 
         Assert.ThrowsAsync<JsonReaderException>(() => sut.FlightSearch(sutParameters));
+    }
+
+    [Test]
+    public async Task FlightSearch_RetriesOnce_WhenApiReturnsTooManyRequests()
+    {
+        var expectedFlights = _fixture.Create<FlightSearchOutputModel>();
+        var httpResponseJson = JsonConvert.SerializeObject(expectedFlights);
+        var rateLimitResponse = new HttpResponseMessage(HttpStatusCode.TooManyRequests);
+        rateLimitResponse.Headers.RetryAfter = new RetryConditionHeaderValue(TimeSpan.Zero);
+        var successfulResponse = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(httpResponseJson)
+        };
+        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        httpMessageHandlerMock.Protected()
+            .SetupSequence<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(rateLimitResponse)
+            .ReturnsAsync(successfulResponse);
+        var httpClient = AmadeusApiHttpClientTestHelper.CreateTestHttpClient(httpMessageHandlerMock);
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        AmadeusApiHttpClientTestHelper.SetupHttpClientFactoryMock(httpClientFactoryMock, httpClient);
+        var sut = new FlightSearchService(httpClientFactoryMock.Object, _getTokenMock.Object);
+
+        var result = await sut.FlightSearch(_defaultParametersBuilder.Build());
+
+        result.Should().BeEquivalentTo(expectedFlights);
+        httpMessageHandlerMock.Protected().Verify(
+            "SendAsync",
+            Times.Exactly(2),
+            ItExpr.IsAny<HttpRequestMessage>(),
+            ItExpr.IsAny<CancellationToken>());
     }
 }

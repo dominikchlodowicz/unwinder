@@ -39,6 +39,14 @@ public class GetTokenTests
         var token = await sut.GetAuthToken();
 
         Assert.That(token, Is.EqualTo(mockedReturnedJsonFixture.access_token));
+        _loggerMock.Verify(
+            logger => logger.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((state, _) => state.ToString().Contains(token)),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+            Times.Never);
     }
 
     [Test]

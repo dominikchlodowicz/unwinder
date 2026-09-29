@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -53,9 +54,20 @@ public class FlightSearchService : IFlightSearchService
     /// <exception cref="HttpRequestException">Thrown if API response status is not 200.</exception>
     private async Task<HttpResponseMessage> GetFlightSearchFromApi(FlightSearchParameters flightSearchParameters)
     {
+        var response = await SendFlightSearchRequest(flightSearchParameters);
 
-        var processedParameters = ProcessFlightSearchParameters(flightSearchParameters);
-        var response = await _httpClientV2.PostAsync(flightSearchEndpointUri, processedParameters);
+        if (response.StatusCode == HttpStatusCode.TooManyRequests)
+        {
+            var retryDelay = GetRetryDelay(response.Headers.RetryAfter);
+            response.Dispose();
+
+            if (retryDelay > TimeSpan.Zero)
+            {
+                await Task.Delay(retryDelay);
+            }
+
+            response = await SendFlightSearchRequest(flightSearchParameters);
+        }
 
         if (!response.IsSuccessStatusCode)
         {
@@ -63,6 +75,28 @@ public class FlightSearchService : IFlightSearchService
         }
 
         return response;
+    }
+
+    private Task<HttpResponseMessage> SendFlightSearchRequest(FlightSearchParameters flightSearchParameters)
+    {
+        var processedParameters = ProcessFlightSearchParameters(flightSearchParameters);
+        return _httpClientV2.PostAsync(flightSearchEndpointUri, processedParameters);
+    }
+
+    private static TimeSpan GetRetryDelay(RetryConditionHeaderValue retryAfter)
+    {
+        if (retryAfter?.Delta is TimeSpan delta)
+        {
+            return delta > TimeSpan.Zero ? delta : TimeSpan.Zero;
+        }
+
+        if (retryAfter?.Date is DateTimeOffset retryDate)
+        {
+            var delay = retryDate - DateTimeOffset.UtcNow;
+            return delay > TimeSpan.Zero ? delay : TimeSpan.Zero;
+        }
+
+        return TimeSpan.Zero;
     }
 
     /// <summary>

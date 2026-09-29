@@ -38,7 +38,7 @@ public class HotelSearchService : IHotelSearchService
     {
         var query = System.Web.HttpUtility.ParseQueryString(string.Empty);
         query["hotelIds"] = String.Join(",", hotelSearchParameters.HotelIds);
-        query["aduts"] = hotelSearchParameters.Adults.ToString();
+        query["adults"] = hotelSearchParameters.Adults.ToString();
         query["checkInDate"] = hotelSearchParameters.CheckInDate;
         query["checkOutDate"] = hotelSearchParameters.CheckOutDate;
         query["currency"] = hotelSearchParameters.Currency;

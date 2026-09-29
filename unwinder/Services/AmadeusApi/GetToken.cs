@@ -91,10 +91,6 @@ public class GetToken : IGetToken
         {
             throw new InvalidOperationException("Api response is empty.");
         }
-
-
-        _logger.LogInformation("Bearer response: {responseString}", responseString);
-
         var deserializedResponse = JsonConvert.DeserializeObject<BearerTokenModel>(responseString);
         if (deserializedResponse == null || deserializedResponse.access_token == null)
         {
